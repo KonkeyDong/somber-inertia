@@ -1,85 +1,65 @@
-﻿using System;
-using Raylib_cs;
+﻿using Raylib_cs;
 
 namespace SomberInertia;
+
 class Program
 {
     static void Main(string[] args)
     {
+        // ============== LOGGING SETUP ==============
+        Logger.MinimumLevel = LogLevel.Info;     // Change to Debug for more detail during development
+        // Logger.MinimumLevel = LogLevel.Debug; // Uncomment for verbose logging
+
         const int screenWidth = 800;
         const int screenHeight = 800;
 
         Raylib.InitWindow(screenWidth, screenHeight, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        var max = new Unit("assets/max_8x.png", 10, 10);
-        var grassTile = new Block("assets/grass_tile.png", BlockType.Grass);
-        Block[][] background = new Block[4][]
-        {
-            new Block[] { grassTile, grassTile, grassTile, grassTile },
-            new Block[] { grassTile, grassTile, grassTile, grassTile },
-            new Block[] { grassTile, grassTile, grassTile, grassTile },
-            new Block[] { grassTile, grassTile, grassTile, grassTile }
-        };
+        Logger.Info("Game window initialized.");
 
-        while(!Raylib.WindowShouldClose())
-        {
-            // 1) handle input
-            HandleKeyPresses(max);
+        // ============== GAME INITIALIZATION ==============
+        var grid = new Grid(4, 4);
+        
+        var max = new Unit("assets/max_8x.png", "Max", MovementType.Warrior);
+        grid.AddUnit(max, 0, 0);
 
-            // last) render graphics
+        Logger.Info("Game setup complete. Starting main loop...");
+
+        // ============== MAIN GAME LOOP ==============
+        while (!Raylib.WindowShouldClose())
+        {
+            // 1. Input
+            HandleInput(grid, max);
+
+            // 2. Update (add more game logic here later)
+
+            // 3. Render
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.RayWhite);
 
-            DrawBackground(background);
+            grid.DrawBackground();
+            grid.DrawUnits();
 
-            Raylib.DrawTexture(max.Texture, max.X, max.Y, Color.White);
-            Raylib.EndDrawing();   
+            Raylib.EndDrawing();
         }
-        
+
+        Logger.Info("Closing game window...");
         Raylib.CloseWindow();
     }
 
-    public static void DrawBackground(Block[][] background)
+    public static void HandleInput(Grid grid, Unit unit)
     {
-        var x = 0;
-        var y = 0;
-        var width = 24 * 8;
-        var height = 24 * 8;
-        foreach (Block[] row in background)
-        {
-            x = 0;
-            foreach (Block cell in row)
-            {
-                Raylib.DrawTexture(cell.Texture, x, y, Color.White);
-                x += width;
-            }
-
-            y += height;
-        }
-    }
-
-    public static void HandleKeyPresses(Unit unit)
-    {
-        int amount = 24 * 8;
         if (Raylib.IsKeyPressed(KeyboardKey.Up))
-        {
-            unit.Y -= amount;
-        }
+            grid.MoveUnitInDirection(unit, Direction.Up);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Down))
-        {
-            unit.Y += amount;
-        }
+            grid.MoveUnitInDirection(unit, Direction.Down);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Left))
-        {
-            unit.X -= amount;
-        }
+            grid.MoveUnitInDirection(unit, Direction.Left);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Right))
-        {
-            unit.X += amount;
-        }
+            grid.MoveUnitInDirection(unit, Direction.Right);
     }
 }

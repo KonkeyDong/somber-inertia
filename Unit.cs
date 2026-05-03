@@ -15,15 +15,55 @@ public enum MovementType
 
 public class Unit
 {
-    public Texture2D Texture { get; set; }
-    public int X { get; set; } // horizontal position (X coordinate)
-    public int Y { get; set; } // vertical position (Y coordinate)
+    public Texture2D Texture { get; private set; }
+
+    public string Name { get; private set; }
     public MovementType MovementType { get; private set; }
 
-    public Unit(string texturePath, int x, int y)
+    // Core reference - source of truth for position
+    private Block? _block;
+    public Block? Block
+    {
+        get => _block;
+        set
+        {
+            if (_block == value) return; // avoid spam on same value
+
+            Logger.Debug($"Unit '{Name}' moved from " +
+                $"{(_block?.PrintCoordinates() ?? "null")} → " +
+                $"{(value?.PrintCoordinates() ?? "null")}");
+
+            _block = value;
+        }
+    }
+
+    // Stats
+    public byte HP { get; set; }
+    public byte MP { get; set; }
+    public byte Attack { get; set; }
+    public byte Defense { get; set; }
+    public byte Speed { get; set; }
+    public byte Movement { get; private set; }   // movement range
+
+    public bool Friendly { get; set; }
+
+    public Unit(string texturePath, string name, MovementType movementType, byte movement = 8)
     {
         Texture = Raylib.LoadTexture(texturePath);
-        X = x;
-        Y = y;
+        Name = name;
+        MovementType = movementType;
+        Movement = movement;
+
+        Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
     }
+
+    /// <summary>
+    /// Convenience method to set position (triggers logging)
+    /// </summary>
+    public void SetPosition(Block block)
+    {
+        Block = block;
+    }
+
+    public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintCoordinates() ?? "null"}";
 }
