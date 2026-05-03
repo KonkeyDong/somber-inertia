@@ -20,6 +20,7 @@ public class Grid
     public readonly Block[,] Blocks;
 
     private readonly List<Unit> _units = new List<Unit>();
+    public IReadOnlyList<Unit> Units => _units; // public read-only
 
     private const int TileSize = 24;
     private const int BlockSize = TileSize * 8;   // 192 pixels per block
@@ -125,6 +126,4 @@ public class Grid
 
         PlaceUnit(unit, newX, newY);
     }
-
-    public IReadOnlyList<Unit> Units => _units;
 }

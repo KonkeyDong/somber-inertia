@@ -29,6 +29,8 @@ class Program
         // ============== MAIN GAME LOOP ==============
         while (!Raylib.WindowShouldClose())
         {
+            Game.Update();
+
             // 1. Input
             HandleInput(grid, max);
 
