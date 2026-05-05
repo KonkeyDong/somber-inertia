@@ -13,6 +13,27 @@ public enum MovementType
     Werewolf,
 }
 
+// Class is a reserved word; job will have to do.
+public enum Job
+{
+    Swordsman,
+    Hero,
+    Warrior,
+    Gladiator,
+    Archer,
+    Sniper,
+    Mage,
+    Wizard,
+    Knight,
+    Paladin,
+}
+
+public struct Stat
+{
+    public byte Current { get; set; }
+    public byte Max { get; set; }
+}
+
 public class Unit
 {
     public Texture2D Texture { get; private set; }
@@ -38,16 +59,18 @@ public class Unit
     }
 
     // Stats
-    public byte HP { get; set; }
-    public byte MP { get; set; }
+    public Stat HP { get; set; }
+    public Stat MP { get; set; }
+    public Job Job { get; set; }
+    public byte Exp { get; set; } // experience
     public byte Attack { get; set; }
     public byte Defense { get; set; }
     public byte Speed { get; set; }
-    public byte Movement { get; private set; }   // movement range
+    public float Movement { get; private set; }   // movement range
 
     public bool Friendly { get; set; }
 
-    public Unit(string texturePath, string name, MovementType movementType, byte movement = 8)
+    public Unit(string texturePath, string name, MovementType movementType, float movement)
     {
         Texture = Raylib.LoadTexture(texturePath);
         Name = name;

@@ -1,3 +1,5 @@
+using Raylib_cs;
+
 namespace SomberInertia;
 
 public static class Game

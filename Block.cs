@@ -5,10 +5,12 @@ namespace SomberInertia;
 public enum TerrainType
 {
     Road,
-    Grass,
+    Plains,
+    Overgrowth,
     Forest,
     Hill,
     Mountain,
+    Sand,
     Impassable,
     Water,
     Floor,
@@ -38,6 +40,8 @@ public class Block
             _occupant = value;
         }
     }
+
+    public float MovementCost { get; set; } = 0.0f;
 
     public Block(string texturePath, TerrainType terrainType, byte x, byte y)
     {
