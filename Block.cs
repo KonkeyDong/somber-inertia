@@ -3,7 +3,9 @@ using Raylib_cs;
 
 namespace SomberInertia;
 
-
+// map dimensions (in blocks)
+// Height: 10 (240 px)
+// Width: 11 (264 px)
 public class Block
 {
     public Texture2D Texture { get; private set; }

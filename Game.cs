@@ -1,5 +1,6 @@
 using SomberInertia.Enums;
 using SomberInertia.Timers;
+using System.Numerics;
 using Raylib_cs;
 
 namespace SomberInertia;
@@ -11,14 +12,19 @@ public class Game
     public MovementRangeTint RangeTint { get; private set; }
     public int FrameCounter { get; private set; }
 
+    private int _width { get; set; } = 264 * 3;
+    private int _height { get; set; } = 240 * 3;
+    private float _scale = 3.0f;
+
     public Game()
     {
         // Initialize core systems
-        Grid = new Grid(4, 4);
+        Grid = new Grid(11, 10);
 
-        Player = new Unit("assets/max_8x.png", "Max", MovementType.Warrior, 3);
+
+        Player = new Unit("assets/max.png", "Max", MovementType.Warrior, 4);
         Player.Friendly = true;
-        var goblin = new Unit("assets/goblin_8x.png", "Goblin", MovementType.Warrior, 5);
+        var goblin = new Unit("assets/goblin.png", "Goblin", MovementType.Warrior, 5);
         goblin.Friendly = false;
         Grid.AddUnit(Player, 0, 0);
         Grid.AddUnit(goblin, 2, 1);
@@ -37,6 +43,7 @@ public class Game
 
     private void HandleInput()
     {
+        // Arrow keys
         if (Raylib.IsKeyPressed(KeyboardKey.Up))
             Grid.MoveUnitInDirection(Player, Direction.Up);
 
@@ -58,6 +65,35 @@ public class Game
 
             Logger.Info($"Logging level changed to: {Logger.MinimumLevel}");
         }
+
+        // Window Resize with Ctrl + +/- 
+        if (Raylib.IsKeyDown(KeyboardKey.LeftControl) || Raylib.IsKeyDown(KeyboardKey.RightControl))
+        {
+            if (Raylib.IsKeyPressed(KeyboardKey.Equal))      // Ctrl + "+"
+            {
+                _scale += 1.0f;
+                ResizeWindow();
+            }
+
+            if (Raylib.IsKeyPressed(KeyboardKey.Minus))      // Ctrl + "-"
+            {
+                _scale = Math.Max(0.5f, _scale - 1.0f);
+                ResizeWindow();
+            }
+        }
+    }
+
+    private void ResizeWindow()
+    {
+        _scale = Math.Clamp(_scale, 1.0f, 5.0f);
+
+        _width = (int)(264 * _scale);
+        _height = (int)(240 * _scale);
+
+        Raylib.SetWindowSize(_width, _height);
+        Grid.BlockSize = (int)(Grid.TileSize * _scale);
+
+        Logger.Debug($"ResizeWindow() Window resized to {_width} x {_height} (Scale: {_scale:F2}x); BlockSize: {Grid.BlockSize}");
     }
 
     public void Draw()
@@ -65,8 +101,8 @@ public class Game
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.RayWhite);
 
-        Grid.DrawBackground(RangeTint);
-        Grid.DrawUnits();
+        Grid.DrawBackground(RangeTint, _scale);
+        Grid.DrawUnits(_scale);
 
         Raylib.EndDrawing();
     }

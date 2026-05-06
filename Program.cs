@@ -8,7 +8,7 @@ class Program
     {
         Logger.MinimumLevel = LogLevel.Info;
 
-        Raylib.InitWindow(800, 800, "Somber Inertia");
+        Raylib.InitWindow(264 * 3, 240 * 3, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
         var game = new Game();

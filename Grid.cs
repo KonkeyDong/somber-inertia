@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using SomberInertia.Timers;
 using SomberInertia.Enums;
 using Raylib_cs;
@@ -16,8 +17,8 @@ public class Grid
     private readonly List<Unit> _units = new List<Unit>();
     public IReadOnlyList<Unit> Units => _units; // public read-only
 
-    private const int TileSize = 24;
-    private const int BlockSize = TileSize * 8;   // 192 pixels per block
+    public const int TileSize = 24;
+    public int BlockSize = TileSize * 3;   // 192 pixels per block
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, float>> _movementCostsMap;
     private HashSet<(byte x, byte y)> MovementRangeSet = new HashSet<(byte x, byte y)>();
@@ -160,7 +161,7 @@ public class Grid
         throw new ArgumentNullException($"No movement type [{movementType}] cost or terrain type [{terrainType}] found in _movementCosts dictionary.");
     }
 
-    public void DrawBackground(MovementRangeTint rangeTint)
+    public void DrawBackground(MovementRangeTint rangeTint, float scale)
     {
         for (byte x = 0; x < Width; x++)
         {
@@ -173,18 +174,24 @@ public class Grid
                     ? rangeTint.GetCurrentColor()
                     : Color.White;
 
-                Raylib.DrawTexture(Blocks[x, y].Texture, screenX, screenY, color);
+                Raylib.DrawTextureEx(
+                    Blocks[x, y].Texture, 
+                    new Vector2(screenX, screenY), 
+                    0.0f,          // rotation
+                    scale,         // ← This is what scales the texture
+                    color
+                );
 
                 if (Logger.MinimumLevel == LogLevel.Debug)
                 {
-                    Raylib.DrawText($"Movement Cost: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
+                    Raylib.DrawText($"MC: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
                     Raylib.DrawText(Blocks[x, y].PrintCoordinates(), screenX, screenY + 20, 16, Color.White);
                 }
             }
         }
     }
 
-    public void DrawUnits()
+    public void DrawUnits(float scale)
     {
         foreach (Unit unit in _units)
         {
@@ -197,7 +204,13 @@ public class Grid
             int screenX = unit.Block.X * BlockSize;
             int screenY = unit.Block.Y * BlockSize;
 
-            Raylib.DrawTexture(unit.Texture, screenX, screenY, Color.White);
+            Raylib.DrawTextureEx(
+                unit.Texture,
+                new Vector2(screenX, screenY), 
+                0.0f,          // rotation
+                scale,         // ← This is what scales the texture
+                Color.White
+            );
         }
     }
 
