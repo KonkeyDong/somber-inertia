@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
+using SomberInertia.Timers;
+using SomberInertia.Enums;
 using Raylib_cs;
 
 namespace SomberInertia;
-
-public enum Direction
-{
-    Up,
-    Right,
-    Down,
-    Left
-}
 
 public class Grid
 {
@@ -35,12 +29,12 @@ public class Grid
         {
             [MovementType.Warrior] = new Dictionary<TerrainType, float>
             {
-                { TerrainType.Road, 1.0f },
-                { TerrainType.Plains, 1.0f },
-                { TerrainType.Overgrowth, 1.5f },
-                { TerrainType.Forest, 2.0f },
-                { TerrainType.Hill, 1.5f },
-                { TerrainType.Sand, 1.5f }
+                { TerrainType.Road, 10 },
+                { TerrainType.Plains, 10 },
+                { TerrainType.Overgrowth, 15 },
+                { TerrainType.Forest, 20 },
+                { TerrainType.Hill, 15 },
+                { TerrainType.Sand, 15 }
             },
         };
     }
@@ -62,7 +56,16 @@ public class Grid
             }
         }
 
-        Blocks[1, 3] = new Block("assets/forest_tile.png", TerrainType.Forest, 1, 3);
+        var tempCoords = new (byte x, byte y)[2]
+        {
+            (0, 2),
+            (0, 1)
+        };
+        foreach (var point in tempCoords)
+        {
+            Blocks[point.x, point.y] = new Block("assets/forest_tile.png", TerrainType.Forest, point.x, point.y);
+        }
+
 
         Logger.Info("Grid initialization complete.");
     }
@@ -76,7 +79,7 @@ public class Grid
         {
             for (byte y = 0; y < Height; y++)
             {
-                Blocks[x, y].MovementCost = 0.0f;
+                Blocks[x, y].MovementCost = 0;
             }
         }
     }
@@ -88,7 +91,7 @@ public class Grid
             throw new NullReferenceException($"Unit {unit?.Name ?? "null"} is not on a block.");
         }
 
-        Logger.Info($"Calculating movement range for {unit.Name} (Move: {unit.Movement})");
+        Logger.Debug($"CalculateUnitMovementRange() called with unit: {unit.ToString()}");
 
         ResetGridMovementCosts();
         var queue = new Queue<Block>();
@@ -109,19 +112,20 @@ public class Grid
                 if (MovementRangeSet.Contains(coord))
                     continue;
 
-                float enterCost = CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
-                float totalCost = current.MovementCost + enterCost;
+                short enterCost = neighbor.Occupant != null && unit.Friendly != neighbor?.Occupant?.Friendly
+                    ? (short)255
+                    : CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
+
+                short totalCost = (short)(current.MovementCost + enterCost);
+                neighbor.MovementCost = totalCost;
 
                 if (totalCost <= unit.Movement)
-                {
-                    neighbor.MovementCost = totalCost;     // temporary value
+                {                  
                     queue.Enqueue(neighbor);
                     MovementRangeSet.Add(coord);
                 }
             }
         }
-
-        Logger.Debug($"Movement range calculated: {MovementRangeSet.Count} tiles reachable.");
     }
 
     private IEnumerable<Block> GetAdjacentBlocks(Block block)
@@ -143,23 +147,20 @@ public class Grid
         }
     }
 
-    private float CalculateTerrainTypeCost(MovementType movementType, TerrainType terrainType)
+    private short CalculateTerrainTypeCost(MovementType movementType, TerrainType terrainType)
     {
-        Logger.Debug($"CalculateTerrainTypeCost(): movementType = [{movementType}]; terrainType = [{terrainType}]");
-
         if (_movementCostsMap.TryGetValue(movementType, out var terrainDict))
         {
             if (terrainDict.TryGetValue(terrainType, out float cost))
             {
-                Logger.Debug($"CalculateTerrainTypeCost(): cost of value [{cost}] was found.");
-                return cost;
+                return (short)cost;
             }
         }
 
         throw new ArgumentNullException($"No movement type [{movementType}] cost or terrain type [{terrainType}] found in _movementCosts dictionary.");
     }
 
-    public void DrawBackground()
+    public void DrawBackground(MovementRangeTint rangeTint)
     {
         for (byte x = 0; x < Width; x++)
         {
@@ -167,7 +168,18 @@ public class Grid
             {
                 int screenX = x * BlockSize;
                 int screenY = y * BlockSize;
-                Raylib.DrawTexture(Blocks[x, y].Texture, screenX, screenY, Color.White);
+
+                var color = MovementRangeSet.Contains((x, y)) 
+                    ? rangeTint.GetCurrentColor()
+                    : Color.White;
+
+                Raylib.DrawTexture(Blocks[x, y].Texture, screenX, screenY, color);
+
+                if (Logger.MinimumLevel == LogLevel.Debug)
+                {
+                    Raylib.DrawText($"Movement Cost: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
+                    Raylib.DrawText(Blocks[x, y].PrintCoordinates(), screenX, screenY + 20, 16, Color.White);
+                }
             }
         }
     }
@@ -210,7 +222,7 @@ public class Grid
         // Place on new block
         Blocks[x, y].SetOccupant(unit);
 
-        Logger.Info($"Unit '{unit.Name}' placed at [{x}, {y}]");
+        Logger.Info($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintCoordinates()}.");
     }
 
     public void MoveUnitInDirection(Unit unit, Direction direction)
@@ -235,6 +247,12 @@ public class Grid
         if (newX < 0 || newX >= Width || newY < 0 || newY >= Height)
         {
             Logger.Debug($"Movement blocked: out of bounds ({newX}, {newY})");
+            return;
+        }
+
+        if (!MovementRangeSet.Contains((newX, newY)))
+        {
+            Logger.Debug($"Movement blocked: block coordinate [{newX}, {newY}] not in movement range.");
             return;
         }
 

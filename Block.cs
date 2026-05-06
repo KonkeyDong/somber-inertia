@@ -1,20 +1,8 @@
+using SomberInertia.Enums;
 using Raylib_cs;
 
 namespace SomberInertia;
 
-public enum TerrainType
-{
-    Road,
-    Plains,
-    Overgrowth,
-    Forest,
-    Hill,
-    Mountain,
-    Sand,
-    Impassable,
-    Water,
-    Floor,
-}
 
 public class Block
 {
@@ -41,7 +29,7 @@ public class Block
         }
     }
 
-    public float MovementCost { get; set; } = 0.0f;
+    public short MovementCost { get; set; } = 0;
 
     public Block(string texturePath, TerrainType terrainType, byte x, byte y)
     {
