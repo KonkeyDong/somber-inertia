@@ -1,4 +1,4 @@
-namespace SomberInertia.Enums;
+namespace SomberInertia.Structs;
 
 public struct Stat
 {

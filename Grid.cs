@@ -9,38 +9,37 @@ namespace SomberInertia;
 
 public class Grid
 {
-    public byte Width { get; private set; }
-    public byte Height { get; private set; }
+    public int Width { get; private set; }
+    public int Height { get; private set; }
 
     public readonly Block[,] Blocks;
 
     private readonly List<Unit> _units = new List<Unit>();
     public IReadOnlyList<Unit> Units => _units; // public read-only
 
-    public const int TileSize = 24;
-    public int BlockSize = TileSize * 3;   // 192 pixels per block
+    public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.BASE_WINDOW_SCALE);
 
-    private static readonly Dictionary<MovementType, Dictionary<TerrainType, float>> _movementCostsMap;
-    private HashSet<(byte x, byte y)> MovementRangeSet = new HashSet<(byte x, byte y)>();
+    private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
+    private HashSet<(int x, int y)> _movementRangeSet = new HashSet<(int x, int y)>();
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()
     {
-        _movementCostsMap = new Dictionary<MovementType, Dictionary<TerrainType, float>>
+        _movementCostsMap = new Dictionary<MovementType, Dictionary<TerrainType, int>>
         {
-            [MovementType.Warrior] = new Dictionary<TerrainType, float>
+            [MovementType.Warrior] = new Dictionary<TerrainType, int>
             {
-                { TerrainType.Road, 10 },
-                { TerrainType.Plains, 10 },
-                { TerrainType.Overgrowth, 15 },
-                { TerrainType.Forest, 20 },
-                { TerrainType.Hill, 15 },
-                { TerrainType.Sand, 15 }
+                { TerrainType.Road, 2 },
+                { TerrainType.Plains, 2 },
+                { TerrainType.Overgrowth, 3 },
+                { TerrainType.Forest, 4 },
+                { TerrainType.Hill, 3 },
+                { TerrainType.Sand, 3 }
             },
         };
     }
 
-    public Grid(byte width, byte height)
+    public Grid(int width, int height)
     {
         Width = width;
         Height = height;
@@ -49,15 +48,15 @@ public class Grid
 
         Blocks = new Block[Width, Height];
 
-        for (byte x = 0; x < Width; x++)
+        for (int x = 0; x < Width; x++)
         {
-            for (byte y = 0; y < Height; y++)
+            for (int y = 0; y < Height; y++)
             {
                 Blocks[x, y] = new Block("assets/grass_tile.png", TerrainType.Plains, x, y);
             }
         }
 
-        var tempCoords = new (byte x, byte y)[2]
+        var tempCoords = new (int x, int y)[2]
         {
             (0, 2),
             (0, 1)
@@ -74,56 +73,45 @@ public class Grid
     public void ResetGridMovementCosts()
     {
         Logger.Info("ResetGridMovementCosts(): resetting Visited HashSet and Blocks[,].MovementCost values.");
-        MovementRangeSet.Clear();
-
-        for (byte x = 0; x < Width; x++)
-        {
-            for (byte y = 0; y < Height; y++)
-            {
-                Blocks[x, y].MovementCost = 0;
-            }
-        }
+        _movementRangeSet.Clear();
     }
 
     public void CalculateUnitMovementRange(Unit unit)
     {
-        if (unit?.Block == null)
-        {
-            throw new NullReferenceException($"Unit {unit?.Name ?? "null"} is not on a block.");
-        }
+        if (unit?.Block == null) return;
 
-        Logger.Debug($"CalculateUnitMovementRange() called with unit: {unit.ToString()}");
+        _movementRangeSet.Clear();
+        var costToReach = new Dictionary<(int x, int y), int>();
 
-        ResetGridMovementCosts();
         var queue = new Queue<Block>();
         var start = unit.Block;
 
+        _movementRangeSet.Add((start.X, start.Y));
+        costToReach[(start.X, start.Y)] = 0;
         queue.Enqueue(start);
-        MovementRangeSet.Add((start.X, start.Y));
 
         while (queue.Count > 0)
         {
             Block current = queue.Dequeue();
+            int currentCost = costToReach[(current.X, current.Y)];
 
-            // Check all 4 directions
             foreach (Block neighbor in GetAdjacentBlocks(current))
             {
                 var coord = (neighbor.X, neighbor.Y);
-
-                if (MovementRangeSet.Contains(coord))
+                if (_movementRangeSet.Contains(coord)) 
                     continue;
 
-                short enterCost = neighbor.Occupant != null && unit.Friendly != neighbor?.Occupant?.Friendly
-                    ? (short)255
+                int enterCost = neighbor.Occupant != null && unit.Friendly != neighbor?.Occupant?.Friendly
+                    ? GameConstants.MAX_MOVEMENT_COST
                     : CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
 
-                short totalCost = (short)(current.MovementCost + enterCost);
-                neighbor.MovementCost = totalCost;
+                int totalCost = currentCost + enterCost;
 
                 if (totalCost <= unit.Movement)
-                {                  
+                {
+                    _movementRangeSet.Add(coord);
+                    costToReach[coord] = totalCost;
                     queue.Enqueue(neighbor);
-                    MovementRangeSet.Add(coord);
                 }
             }
         }
@@ -148,46 +136,61 @@ public class Grid
         }
     }
 
-    private short CalculateTerrainTypeCost(MovementType movementType, TerrainType terrainType)
+    private int CalculateTerrainTypeCost(MovementType movementType, TerrainType terrainType)
     {
         if (_movementCostsMap.TryGetValue(movementType, out var terrainDict))
         {
-            if (terrainDict.TryGetValue(terrainType, out float cost))
+            if (terrainDict.TryGetValue(terrainType, out int cost))
             {
-                return (short)cost;
+                return cost;
             }
         }
 
         throw new ArgumentNullException($"No movement type [{movementType}] cost or terrain type [{terrainType}] found in _movementCosts dictionary.");
     }
 
-    public void DrawBackground(MovementRangeTint rangeTint, float scale)
+    public void DrawBackground(float scale)
     {
-        for (byte x = 0; x < Width; x++)
+        var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
+
+        for (int x = 0; x < Width; x++)
         {
-            for (byte y = 0; y < Height; y++)
+            for (int y = 0; y < Height; y++)
             {
                 int screenX = x * BlockSize;
                 int screenY = y * BlockSize;
-
-                var color = MovementRangeSet.Contains((x, y)) 
-                    ? rangeTint.GetCurrentColor()
-                    : Color.White;
 
                 Raylib.DrawTextureEx(
                     Blocks[x, y].Texture, 
                     new Vector2(screenX, screenY), 
                     0.0f,          // rotation
                     scale,         // ← This is what scales the texture
-                    color
+                    Color.White
                 );
 
-                if (Logger.MinimumLevel == LogLevel.Debug)
+                if (debugFlag)
                 {
-                    Raylib.DrawText($"MC: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
+                    // Raylib.DrawText($"MC: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
                     Raylib.DrawText(Blocks[x, y].PrintCoordinates(), screenX, screenY + 20, 16, Color.White);
                 }
             }
+        }
+    }
+
+    public void DrawMovementRange(float scale, Color color)
+    {
+        foreach ((int x, int y) in _movementRangeSet)
+        {
+            int screenX = x * BlockSize;
+            int screenY = y * BlockSize;
+
+            Raylib.DrawTextureEx(
+                Blocks[x, y].Texture,
+                new Vector2(screenX, screenY), 
+                0.0f,
+                scale,
+                color
+            );
         }
     }
 
@@ -198,7 +201,7 @@ public class Grid
             if (unit.Block == null)
             {
                 Logger.Error($"Unit {unit.Name} has no Block reference!");
-                continue;                    // Don't crash the whole draw
+                continue;
             }
 
             int screenX = unit.Block.X * BlockSize;
@@ -207,14 +210,14 @@ public class Grid
             Raylib.DrawTextureEx(
                 unit.Texture,
                 new Vector2(screenX, screenY), 
-                0.0f,          // rotation
-                scale,         // ← This is what scales the texture
+                0.0f,
+                scale,
                 Color.White
             );
         }
     }
 
-    public void AddUnit(Unit unit, byte x, byte y)
+    public void AddUnit(Unit unit, int x, int y)
     {
         if (unit == null) 
             throw new ArgumentNullException(nameof(unit));
@@ -223,9 +226,9 @@ public class Grid
         PlaceUnit(unit, x, y);
     }
 
-    private void PlaceUnit(Unit unit, byte x, byte y)
+    private void PlaceUnit(Unit unit, int x, int y)
     {
-        if (x >= Width || y >= Height)
+        if (x < 0 || x >= Width || y < 0 || y >= Height)
             throw new ArgumentOutOfRangeException($"Target position ({x}, {y}) is outside grid bounds.");
 
         // Clear old position if any
@@ -246,8 +249,8 @@ public class Grid
             return;
         }
 
-        byte newX = unit.Block.X;
-        byte newY = unit.Block.Y;
+        var newX = unit.Block.X;
+        var newY = unit.Block.Y;
 
         switch (direction)
         {
@@ -263,7 +266,7 @@ public class Grid
             return;
         }
 
-        if (!MovementRangeSet.Contains((newX, newY)))
+        if (!_movementRangeSet.Contains((newX, newY)))
         {
             Logger.Debug($"Movement blocked: block coordinate [{newX}, {newY}] not in movement range.");
             return;

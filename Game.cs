@@ -9,18 +9,24 @@ public class Game
 {
     public Grid Grid { get; private set; }
     public Unit Player { get; private set; }
-    public MovementRangeTint RangeTint { get; private set; }
+    public MovementRangeTint MovementRangeTint { get; private set; }
     public int FrameCounter { get; private set; }
 
-    private int _width { get; set; } = 264 * 3;
-    private int _height { get; set; } = 240 * 3;
-    private float _scale = 3.0f;
+    private int _currentWidth { get; set; }
+    private int _currentHeight { get; set; }
+    private float _currentScale { get; set; }
 
     public Game()
     {
-        // Initialize core systems
-        Grid = new Grid(11, 10);
+        _currentWidth = (int)(GameConstants.BASE_WINDOW_WIDTH * GameConstants.BASE_WINDOW_SCALE);
+        _currentHeight = (int)(GameConstants.BASE_WINDOW_HEIGHT * GameConstants.BASE_WINDOW_SCALE);
+        _currentScale = GameConstants.BASE_WINDOW_SCALE;
 
+        // Initialize core systems
+        // map dimensions (in blocks)
+        // Height: 10 (240 px)
+        // Width: 11 (264 px)
+        Grid = new Grid(11, 10);
 
         Player = new Unit("assets/max.png", "Max", MovementType.Warrior, 4);
         Player.Friendly = true;
@@ -30,7 +36,7 @@ public class Game
         Grid.AddUnit(goblin, 2, 1);
         Grid.CalculateUnitMovementRange(Player);
 
-        RangeTint = new MovementRangeTint(6);   // 6 frames per tint step
+        MovementRangeTint = new MovementRangeTint(6);   // 6 frames per tint step
     }
 
     public void Update()
@@ -38,7 +44,7 @@ public class Game
         FrameCounter++;
 
         HandleInput();
-        RangeTint.Tick();
+        MovementRangeTint.Tick();
     }
 
     private void HandleInput()
@@ -71,13 +77,13 @@ public class Game
         {
             if (Raylib.IsKeyPressed(KeyboardKey.Equal))      // Ctrl + "+"
             {
-                _scale += 1.0f;
+                _currentScale += 1.0f;
                 ResizeWindow();
             }
 
             if (Raylib.IsKeyPressed(KeyboardKey.Minus))      // Ctrl + "-"
             {
-                _scale = Math.Max(0.5f, _scale - 1.0f);
+                _currentScale = Math.Max(0.5f, _currentScale - 1.0f);
                 ResizeWindow();
             }
         }
@@ -85,15 +91,15 @@ public class Game
 
     private void ResizeWindow()
     {
-        _scale = Math.Clamp(_scale, 1.0f, 5.0f);
+        _currentScale = Math.Clamp(_currentScale, 1.0f, 5.0f);
 
-        _width = (int)(264 * _scale);
-        _height = (int)(240 * _scale);
+        _currentWidth = (int)(GameConstants.BASE_WINDOW_WIDTH * _currentScale);
+        _currentHeight = (int)(GameConstants.BASE_WINDOW_HEIGHT * _currentScale);
 
-        Raylib.SetWindowSize(_width, _height);
-        Grid.BlockSize = (int)(Grid.TileSize * _scale);
+        Raylib.SetWindowSize(_currentWidth, _currentHeight);
+        Grid.BlockSize = (int)(GameConstants.TILE_SIZE * _currentScale);
 
-        Logger.Debug($"ResizeWindow() Window resized to {_width} x {_height} (Scale: {_scale:F2}x); BlockSize: {Grid.BlockSize}");
+        Logger.Debug($"ResizeWindow() Window resized to {_currentWidth} x {_currentHeight} (Scale: {_currentScale:F2}x); BlockSize: {Grid.BlockSize}");
     }
 
     public void Draw()
@@ -101,8 +107,9 @@ public class Game
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.RayWhite);
 
-        Grid.DrawBackground(RangeTint, _scale);
-        Grid.DrawUnits(_scale);
+        Grid.DrawBackground(_currentScale);
+        Grid.DrawMovementRange(_currentScale, MovementRangeTint.GetCurrentColor());
+        Grid.DrawUnits(_currentScale);
 
         Raylib.EndDrawing();
     }

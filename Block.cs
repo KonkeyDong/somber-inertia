@@ -3,17 +3,14 @@ using Raylib_cs;
 
 namespace SomberInertia;
 
-// map dimensions (in blocks)
-// Height: 10 (240 px)
-// Width: 11 (264 px)
 public class Block
 {
     public Texture2D Texture { get; private set; }
     public TerrainType TerrainType { get; private set; }
 
     // Coordinates (immutable after creation)
-    public byte X { get; private set; }
-    public byte Y { get; private set; }
+    public int X { get; private set; }
+    public int Y { get; private set; }
 
     // Occupant management
     private Unit? _occupant;
@@ -31,11 +28,9 @@ public class Block
         }
     }
 
-    public short MovementCost { get; set; } = 0;
-
-    public Block(string texturePath, TerrainType terrainType, byte x, byte y)
+    public Block(string texturePath, TerrainType terrainType, int x, int y)
     {
-        Texture = Raylib.LoadTexture(texturePath);
+        Texture = TextureManager.Load(texturePath);
         TerrainType = terrainType;
         X = x;
         Y = y;

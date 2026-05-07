@@ -8,7 +8,11 @@ class Program
     {
         Logger.MinimumLevel = LogLevel.Info;
 
-        Raylib.InitWindow(264 * 3, 240 * 3, "Somber Inertia");
+        var scale = GameConstants.BASE_WINDOW_SCALE;
+        var width = (int)(GameConstants.BASE_WINDOW_WIDTH * scale);
+        var height = (int)(GameConstants.BASE_WINDOW_HEIGHT * scale);
+
+        Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
         var game = new Game();
@@ -19,6 +23,7 @@ class Program
             game.Draw();
         }
 
+        TextureManager.UnloadAll();
         Raylib.CloseWindow();
     }
 }

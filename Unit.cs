@@ -1,4 +1,5 @@
 using SomberInertia.Enums;
+using SomberInertia.Structs;
 using Raylib_cs;
 
 namespace SomberInertia;
@@ -31,23 +32,23 @@ public class Unit
     public byte Attack { get; set; }
     public byte Defense { get; set; }
     public byte Speed { get; set; }
-    public short Movement { get; private set; }   // movement range
+    public int Movement { get; private set; }
 
     public bool Friendly { get; set; }
 
-    public Unit(string texturePath, string name, MovementType movementType, short movement)
+    public Unit(string texturePath, string name, MovementType movementType, int movement)
     {
         Texture = Raylib.LoadTexture(texturePath);
         Name = name;
         MovementType = movementType;
-        Movement = (short)(movement * 10);
+
+        // Original terrain movement costs could use values like 1.5.
+        // Multiply by two to get rid of the decimal.
+        Movement = (movement * 2);
 
         Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
     }
 
-    /// <summary>
-    /// Convenience method to set position (triggers logging)
-    /// </summary>
     public void SetPosition(Block block)
     {
         Block = block;
