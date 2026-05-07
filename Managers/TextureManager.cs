@@ -1,7 +1,7 @@
 using Raylib_cs;
 using System.Collections.Generic;
 
-namespace SomberInertia;
+namespace SomberInertia.Managers;
 
 public static class TextureManager
 {

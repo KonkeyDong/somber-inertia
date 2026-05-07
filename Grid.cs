@@ -78,7 +78,16 @@ public class Grid
 
     public void CalculateUnitMovementRange(Unit unit)
     {
-        if (unit?.Block == null) return;
+        if (unit == null)
+        {
+            Logger.Error("CalculateUnitMovementRange() unit is null.");
+        }
+
+        if (unit?.Block == null) 
+        {
+            Logger.Error($"Unit {unit.Name} does not contain a block.");
+            return;
+        }
 
         _movementRangeSet.Clear();
         var costToReach = new Dictionary<(int x, int y), int>();
@@ -97,6 +106,12 @@ public class Grid
 
             foreach (Block neighbor in GetAdjacentBlocks(current))
             {
+                if (neighbor is null)
+                {
+                    Logger.Error("CalculateUnitMovementRange() neighbor is null; ignoring.");
+                    continue;
+                }
+
                 var coord = (neighbor.X, neighbor.Y);
                 if (_movementRangeSet.Contains(coord)) 
                     continue;
