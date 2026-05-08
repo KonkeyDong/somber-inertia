@@ -5,7 +5,7 @@ using SomberInertia.Timers;
 using SomberInertia.Enums;
 using Raylib_cs;
 
-namespace SomberInertia;
+namespace SomberInertia.Core;
 
 public class Grid
 {
@@ -52,7 +52,7 @@ public class Grid
         {
             for (int y = 0; y < Height; y++)
             {
-                Blocks[x, y] = new Block("assets/grass_tile.png", TerrainType.Plains, x, y);
+                Blocks[x, y] = new Block("Assets/grass_tile.png", TerrainType.Plains, x, y);
             }
         }
 
@@ -63,7 +63,7 @@ public class Grid
         };
         foreach (var point in tempCoords)
         {
-            Blocks[point.x, point.y] = new Block("assets/forest_tile.png", TerrainType.Forest, point.x, point.y);
+            Blocks[point.x, point.y] = new Block("Assets/forest_tile.png", TerrainType.Forest, point.x, point.y);
         }
 
 

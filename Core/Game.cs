@@ -4,7 +4,7 @@ using SomberInertia.Timers;
 using System.Numerics;
 using Raylib_cs;
 
-namespace SomberInertia;
+namespace SomberInertia.Core;
 
 public class Game
 {
@@ -32,9 +32,9 @@ public class Game
         // Width: 11 (264 px)
         Grid = new Grid(11, 10);
 
-        Player = new Unit("assets/max.png", "Max", MovementType.Warrior, 4);
+        Player = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         Player.Friendly = true;
-        var goblin = new Unit("assets/goblin.png", "Goblin", MovementType.Warrior, 5);
+        var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
         goblin.Friendly = false;
         Grid.AddUnit(Player, 0, 0);
         Grid.AddUnit(goblin, 2, 1);

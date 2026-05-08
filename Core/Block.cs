@@ -2,7 +2,7 @@ using SomberInertia.Enums;
 using SomberInertia.Graphics;
 using Raylib_cs;
 
-namespace SomberInertia;
+namespace SomberInertia.Core;
 
 public class Block
 {

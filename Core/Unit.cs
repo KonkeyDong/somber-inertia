@@ -2,7 +2,7 @@ using SomberInertia.Enums;
 using SomberInertia.Structs;
 using Raylib_cs;
 
-namespace SomberInertia;
+namespace SomberInertia.Core;
 
 public class Unit
 {

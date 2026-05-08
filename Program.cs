@@ -1,4 +1,5 @@
-﻿using SomberInertia.Graphics;
+﻿using SomberInertia.Core;
+using SomberInertia.Graphics;
 using Raylib_cs;
 
 namespace SomberInertia;

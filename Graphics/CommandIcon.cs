@@ -10,7 +10,7 @@ public class CommandIcon
     public readonly Sprite Sprite;
     private readonly Timer.CommandIcon Animator;     // Better name than "CommandIcon"
 
-    private const string SpriteSheetPath = "assets/commands.png";
+    private const string SpriteSheetPath = "Assets/commands.png";
 
     public CommandIcon(CommandIconType type)      // Use enum instead of raw int
     {
