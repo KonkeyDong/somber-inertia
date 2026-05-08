@@ -1,5 +1,5 @@
 using SomberInertia.Enums;
-using SomberInertia.Managers;
+using SomberInertia.Graphics;
 using Raylib_cs;
 
 namespace SomberInertia;
@@ -31,7 +31,7 @@ public class Block
 
     public Block(string texturePath, TerrainType terrainType, int x, int y)
     {
-        Texture = TextureManager.Load(texturePath);
+        Texture = SpriteManager.Load(texturePath);
         TerrainType = terrainType;
         X = x;
         Y = y;

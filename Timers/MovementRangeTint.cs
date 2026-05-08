@@ -2,10 +2,10 @@ namespace SomberInertia.Timers;
 
 using Raylib_cs;
 
-public class MovementRangeTint
+public class MovementRangeTint : ITimers
 {
-    private readonly int _framesPerTint;
-    private int _frameCounter;
+    private readonly int _maxNumberOfFrames;
+    private int _frameCounter { get; set; }
 
     private int _currentIndex = 0;
     private int _direction = 1; // 1 = forward, -1 = backward
@@ -20,7 +20,7 @@ public class MovementRangeTint
 
     public MovementRangeTint(int framesPerTint = 8)
     {
-        _framesPerTint = framesPerTint;
+        _maxNumberOfFrames = framesPerTint;
         _frameCounter = framesPerTint;
     }
 
@@ -30,7 +30,7 @@ public class MovementRangeTint
 
         if (_frameCounter <= 0)
         {
-            _frameCounter = _framesPerTint;
+            _frameCounter = _maxNumberOfFrames;
 
             // Move index in current direction
             _currentIndex += _direction;
@@ -56,6 +56,6 @@ public class MovementRangeTint
     {
         _currentIndex = 0;
         _direction = 1;
-        _frameCounter = _framesPerTint;
+        _frameCounter = _maxNumberOfFrames;
     }
 }

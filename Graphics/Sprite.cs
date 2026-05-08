@@ -1,0 +1,62 @@
+using System.Numerics;
+using Raylib_cs;
+
+namespace SomberInertia.Graphics;
+
+public class Sprite
+{
+    public Texture2D Texture { get; private set; }
+
+    public int FrameWidth { get; private set; }
+    public int FrameHeight { get; private set; }
+
+    private int _currentFrame = 0;
+    private int _currentRow = 0;
+
+    public Sprite(string path, int frameWidth, int frameHeight)
+    {
+        Texture = SpriteManager.Load(path);
+        FrameWidth = frameWidth;
+        FrameHeight = frameHeight;
+    }
+
+    public void SetFrame(int frame)
+    {
+        _currentFrame = frame;
+    }
+
+    public void SetRow(int row)
+    {
+        if (_currentRow != row)
+        {
+            _currentRow = row;
+            _currentFrame = 0;           // Reset frame when changing row
+        }
+    }
+
+    public void Draw(Vector2 position, float scale)
+    {
+        Rectangle source = new Rectangle(
+            x:      _currentFrame * FrameWidth,
+            y:      _currentRow * FrameHeight,
+            width:  FrameWidth,
+            height: FrameHeight
+        );
+
+        Rectangle dest = new Rectangle(
+            x:      position.X,
+            y:      position.Y,
+            width:  FrameWidth * scale,
+            height: FrameHeight * scale
+        );
+
+        Raylib.DrawTexturePro(
+            Texture,
+            source,
+            dest,
+            new Vector2(0, 0),     // origin
+            0.0f,                  // rotation
+            Color.White
+        );
+    }
+}

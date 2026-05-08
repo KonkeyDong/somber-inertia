@@ -1,4 +1,4 @@
-﻿using SomberInertia.Managers;
+﻿using SomberInertia.Graphics;
 using Raylib_cs;
 
 namespace SomberInertia;
@@ -24,7 +24,7 @@ class Program
             game.Draw();
         }
 
-        TextureManager.UnloadAll();
+        SpriteManager.UnloadAll();
         Raylib.CloseWindow();
     }
 }

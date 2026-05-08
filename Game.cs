@@ -1,4 +1,5 @@
 using SomberInertia.Enums;
+using SomberInertia.Graphics;
 using SomberInertia.Timers;
 using System.Numerics;
 using Raylib_cs;
@@ -15,6 +16,9 @@ public class Game
     private int _currentWidth { get; set; }
     private int _currentHeight { get; set; }
     private float _currentScale { get; set; }
+
+    // private SomberInertia.Graphics.CommandIcon yesCommand;
+    // private SomberInertia.Graphics.CommandIcon noCommand;
 
     public Game()
     {
@@ -35,6 +39,9 @@ public class Game
         Grid.AddUnit(Player, 0, 0);
         Grid.AddUnit(goblin, 2, 1);
         Grid.CalculateUnitMovementRange(Player);
+
+        // yesCommand = new SomberInertia.Graphics.CommandIcon(CommandIconType.Yes);
+        // noCommand = new SomberInertia.Graphics.CommandIcon(CommandIconType.No);
 
         MovementRangeTint = new MovementRangeTint(6);   // 6 frames per tint step
     }

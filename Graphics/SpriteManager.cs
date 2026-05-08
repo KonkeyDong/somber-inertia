@@ -1,23 +1,25 @@
 using Raylib_cs;
 using System.Collections.Generic;
 
-namespace SomberInertia.Managers;
+namespace SomberInertia.Graphics;
 
-public static class TextureManager
+public static class SpriteManager
 {
     private static readonly Dictionary<string, Texture2D> _textures = new();
 
     public static Texture2D Load(string filePath)
     {
         if (_textures.TryGetValue(filePath, out Texture2D existing))
+        {
             return existing;
+        }
 
-        Logger.Debug($"Loading texture: {filePath}");
+        Logger.Debug($"Loading sprite: {filePath}");
         Texture2D texture = Raylib.LoadTexture(filePath);
 
         if (texture.Id == 0)
         {
-            Logger.Error($"Failed to load texture: {filePath}");
+            Logger.Error($"Failed to load sprite: {filePath}");
         }
 
         _textures[filePath] = texture;
@@ -33,6 +35,6 @@ public static class TextureManager
 
         _textures.Clear();
 
-        Logger.Info("All textures unloaded.");
+        Logger.Info("All sprites unloaded.");
     }
 }
