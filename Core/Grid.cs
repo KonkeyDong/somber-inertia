@@ -81,6 +81,7 @@ public class Grid
         if (unit == null)
         {
             Logger.Error("CalculateUnitMovementRange() unit is null.");
+            return;
         }
 
         if (unit?.Block == null) 
@@ -116,7 +117,7 @@ public class Grid
                 if (_movementRangeSet.Contains(coord)) 
                     continue;
 
-                int enterCost = neighbor.Occupant != null && unit.Friendly != neighbor?.Occupant?.Friendly
+                int enterCost = neighbor.PeekOccupant() != null && unit.Friendly != neighbor?.PeekOccupant()?.Friendly
                     ? GameConstants.MAX_MOVEMENT_COST
                     : CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
 
@@ -178,8 +179,8 @@ public class Grid
                 Raylib.DrawTextureEx(
                     Blocks[x, y].Texture, 
                     new Vector2(screenX, screenY), 
-                    0.0f,          // rotation
-                    scale,         // ← This is what scales the texture
+                    0.0f, // rotation
+                    scale,
                     Color.White
                 );
 
@@ -211,8 +212,12 @@ public class Grid
 
     public void DrawUnits(float scale)
     {
-        foreach (Unit unit in _units)
+        // We loop in reverse to get the drawing order correct.
+        // This allows current controlled unit to always be on top
+        // of a block containing an occupant.
+        for (int i = _units.Count - 1; i >= 0; i--)
         {
+            var unit = _units[i];
             if (unit.Block == null)
             {
                 Logger.Error($"Unit {unit.Name} has no Block reference!");
@@ -248,10 +253,12 @@ public class Grid
 
         // Clear old position if any
         if (unit.Block != null)
-            unit.Block.ClearOccupant();
+        {
+            unit.Block.PopOccupant();
+        }
 
         // Place on new block
-        Blocks[x, y].SetOccupant(unit);
+        Blocks[x, y].PushOccupant(unit);
 
         Logger.Info($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintCoordinates()}.");
     }

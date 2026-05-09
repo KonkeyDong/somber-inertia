@@ -36,8 +36,12 @@ public class Game
         Player.Friendly = true;
         var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
         goblin.Friendly = false;
+        var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
+        anri.Friendly = true;
+
         Grid.AddUnit(Player, 0, 0);
         Grid.AddUnit(goblin, 2, 1);
+        Grid.AddUnit(anri, 1, 1);
         Grid.CalculateUnitMovementRange(Player);
 
         // yesCommand = new SomberInertia.Graphics.CommandIcon(CommandIconType.Yes);

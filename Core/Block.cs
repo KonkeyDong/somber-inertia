@@ -14,20 +14,7 @@ public class Block
     public int Y { get; private set; }
 
     // Occupant management
-    private Unit? _occupant;
-    public Unit? Occupant
-    {
-        get => _occupant;
-        set
-        {
-            if (_occupant == value) return; // avoid spam
-
-            Logger.Debug($"Block [{X}, {Y}] occupant changed: " +
-                $"{(_occupant?.Name ?? "null")} → {(value?.Name ?? "null")}");
-
-            _occupant = value;
-        }
-    }
+    private Stack<Unit> _occupant = new Stack<Unit>();
 
     public Block(string texturePath, TerrainType terrainType, int x, int y)
     {
@@ -39,27 +26,48 @@ public class Block
         Logger.Debug($"Block created at [{x}, {y}] - {terrainType}");
     }
 
-    /// <summary>
-    /// Set a unit as occupant on this block (keeps both sides in sync)
-    /// </summary>
-    public void SetOccupant(Unit? unit)
+    public void PushOccupant(Unit unit)
     {
-        Occupant = unit;
+        if (_occupant.Count == 2)
+        {
+            Logger.Error($"PushOccupant(): Block {PrintCoordinates()} contains two occupants; no more can be set at block.");
+            throw new IndexOutOfRangeException("Stack<Unit> in Block class can at most contain two occupants.");
+        }
+
+        Logger.Debug($"PushOccupant(): pushing unit {unit.Name} into block {PrintCoordinates()}.");
+        _occupant.Push(unit);
 
         if (unit != null)
+        {
             unit.Block = this;   // important: keep bidirectional link
+        }
     }
 
-    /// <summary>
-    /// Clear any occupant from this block
-    /// </summary>
-    public void ClearOccupant()
+    public Unit PeekOccupant()
     {
-        if (Occupant != null)
+        if (_occupant.Count == 0)
         {
-            Occupant.Block = null;
-            Occupant = null;
+            return null;
         }
+
+        var unit = _occupant.Peek();
+        Logger.Debug($"PeekOccupant(): block {PrintCoordinates()} currently contains {unit?.Name ?? null}.");
+
+        return unit;
+    }
+
+    public Unit PopOccupant()
+    {
+        if (_occupant.Count == 0)
+        {
+            Logger.Error($"PopOccupant(): Block {PrintCoordinates()} attempting to pop occupant stack with size zero.");
+            throw new IndexOutOfRangeException("Stack<Unit> in Block class has zero units and cannot be popped any further.");
+        }
+
+        var unit  = _occupant.Pop();
+        unit.Block = null; // clear block data on unit
+
+        return unit;
     }
 
     public string PrintCoordinates() => $"[{X}, {Y}]";
