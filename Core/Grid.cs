@@ -21,6 +21,7 @@ public class Grid
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     private HashSet<(int x, int y)> _movementRangeSet = new HashSet<(int x, int y)>();
+    public readonly MovementRangeTint MovementRangeTint = new MovementRangeTint(6);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()
@@ -193,7 +194,7 @@ public class Grid
         }
     }
 
-    public void DrawMovementRange(float scale, Color color)
+    public void DrawMovementRange(float scale)
     {
         foreach ((int x, int y) in _movementRangeSet)
         {
@@ -205,7 +206,7 @@ public class Grid
                 new Vector2(screenX, screenY), 
                 0.0f,
                 scale,
-                color
+                MovementRangeTint.GetCurrentColor()
             );
         }
     }

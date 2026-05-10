@@ -1,4 +1,6 @@
 ﻿using SomberInertia.Core;
+using SomberInertia.State;
+using SomberInertia.Enums;
 using SomberInertia.Graphics;
 using Raylib_cs;
 
@@ -17,12 +19,27 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        var game = new Game();
+        var Grid = new Grid(11, 10);
+
+        var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
+        max.Friendly = true;
+        var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
+        goblin.Friendly = false;
+        var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
+        anri.Friendly = true;
+
+        Grid.AddUnit(max, 0, 0);
+        Grid.AddUnit(anri, 1, 1);
+        Grid.AddUnit(goblin, 2, 1);
+
+
+        GameStateManager.InitializeGameState(GameStateType.BattleMoving, Grid);
 
         while (!Raylib.WindowShouldClose())
         {
-            game.Update();
-            game.Draw();
+            GameStateManager.HandleInput();
+            GameStateManager.Update();
+            GameStateManager.Draw();
         }
 
         SpriteManager.UnloadAll();
