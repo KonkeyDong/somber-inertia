@@ -13,6 +13,12 @@ public static class Logger
 {
     public static LogLevel MinimumLevel { get; set; } = LogLevel.Info;
 
+    private const string Reset = "\x1b[0m"; // white
+    private const string Red = "\x1b[91m";
+    private const string Cyan = "\x1b[36m";
+    private const string Yellow = "\x1b[33m";
+    private const string Green = "\x1b[92m";
+
     private static readonly object _lock = new object();
 
     public static void Log(LogLevel level, string message)
@@ -23,10 +29,10 @@ public static class Logger
         {
             string prefix = level switch
             {
-                LogLevel.Debug   => "[DEBUG]  ",
-                LogLevel.Info    => "[INFO]   ",
-                LogLevel.Warning => "[WARN]   ",
-                LogLevel.Error   => "[ERROR]  ",
+                LogLevel.Debug   => $"{Green}[DEBUG]{Reset}  ",
+                LogLevel.Info    => $"{Cyan}[INFO]{Reset}   ",
+                LogLevel.Warning => $"{Yellow}[WARN]{Reset}   ",
+                LogLevel.Error   => $"{Red}[ERROR]{Reset}  ",
                 LogLevel.Fatal   => "[FATAL]  ",
                 _ => "[LOG]    "
             };
