@@ -30,6 +30,7 @@ public class Unit
     public Job Job { get; set; }
     public byte Exp { get; set; } // experience
     public byte Attack { get; set; }
+    public Weapon Weapon { get; set; }
     public byte Defense { get; set; }
     public byte Speed { get; set; }
     public int Movement { get; private set; }
@@ -52,6 +53,13 @@ public class Unit
     public void SetPosition(Block block)
     {
         Block = block;
+    }
+
+    public void EquipWeapon(Weapon weapon)
+    {
+        Logger.Warning("Unit::EquipWeapon(): will need to redesign when items are more incorporated.");
+
+        Weapon = weapon;
     }
 
     public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintCoordinates() ?? "[null]"}";

@@ -16,6 +16,9 @@ public enum GameStateType
     AreAllEnemiesDefeated,
     IsHeroDefeated,
     Fighting,
-    BattleMoving,
+    UnitMoving,
+    CalculateUnitMovementRange,
+    CalculateWeaponAttackRange,
+    BattleActionMenu,
     SelectingAction
 }

@@ -23,6 +23,7 @@ class Program
 
         var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Friendly = true;
+        max.EquipWeapon(new Weapon("Sword", 6, WeaponType.Sword, new WeaponRange(2, 2)));
         var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
         goblin.Friendly = false;
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
@@ -33,7 +34,7 @@ class Program
         Grid.AddUnit(goblin, 2, 1);
 
 
-        GameStateManager.InitializeGameState(GameStateType.BattleMoving, Grid);
+        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, Grid);
 
         while (!Raylib.WindowShouldClose())
         {

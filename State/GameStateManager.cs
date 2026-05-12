@@ -24,7 +24,7 @@ public static class GameStateManager
 
     public static void ChangeStateType(GameStateType gameStateType)
     {
-        Logger.Debug($"ChangeGameState() updating game state from {CurrentStateType} to {gameStateType}.");
+        Logger.Info($"ChangeGameState() updating game state from [{CurrentStateType}] to [{gameStateType}].");
 
         CurrentStateType = gameStateType;
         BuildGameState();
@@ -35,8 +35,20 @@ public static class GameStateManager
         IGameState newGameState = null;
         switch(CurrentStateType)
         {
-            case GameStateType.BattleMoving:
-                newGameState = new BattleMoving(_grid);
+            case GameStateType.UnitMoving:
+                newGameState = new UnitMoving(_grid);
+                break;
+
+            case GameStateType.CalculateUnitMovementRange:
+                newGameState = new CalculateUnitMovementRange(_grid);
+                break;
+
+            case GameStateType.CalculateWeaponAttackRange:
+                newGameState = new CalculateWeaponAttackRange(_grid);
+                break;
+
+            case GameStateType.BattleActionMenu:
+                newGameState = new BattleActionMenu(_grid);
                 break;
 
             default:
@@ -63,7 +75,7 @@ public static class GameStateManager
         Raylib.SetWindowSize(CurrentWidth, CurrentHeight);
         _grid.BlockSize = (int)(GameConstants.TILE_SIZE * CurrentScale);
 
-        Logger.Debug($"ResizeWindow() Window resized to {CurrentWidth} x {CurrentHeight} (Scale: {CurrentScale:F2}x); BlockSize: {_grid.BlockSize}");
+        Logger.Info($"ResizeWindow() Window resized to {CurrentWidth} x {CurrentHeight} (Scale: {CurrentScale:F2}x); BlockSize: {_grid.BlockSize}");
     }
 
     private static void HandleResizingWindow()

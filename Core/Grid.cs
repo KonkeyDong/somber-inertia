@@ -21,7 +21,8 @@ public class Grid
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     private HashSet<(int x, int y)> _movementRangeSet = new HashSet<(int x, int y)>();
-    public readonly MovementRangeTint MovementRangeTint = new MovementRangeTint(6);
+    private HashSet<(int x, int y)> _weaponAttackRangeSet = new HashSet<(int x, int y)>();
+    public readonly MovementRangeTint RangeTint = new MovementRangeTint(6);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()
@@ -73,8 +74,14 @@ public class Grid
 
     public void ResetGridMovementCosts()
     {
-        Logger.Info("ResetGridMovementCosts(): resetting Visited HashSet and Blocks[,].MovementCost values.");
+        Logger.Info("ResetGridMovementCosts(): resetting visited HashSet and Blocks[,].MovementCost values.");
         _movementRangeSet.Clear();
+    }
+
+    public void ResetAttackRangeCosts()
+    {
+        Logger.Info("ResetAttackRangeCosts(): resetting attack range HashSet.");
+        _weaponAttackRangeSet.Clear();
     }
 
     public void CalculateUnitMovementRange(Unit unit)
@@ -128,6 +135,52 @@ public class Grid
                 {
                     _movementRangeSet.Add(coord);
                     costToReach[coord] = totalCost;
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+    }
+
+    public void CalculateWeaponAttackRange(Unit unit)
+    {
+        if (unit?.Block == null || unit.Weapon == null)
+            return;
+
+        _weaponAttackRangeSet.Clear();
+
+        var queue = new Queue<Block>();
+        var visited = new HashSet<(int x, int y)>();
+        var start = unit.Block;
+
+        int minRange = unit.Weapon.Range.Min;
+        int maxRange = unit.Weapon.Range.Max;
+
+        queue.Enqueue(start);
+        visited.Add((start.X, start.Y));
+
+        while (queue.Count > 0)
+        {
+            Block current = queue.Dequeue();
+            int distance = Math.Abs(current.X - start.X) + Math.Abs(current.Y - start.Y);
+
+            // Add tile if it's within min and max range (inclusive)
+            if (distance >= minRange && distance <= maxRange)
+            {
+                _weaponAttackRangeSet.Add((current.X, current.Y));
+            }
+
+            if (distance >= maxRange)
+            {
+                continue;
+            }
+
+            foreach (Block neighbor in GetAdjacentBlocks(current))
+            {
+                var coord = (neighbor.X, neighbor.Y);
+
+                if (!visited.Contains(coord))
+                {
+                    visited.Add(coord);
                     queue.Enqueue(neighbor);
                 }
             }
@@ -196,7 +249,17 @@ public class Grid
 
     public void DrawMovementRange(float scale)
     {
-        foreach ((int x, int y) in _movementRangeSet)
+        DrawRangeBlockColor(scale, _movementRangeSet);
+    }
+
+    public void DrawWeaponAttackRange(float scale)
+    {
+        DrawRangeBlockColor(scale, _weaponAttackRangeSet);
+    }
+
+    private void DrawRangeBlockColor(float scale, HashSet<(int x, int y)> hashSet)
+    {
+        foreach((int x, int y) in hashSet)
         {
             int screenX = x * BlockSize;
             int screenY = y * BlockSize;
@@ -206,7 +269,7 @@ public class Grid
                 new Vector2(screenX, screenY), 
                 0.0f,
                 scale,
-                MovementRangeTint.GetCurrentColor()
+                RangeTint.GetCurrentColor()
             );
         }
     }
@@ -261,7 +324,7 @@ public class Grid
         // Place on new block
         Blocks[x, y].PushOccupant(unit);
 
-        Logger.Info($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintCoordinates()}.");
+        Logger.Debug($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintCoordinates()}.");
     }
 
     public void MoveUnitInDirection(Unit unit, Direction direction)

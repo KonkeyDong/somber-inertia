@@ -1,21 +1,22 @@
-using SomberInertia.Core;
 using Raylib_cs;
+
+using SomberInertia.Core;
 
 namespace SomberInertia.State;
 
-public class BattleMoving : IGameState
+public class BattleActionMenu : IGameState
 {
     private Grid _grid { get; set; }
     private Unit _currentUnit { get; set; }
 
-    public BattleMoving(Grid grid)
+    public BattleActionMenu(Grid grid)
     {
         _grid = grid;
 
         if (_grid.Units.Count == 0)
         {
-            Logger.Error("BattleMoving(): grid has no units! Aborting...");
-            throw new IndexOutOfRangeException("BattleMoving(): trying to index empty list at _grid.Units.");
+            Logger.Error("BattleActionMenu(): grid has no units! Aborting...");
+            throw new IndexOutOfRangeException("BattleActionMenu(): trying to index empty list at _grid.Units.");
         }
 
         _currentUnit = _grid.Units[0];
@@ -23,14 +24,12 @@ public class BattleMoving : IGameState
 
     public void Enter()
     {
-        Logger.Debug("BattleMoving::Enter() called.");
-        _grid.MovementRangeTint.Reset();
-        _grid.CalculateUnitMovementRange(_currentUnit);
+        _grid.RangeTint.Reset();
     }
-
+    
     public void Exit()
     {
-        Logger.Debug("BattleMoving::Exit() called.");
+        
     }
 
     public void HandleInput()
@@ -47,20 +46,17 @@ public class BattleMoving : IGameState
 
         if (Raylib.IsKeyPressed(KeyboardKey.Right))
             _grid.MoveUnitInDirection(_currentUnit, Direction.Right);
-
-        // if (Raylib.IsKeyPressed(KeyboardKey.Z))
-        //     _grid.
     }
 
     public void Update()
     {
-        _grid.MovementRangeTint.Tick();
+        _grid.RangeTint.Tick();
     }
 
     public void Draw(float scale)
     {
         _grid.DrawBackground(scale);
-        _grid.DrawMovementRange(scale);
+        _grid.DrawWeaponAttackRange(scale);
         _grid.DrawUnits(scale);
     }
 }
