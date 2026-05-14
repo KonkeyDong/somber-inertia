@@ -11,5 +11,21 @@ public enum CommandIconType
     Item,
     Search,
     Attack,
-    Stay
+    Stay,
+    Use,
+    Give,
+    Equip,
+    Drop,
+    Map,
+    Speed,
+    Message,
+    Quit,
+    Save,
+    Cure,
+    Raise,
+    Promote,
+    Buy,
+    Deals,
+    Sell,
+    Repair
 }
