@@ -6,25 +6,18 @@ namespace SomberInertia.State;
 
 public class BattleActionMenu : IGameState
 {
-    private Grid _grid { get; set; }
+    private Game _game { get; set; }
     private Unit _currentUnit { get; set; }
 
-    public BattleActionMenu(Grid grid)
+    public BattleActionMenu(Game game)
     {
-        _grid = grid;
-
-        if (_grid.Units.Count == 0)
-        {
-            Logger.Error("BattleActionMenu(): grid has no units! Aborting...");
-            throw new IndexOutOfRangeException("BattleActionMenu(): trying to index empty list at _grid.Units.");
-        }
-
-        _currentUnit = _grid.Units[0];
+        _game = game;
+        _currentUnit = _game.GetCurrentUnit();
     }
 
     public void Enter()
     {
-        _grid.RangeTint.Reset();
+        _game.Grid.RangeTint.Reset();
     }
     
     public void Exit()
@@ -36,27 +29,27 @@ public class BattleActionMenu : IGameState
     {
         // Arrow keys
         if (Raylib.IsKeyPressed(KeyboardKey.Up))
-            _grid.MoveUnitInDirection(_currentUnit, Direction.Up);
+            _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Up);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Down))
-            _grid.MoveUnitInDirection(_currentUnit, Direction.Down);
+            _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Down);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Left))
-            _grid.MoveUnitInDirection(_currentUnit, Direction.Left);
+            _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Left);
 
         if (Raylib.IsKeyPressed(KeyboardKey.Right))
-            _grid.MoveUnitInDirection(_currentUnit, Direction.Right);
+            _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Right);
     }
 
     public void Update()
     {
-        _grid.RangeTint.Tick();
+        _game.Grid.RangeTint.Tick();
     }
 
     public void Draw(float scale)
     {
-        _grid.DrawBackground(scale);
-        _grid.DrawWeaponAttackRange(scale);
-        _grid.DrawUnits(scale);
+        _game.Grid.DrawBackground(scale);
+        _game.Grid.DrawWeaponAttackRange(scale);
+        _game.Grid.DrawUnits(_game.Units, scale);
     }
 }

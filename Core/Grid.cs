@@ -14,9 +14,6 @@ public class Grid
 
     public readonly Block[,] Blocks;
 
-    private readonly List<Unit> _units = new List<Unit>();
-    public IReadOnlyList<Unit> Units => _units; // public read-only
-
     public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.BASE_WINDOW_SCALE);
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
@@ -274,14 +271,14 @@ public class Grid
         }
     }
 
-    public void DrawUnits(float scale)
+    public void DrawUnits(List<Unit> units, float scale)
     {
         // We loop in reverse to get the drawing order correct.
         // This allows current controlled unit to always be on top
         // of a block containing an occupant.
-        for (int i = _units.Count - 1; i >= 0; i--)
+        for (int i = units.Count - 1; i >= 0; i--)
         {
-            var unit = _units[i];
+            var unit = units[i];
             if (unit.Block == null)
             {
                 Logger.Error($"Unit {unit.Name} has no Block reference!");
@@ -301,20 +298,8 @@ public class Grid
         }
     }
 
-    public void AddUnit(Unit unit, int x, int y)
+    public void PlaceUnit(Unit unit, int x, int y)
     {
-        if (unit == null) 
-            throw new ArgumentNullException(nameof(unit));
-
-        _units.Add(unit);
-        PlaceUnit(unit, x, y);
-    }
-
-    private void PlaceUnit(Unit unit, int x, int y)
-    {
-        if (x < 0 || x >= Width || y < 0 || y >= Height)
-            throw new ArgumentOutOfRangeException($"Target position ({x}, {y}) is outside grid bounds.");
-
         // Clear old position if any
         if (unit.Block != null)
         {

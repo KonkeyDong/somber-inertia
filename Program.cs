@@ -19,7 +19,7 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        var Grid = new Grid(11, 10);
+        var Game = new Game(new Grid(11, 10));
 
         var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Friendly = true;
@@ -29,12 +29,12 @@ class Program
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;
 
-        Grid.AddUnit(max, 0, 0);
-        Grid.AddUnit(anri, 1, 1);
-        Grid.AddUnit(goblin, 2, 1);
+        Game.AddUnit(max, 0, 0);
+        Game.AddUnit(anri, 1, 1);
+        Game.AddUnit(goblin, 2, 1);
 
 
-        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, Grid);
+        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, Game);
 
         while (!Raylib.WindowShouldClose())
         {

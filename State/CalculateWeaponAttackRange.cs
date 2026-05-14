@@ -6,27 +6,20 @@ namespace SomberInertia.State;
 
 public class CalculateWeaponAttackRange : IGameState
 {
-    private Grid _grid { get; set; }
+    private Game _game { get; set; }
     private Unit _currentUnit { get; set; }
 
-    public CalculateWeaponAttackRange(Grid grid)
+    public CalculateWeaponAttackRange(Game game)
     {
-        _grid = grid;
-
-        if (_grid.Units.Count == 0)
-        {
-            Logger.Error("BattleActionMenu(): grid has no units! Aborting...");
-            throw new IndexOutOfRangeException("BattleActionMenu(): trying to index empty list at _grid.Units.");
-        }
-
-        _currentUnit = _grid.Units[0];
+        _game = game;
+        _currentUnit = _game.GetCurrentUnit();
     }
 
     public void Enter()
     {
         Logger.Debug("CalculateWeaponAttackRange::Enter(): called.");
-        _grid.ResetAttackRangeCosts();
-        _grid.CalculateWeaponAttackRange(_currentUnit);
+        _game.Grid.ResetAttackRangeCosts();
+        _game.Grid.CalculateWeaponAttackRange(_currentUnit);
         GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 

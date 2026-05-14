@@ -5,26 +5,19 @@ namespace SomberInertia.State;
 
 public class CalculateUnitMovementRange : IGameState
 {
-    private Grid _grid { get; set; }
+    private Game _game { get; set; }
     private Unit _currentUnit { get; set; }
 
-    public CalculateUnitMovementRange(Grid grid)
+    public CalculateUnitMovementRange(Game game)
     {
-        _grid = grid;
-
-        if (_grid.Units.Count == 0)
-        {
-            Logger.Error("CalculateUnitMovementRange(): grid has no units! Aborting...");
-            throw new IndexOutOfRangeException("CalculateUnitMovementRange(): trying to index empty list at _grid.Units.");
-        }
-
-        _currentUnit = _grid.Units[0];
+        _game = game;
+        _currentUnit = _game.GetCurrentUnit();
     }
 
     public void Enter()
     {
         Logger.Debug("CalculateUnitMovementRange::Enter(): called.");
-        _grid.CalculateUnitMovementRange(_currentUnit);
+        _game.Grid.CalculateUnitMovementRange(_currentUnit);
         GameStateManager.ChangeStateType(GameStateType.UnitMoving);
     }
 
