@@ -8,16 +8,16 @@ public static class GameStateManager
 {
     public static GameStateType CurrentStateType { get; private set; }
     public static IGameState _gameState { get; private set; }
-    public static Grid _grid { get; private set; }
+    public static Game Game { get; private set; }
 
     public static int CurrentWidth = (int)(GameConstants.BASE_WINDOW_WIDTH * GameConstants.BASE_WINDOW_SCALE);
     public static int CurrentHeight = (int)(GameConstants.BASE_WINDOW_HEIGHT * GameConstants.BASE_WINDOW_SCALE);
     public static float CurrentScale = GameConstants.BASE_WINDOW_SCALE;
 
-    public static void InitializeGameState(GameStateType gameStateType, Grid grid)
+    public static void InitializeGameState(GameStateType gameStateType, Game game)
     {
         CurrentStateType = gameStateType;
-        _grid = grid;
+        Game = game;
 
         ChangeStateType(gameStateType);
     }
@@ -36,19 +36,19 @@ public static class GameStateManager
         switch(CurrentStateType)
         {
             case GameStateType.UnitMoving:
-                newGameState = new UnitMoving(_grid);
+                newGameState = new UnitMoving(Game);
                 break;
 
             case GameStateType.CalculateUnitMovementRange:
-                newGameState = new CalculateUnitMovementRange(_grid);
+                newGameState = new CalculateUnitMovementRange(Game);
                 break;
 
             case GameStateType.CalculateWeaponAttackRange:
-                newGameState = new CalculateWeaponAttackRange(_grid);
+                newGameState = new CalculateWeaponAttackRange(Game);
                 break;
 
             case GameStateType.BattleActionMenu:
-                newGameState = new BattleActionMenu(_grid);
+                newGameState = new BattleActionMenu(Game);
                 break;
 
             default:
@@ -73,9 +73,9 @@ public static class GameStateManager
         CurrentHeight = (int)(GameConstants.BASE_WINDOW_HEIGHT * CurrentScale);
 
         Raylib.SetWindowSize(CurrentWidth, CurrentHeight);
-        _grid.BlockSize = (int)(GameConstants.TILE_SIZE * CurrentScale);
+        Game.Grid.BlockSize = (int)(GameConstants.TILE_SIZE * CurrentScale);
 
-        Logger.Info($"ResizeWindow() Window resized to {CurrentWidth} x {CurrentHeight} (Scale: {CurrentScale:F2}x); BlockSize: {_grid.BlockSize}");
+        Logger.Info($"ResizeWindow() Window resized to {CurrentWidth} x {CurrentHeight} (Scale: {CurrentScale:F2}x); BlockSize: {Game.Grid.BlockSize}");
     }
 
     private static void HandleResizingWindow()
