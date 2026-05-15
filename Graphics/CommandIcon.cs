@@ -8,15 +8,16 @@ namespace SomberInertia.Graphics;
 public class CommandIcon
 {
     public readonly Sprite Sprite;
-    private readonly Timer.CommandIcon Animator;     // Better name than "CommandIcon"
+    private readonly Timer.CommandIcon Animator;
 
     private const string SpriteSheetPath = "Assets/commands.png";
 
     public CommandIcon(CommandIconType type)      // Use enum instead of raw int
     {
+        int offset = (int)type;
         Sprite = new Sprite(SpriteSheetPath, 
-                           GameConstants.WORLD_MAP_SPRITE_SIZE, 
-                           GameConstants.WORLD_MAP_SPRITE_SIZE);
+                           GameConstants.WORLD_MAP_SPRITE_SIZE + 1, 
+                           GameConstants.WORLD_MAP_SPRITE_SIZE + 1);
 
         Animator = new Timer.CommandIcon(6);
         
@@ -34,5 +35,9 @@ public class CommandIcon
         Sprite.Draw(position, scale);
     }
 
-    public void Reset() => Animator.Reset();
+    public void Reset()
+    {
+        Animator.Reset();
+        Sprite.SetFrame(0);
+    }
 }
