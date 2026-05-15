@@ -13,12 +13,29 @@ public class Sprite
     private int _currentFrame = 0;
     private int _currentRow = 0;
 
+    private int _offsetWidth { get; set; }
+    private int _offsetHeight { get; set; }
+
     public Sprite(string path, int frameWidth, int frameHeight)
     {
         Texture = SpriteManager.Load(path);
         FrameWidth = frameWidth;
         FrameHeight = frameHeight;
+
+        _offsetWidth = 0;
+        _offsetHeight = 0;
     }
+
+    public Sprite(string path, int frameWidth, int frameHeight, int offsetWidth, int offsetHeight)
+    {
+        Texture = SpriteManager.Load(path);
+        FrameWidth = frameWidth;
+        FrameHeight = frameHeight;
+
+        _offsetWidth = offsetWidth;
+        _offsetHeight = offsetHeight;
+    }
+
 
     public void SetFrame(int frame)
     {
@@ -37,8 +54,8 @@ public class Sprite
     public void Draw(Vector2 position, float scale)
     {
         Rectangle source = new Rectangle(
-            x:      _currentFrame * FrameWidth,
-            y:      _currentRow * FrameHeight,
+            x:      _currentFrame * FrameWidth + _offsetWidth,
+            y:      _currentRow * FrameHeight + _offsetHeight * _currentRow,
             width:  FrameWidth,
             height: FrameHeight
         );
