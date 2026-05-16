@@ -43,7 +43,7 @@ public class BattleActionMenu : IGameState
         _currentUnit = _game.GetCurrentUnit();
 
         _icons = new CommandIcon[_layout.Length];
-        for (int i = 0; i < _layout.Length; i++)
+        for (var i = 0; i < _layout.Length; i++)
         {
             _icons[i] = new CommandIcon(_layout[i].Type);
         }
@@ -57,7 +57,9 @@ public class BattleActionMenu : IGameState
         UpdateCenterPosition();
         
         foreach (var icon in _icons)
+        {
             icon.Reset();
+        }
     }
 
     public void Exit() { }
@@ -73,25 +75,31 @@ public class BattleActionMenu : IGameState
     public void HandleInput()
     {
         // Directional selection (matches your original cross layout)
-        if (Raylib.IsKeyPressed(KeyboardKey.Up))    SetSelectedCommand(CommandIconType.Attack);
-        if (Raylib.IsKeyPressed(KeyboardKey.Down))  SetSelectedCommand(CommandIconType.Stay);
-        if (Raylib.IsKeyPressed(KeyboardKey.Left))  SetSelectedCommand(CommandIconType.Magic);
-        if (Raylib.IsKeyPressed(KeyboardKey.Right)) SetSelectedCommand(CommandIconType.Item);
+        if (Raylib.IsKeyPressed(KeyboardKey.Up))    { SetSelectedCommand(CommandIconType.Attack); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Down))  { SetSelectedCommand(CommandIconType.Stay); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Left))  { SetSelectedCommand(CommandIconType.Magic); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Right)) { SetSelectedCommand(CommandIconType.Item); }
 
-        // // === NEW: Confirmation & Cancel (you definitely want these) ===
-        // if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Space))
-        //     ConfirmSelection();
+        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        {
+            ConfirmSelection();
+        }
 
-        // if (Raylib.IsKeyPressed(KeyboardKey.Escape) || Raylib.IsKeyPressed(KeyboardKey.Backspace))
-        //     CancelMenu();
+        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        {
+            CancelMenu();
+        }
     }
 
     private void SetSelectedCommand(CommandIconType newCommand)
     {
-        if (_selectedCommand == newCommand) return;
+        if (_selectedCommand == newCommand) 
+        {
+            return;
+        }
 
         // Reset the old icon's animation
-        int oldIndex = _typeToIndex[_selectedCommand];
+        var oldIndex = _typeToIndex[_selectedCommand];
         _icons[oldIndex].Reset();
 
         _selectedCommand = newCommand;
@@ -99,22 +107,18 @@ public class BattleActionMenu : IGameState
 
     private void ConfirmSelection()
     {
-        // TODO: Trigger the actual action (attack, magic, etc.)
-        // Example:
-        // _game.ExecuteBattleAction(_selectedCommand, _currentUnit);
-        // _game.StateManager.PopState(); // or transition to target selection
-
-        System.Console.WriteLine($"[BattleActionMenu] Confirmed: {_selectedCommand}");
+        Logger.Debug($"BattleActionMenu::ConfirmSelection() selected command: {_selectedCommand}.");
     }
 
-    // private void CancelMenu()
-    // {
-    //     _game.StateManager.PopState(); // go back to previous state
-    // }
+    private void CancelMenu()
+    {
+       Logger.Debug($"BattleActionMenu::CancelMenu() called; returning to [{GameStateType.UnitMoving}] state.");
+       GameStateManager.ChangeStateType(GameStateType.UnitMoving);
+    }
 
     public void Update()
     {
-        int currentIndex = _typeToIndex[_selectedCommand];
+        var currentIndex = _typeToIndex[_selectedCommand];
         _icons[currentIndex].Update();
 
         _game.Grid.RangeTint.Tick();
@@ -126,9 +130,9 @@ public class BattleActionMenu : IGameState
         _game.Grid.DrawWeaponAttackRange(scale);
         _game.Grid.DrawUnits(_game.Units, scale);
 
-        for (int i = 0; i < _icons.Length; i++)
+        for (var i = 0; i < _icons.Length; i++)
         {
-            Vector2 position = _centerPosition + _layout[i].Offset * scale;
+            var position = _centerPosition + _layout[i].Offset * scale;
             _icons[i].Draw(position, scale);
         }
     }

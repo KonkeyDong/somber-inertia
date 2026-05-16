@@ -1,0 +1,29 @@
+[*.cs]
+# Require braces on ALL control-flow statements (if, else, for, while, do, etc.)
+# even when they contain only one statement.
+csharp_prefer_braces = true:error
+
+# private fields must start with underscore
+dotnet_naming_rule.private_fields_with_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_with_underscore.style = prefix_underscore
+dotnet_naming_rule.private_fields_with_underscore.severity = error
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.prefix_underscore.capitalization = camel_case
+dotnet_naming_style.prefix_underscore.required_prefix = _
+
+# Prefer 'var' when the type is obvious
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+
+# Expression-bodied members (cleaner for short methods/properties)
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
+
+# Using directive placement and sorting
+csharp_using_directive_placement = outside_namespace:suggestion
+dotnet_sort_system_directives_first = true:suggestion

@@ -7,8 +7,8 @@ namespace SomberInertia.State;
 public static class GameStateManager
 {
     public static GameStateType CurrentStateType { get; private set; }
-    public static IGameState _gameState { get; private set; }
-    public static Game Game { get; private set; }
+    public static IGameState? _gameState { get; private set; }
+    public static Game Game { get; private set; } = null!;
 
     public static int CurrentWidth = (int)(GameConstants.BASE_WINDOW_WIDTH * GameConstants.BASE_WINDOW_SCALE);
     public static int CurrentHeight = (int)(GameConstants.BASE_WINDOW_HEIGHT * GameConstants.BASE_WINDOW_SCALE);
@@ -32,7 +32,7 @@ public static class GameStateManager
 
     private static void BuildGameState()
     {
-        IGameState newGameState = null;
+        IGameState newGameState;
         switch(CurrentStateType)
         {
             case GameStateType.UnitMoving:
@@ -53,7 +53,7 @@ public static class GameStateManager
 
             default:
                 Logger.Error($"BuildGameState() unidentified game state {CurrentStateType}.");
-                break;
+                throw new NullReferenceException($"GameStateManager::BuildGameState(): unknown game state [{CurrentStateType}] set; aborting.");
         }
 
         if (_gameState != null)
@@ -117,20 +117,17 @@ public static class GameStateManager
         HandleLoggingToggle();
 
         // game state specific input
-        _gameState.HandleInput();
+        _gameState?.HandleInput();
     }
 
-    public static void Update()
-    {
-        _gameState.Update();
-    }
+    public static void Update() => _gameState?.Update();
 
     public static void Draw()
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.RayWhite);
 
-        _gameState.Draw(CurrentScale);
+        _gameState?.Draw(CurrentScale);
 
         Raylib.EndDrawing();
     }
