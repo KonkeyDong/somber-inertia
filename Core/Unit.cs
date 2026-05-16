@@ -18,7 +18,10 @@ public class Unit
         get => _block;
         set
         {
-            if (_block == value) return; // avoid spam on same value
+            if (_block == value) 
+            {
+                return; // avoid spam on same value
+            }
 
             _block = value;
         }
@@ -30,7 +33,7 @@ public class Unit
     public Job Job { get; set; }
     public byte Exp { get; set; } // experience
     public byte Attack { get; set; }
-    public Weapon Weapon { get; set; }
+    public Weapon Weapon { get; set; } = null!;
     public byte Defense { get; set; }
     public byte Speed { get; set; }
     public int Movement { get; private set; }
@@ -47,13 +50,13 @@ public class Unit
         // Multiply by two to get rid of the decimal.
         Movement = (movement * 2);
 
+        // default for now
+        EquipWeapon(new Weapon("Unarmed", 0, WeaponType.Unarmed, new WeaponRange(1, 1)));
+
         Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
     }
 
-    public void SetPosition(Block block)
-    {
-        Block = block;
-    }
+    public void SetPosition(Block block) => Block = block;
 
     public void EquipWeapon(Weapon weapon)
     {

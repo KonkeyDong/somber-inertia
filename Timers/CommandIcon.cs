@@ -23,13 +23,7 @@ public class CommandIcon : ITimers
         }
     }
 
-    public int GetCurrentFrameIndex()
-    {
-        return _currentIndex;
-    }
+    public int GetCurrentFrameIndex() => _currentIndex;
 
-    public void Reset()
-    {
-        _frameCounter = _maxNumberOfFrames;
-    }
+    public void Reset() => _frameCounter = _maxNumberOfFrames;
 }

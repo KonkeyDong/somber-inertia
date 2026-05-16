@@ -43,9 +43,9 @@ public class Block
         }
     }
 
-    public Unit PeekOccupant()
+    public Unit? PeekOccupant()
     {
-        if (_occupant.Count == 0)
+        if (_occupant == null || _occupant.Count == 0)
         {
             return null;
         }

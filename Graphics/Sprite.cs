@@ -37,10 +37,7 @@ public class Sprite
     }
 
 
-    public void SetFrame(int frame)
-    {
-        _currentFrame = frame;
-    }
+    public void SetFrame(int frame) => _currentFrame = frame;
 
     public void SetRow(int row)
     {
@@ -53,14 +50,14 @@ public class Sprite
 
     public void Draw(Vector2 position, float scale)
     {
-        Rectangle source = new Rectangle(
+        var source = new Rectangle(
             x:      _currentFrame * FrameWidth + _offsetWidth,
             y:      _currentRow * FrameHeight + _offsetHeight * _currentRow,
             width:  FrameWidth,
             height: FrameHeight
         );
 
-        Rectangle dest = new Rectangle(
+        var dest = new Rectangle(
             x:      position.X,
             y:      position.Y,
             width:  FrameWidth * scale,

@@ -9,13 +9,13 @@ public static class SpriteManager
 
     public static Texture2D Load(string filePath)
     {
-        if (_textures.TryGetValue(filePath, out Texture2D existing))
+        if (_textures.TryGetValue(filePath, out var existing))
         {
             return existing;
         }
 
         Logger.Debug($"Loading sprite: {filePath}");
-        Texture2D texture = Raylib.LoadTexture(filePath);
+        var texture = Raylib.LoadTexture(filePath);
 
         if (texture.Id == 0)
         {

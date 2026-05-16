@@ -21,10 +21,7 @@ public class CalculateUnitMovementRange : IGameState
         GameStateManager.ChangeStateType(GameStateType.UnitMoving);
     }
 
-    public void Exit()
-    {
-        Logger.Debug("CalculateUnitMovementRange::Enter(): called.");
-    }
+    public void Exit() => Logger.Debug("CalculateUnitMovementRange::Enter(): called.");
 
     // no op
     public void HandleInput()

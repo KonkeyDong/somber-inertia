@@ -23,11 +23,14 @@ public static class Logger
 
     public static void Log(LogLevel level, string message)
     {
-        if (level < MinimumLevel) return;
+        if (level < MinimumLevel) 
+        {
+            return;
+        }
 
         lock (_lock)  // thread-safe
         {
-            string prefix = level switch
+            var prefix = level switch
             {
                 LogLevel.Debug   => $"{Green}[DEBUG]{Reset}  ",
                 LogLevel.Info    => $"{Cyan}[INFO]{Reset}   ",

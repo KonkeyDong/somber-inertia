@@ -19,10 +19,7 @@ public readonly struct WeaponRange
         Max = max;
     }
 
-    public string ToString()
-    {
-        return $"[<Attack Range> Min: {Min}; Max: {Max}]]";
-    }
+    public override string ToString() => $"[<Attack Range> Min: {Min}; Max: {Max}]]";
 }
 
 public class Weapon

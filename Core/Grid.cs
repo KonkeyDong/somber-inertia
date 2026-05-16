@@ -47,9 +47,9 @@ public class Grid
 
         Blocks = new Block[Width, Height];
 
-        for (int x = 0; x < Width; x++)
+        for (var x = 0; x < Width; x++)
         {
-            for (int y = 0; y < Height; y++)
+            for (var y = 0; y < Height; y++)
             {
                 Blocks[x, y] = new Block("Assets/grass_tile.png", TerrainType.Plains, x, y);
             }
@@ -89,7 +89,7 @@ public class Grid
             return;
         }
 
-        if (unit?.Block == null) 
+        if (unit.Block == null) 
         {
             Logger.Error($"Unit {unit.Name} does not contain a block.");
             return;
@@ -107,12 +107,12 @@ public class Grid
 
         while (queue.Count > 0)
         {
-            Block current = queue.Dequeue();
-            int currentCost = costToReach[(current.X, current.Y)];
+            var current = queue.Dequeue();
+            var currentCost = costToReach[(current.X, current.Y)];
 
-            foreach (Block neighbor in GetAdjacentBlocks(current))
+            foreach (var neighbor in GetAdjacentBlocks(current))
             {
-                if (neighbor is null)
+                if (neighbor == null)
                 {
                     Logger.Error("CalculateUnitMovementRange() neighbor is null; ignoring.");
                     continue;
@@ -120,13 +120,16 @@ public class Grid
 
                 var coord = (neighbor.X, neighbor.Y);
                 if (_movementRangeSet.Contains(coord)) 
+                {
                     continue;
+                }
 
-                int enterCost = neighbor.PeekOccupant() != null && unit.Friendly != neighbor?.PeekOccupant()?.Friendly
+                var occupant = neighbor.PeekOccupant();
+                var enterCost = occupant != null && unit.Friendly != occupant.Friendly
                     ? GameConstants.MAX_MOVEMENT_COST
                     : CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
 
-                int totalCost = currentCost + enterCost;
+                var totalCost = currentCost + enterCost;
 
                 if (totalCost <= unit.Movement)
                 {
@@ -141,7 +144,9 @@ public class Grid
     public void CalculateWeaponAttackRange(Unit unit)
     {
         if (unit?.Block == null || unit.Weapon == null)
+        {
             return;
+        }
 
         _weaponAttackRangeSet.Clear();
 
@@ -149,16 +154,16 @@ public class Grid
         var visited = new HashSet<(int x, int y)>();
         var start = unit.Block;
 
-        int minRange = unit.Weapon.Range.Min;
-        int maxRange = unit.Weapon.Range.Max;
+        var minRange = unit.Weapon.Range.Min;
+        var maxRange = unit.Weapon.Range.Max;
 
         queue.Enqueue(start);
         visited.Add((start.X, start.Y));
 
         while (queue.Count > 0)
         {
-            Block current = queue.Dequeue();
-            int distance = Math.Abs(current.X - start.X) + Math.Abs(current.Y - start.Y);
+            var current = queue.Dequeue();
+            var distance = Math.Abs(current.X - start.X) + Math.Abs(current.Y - start.Y);
 
             // Add tile if it's within min and max range (inclusive)
             if (distance >= minRange && distance <= maxRange)
@@ -171,7 +176,7 @@ public class Grid
                 continue;
             }
 
-            foreach (Block neighbor in GetAdjacentBlocks(current))
+            foreach (var neighbor in GetAdjacentBlocks(current))
             {
                 var coord = (neighbor.X, neighbor.Y);
 
@@ -213,8 +218,8 @@ public class Grid
 
         foreach (var (dx, dy) in directions)
         {
-            int newX = block.X + dx;
-            int newY = block.Y + dy;
+            var newX = block.X + dx;
+            var newY = block.Y + dy;
 
             if (newX >= 0 && newX < Width && newY >= 0 && newY < Height)
             {
@@ -227,7 +232,7 @@ public class Grid
     {
         if (_movementCostsMap.TryGetValue(movementType, out var terrainDict))
         {
-            if (terrainDict.TryGetValue(terrainType, out int cost))
+            if (terrainDict.TryGetValue(terrainType, out var cost))
             {
                 return cost;
             }
@@ -240,12 +245,12 @@ public class Grid
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
 
-        for (int x = 0; x < Width; x++)
+        for (var x = 0; x < Width; x++)
         {
-            for (int y = 0; y < Height; y++)
+            for (var y = 0; y < Height; y++)
             {
-                int screenX = x * BlockSize;
-                int screenY = y * BlockSize;
+                var screenX = x * BlockSize;
+                var screenY = y * BlockSize;
 
                 Raylib.DrawTextureEx(
                     Blocks[x, y].Texture, 
@@ -264,22 +269,14 @@ public class Grid
         }
     }
 
-    public void DrawMovementRange(float scale)
-    {
-        DrawRangeBlockColor(scale, _movementRangeSet);
-    }
-
-    public void DrawWeaponAttackRange(float scale)
-    {
-        DrawRangeBlockColor(scale, _weaponAttackRangeSet);
-    }
-
+    public void DrawMovementRange(float scale) => DrawRangeBlockColor(scale, _movementRangeSet);
+    public void DrawWeaponAttackRange(float scale) => DrawRangeBlockColor(scale, _weaponAttackRangeSet);
     private void DrawRangeBlockColor(float scale, HashSet<(int x, int y)> hashSet)
     {
-        foreach((int x, int y) in hashSet)
+        foreach((var x, var y) in hashSet)
         {
-            int screenX = x * BlockSize;
-            int screenY = y * BlockSize;
+            var screenX = x * BlockSize;
+            var screenY = y * BlockSize;
 
             Raylib.DrawTextureEx(
                 Blocks[x, y].Texture,
@@ -296,7 +293,7 @@ public class Grid
         // We loop in reverse to get the drawing order correct.
         // This allows current controlled unit to always be on top
         // of a block containing an occupant.
-        for (int i = units.Count - 1; i >= 0; i--)
+        for (var i = units.Count - 1; i >= 0; i--)
         {
             var unit = units[i];
             if (unit.Block == null)
@@ -305,8 +302,8 @@ public class Grid
                 continue;
             }
 
-            int screenX = unit.Block.X * BlockSize;
-            int screenY = unit.Block.Y * BlockSize;
+            var screenX = unit.Block.X * BlockSize;
+            var screenY = unit.Block.Y * BlockSize;
 
             Raylib.DrawTextureEx(
                 unit.Texture,

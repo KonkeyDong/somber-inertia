@@ -14,7 +14,7 @@ public class CommandIcon
 
     public CommandIcon(CommandIconType type)      // Use enum instead of raw int
     {
-        int offset = (int)type;
+        var offset = (int)type;
         Sprite = new Sprite(SpriteSheetPath, 
                            GameConstants.WORLD_MAP_SPRITE_SIZE + 1, 
                            GameConstants.WORLD_MAP_SPRITE_SIZE + 1);
@@ -30,10 +30,7 @@ public class CommandIcon
         Sprite.SetFrame(Animator.GetCurrentFrameIndex());
     }
 
-    public void Draw(Vector2 position, float scale)
-    {
-        Sprite.Draw(position, scale);
-    }
+    public void Draw(Vector2 position, float scale) => Sprite.Draw(position, scale);
 
     public void Reset()
     {
