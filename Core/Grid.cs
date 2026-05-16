@@ -184,6 +184,26 @@ public class Grid
         }
     }
 
+    // Note: attack range could be spell range, or item range.
+    public List<Unit> BuildListOfUnitsInAttackRange(Unit unit)
+    {
+        Logger.Debug("Grid::BuildListOfUnitsInAttackRange() building list of units in attack/spell range.");
+        var unitsInRange = new List<Unit>();
+
+        foreach (var (x, y) in _weaponAttackRangeSet)
+        {
+            var occupant = Blocks[x, y].PeekOccupant();
+            if (occupant == null)
+            {
+                continue;
+            }
+            
+            unitsInRange.Add(occupant);
+        }
+
+        return unitsInRange;
+    }
+
     private IEnumerable<Block> GetAdjacentBlocks(Block block)
     {
         var directions = new (int dx, int dy)[]

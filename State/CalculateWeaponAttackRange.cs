@@ -20,6 +20,9 @@ public class CalculateWeaponAttackRange : IGameState
         Logger.Debug("CalculateWeaponAttackRange::Enter(): called.");
         // _game.Grid.ResetAttackRangeCosts();
         _game.Grid.CalculateWeaponAttackRange(_currentUnit);
+        var unitsInRange = _game.Grid.BuildListOfUnitsInAttackRange(_currentUnit);
+        _game.SeparateListOfUnitsInRange(_currentUnit, unitsInRange);
+
         GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 

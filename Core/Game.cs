@@ -4,6 +4,8 @@ public class Game
 {
     public Grid Grid { get; set; }
     public List<Unit> Units { get; set; } = new List<Unit>();
+    public List<Unit> FriendlyUnitsInRange { get; set; } = new List<Unit>();
+    public List<Unit> UnfriendlyUnitsInRange { get; set; } = new List<Unit>();
 
     public Game(Grid grid)
     {
@@ -36,5 +38,31 @@ public class Game
 
         Units.Add(unit);
         Grid.PlaceUnit(unit, x, y);
+    }
+
+    public void ResetListOfUnitsInRange()
+    {
+        FriendlyUnitsInRange.Clear();
+        UnfriendlyUnitsInRange.Clear();
+    }
+
+    public void SeparateListOfUnitsInRange(Unit currentUnit, List<Unit> unitsInRange)
+    {
+        Logger.Debug("Game::SeparateListOfUnitsInRange(): resetting FriendlyUnitsInRange and UnfriendlyUnitsInRange lists.");
+        ResetListOfUnitsInRange();
+
+        foreach (var unitInRange in unitsInRange)
+        {
+            if (currentUnit.Friendly == unitInRange.Friendly)
+            {
+                FriendlyUnitsInRange.Add(unitInRange);
+            }
+            else
+            {
+                UnfriendlyUnitsInRange.Add(unitInRange);
+            }
+        }
+
+        Logger.Info($"FriendlyUnitsInRange.Count = {FriendlyUnitsInRange.Count()}; UnfriendlyUnitsInRange.Count = {UnfriendlyUnitsInRange.Count()}.");
     }
 }
