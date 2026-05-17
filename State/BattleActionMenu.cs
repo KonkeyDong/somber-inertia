@@ -108,6 +108,17 @@ public class BattleActionMenu : IGameState
     private void ConfirmSelection()
     {
         Logger.Debug($"BattleActionMenu::ConfirmSelection() selected command: {_selectedCommand}.");
+
+        if (_selectedCommand == CommandIconType.Attack && _game.UnfriendlyUnitsInRange.Count() > 0)
+        {
+            CombatSystem.Attack(_currentUnit, _game.UnfriendlyUnitsInRange[0]);
+            GameStateManager.ChangeStateType(GameStateType.EndTurn);
+        }
+
+        if (_selectedCommand == CommandIconType.Stay)
+        {
+            GameStateManager.ChangeStateType(GameStateType.EndTurn);
+        }
     }
 
     private void CancelMenu()

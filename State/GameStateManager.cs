@@ -51,6 +51,10 @@ public static class GameStateManager
                 newGameState = new BattleActionMenu(Game);
                 break;
 
+            case GameStateType.EndTurn:
+                newGameState = new EndTurn(Game);
+                break;
+
             default:
                 Logger.Error($"BuildGameState() unidentified game state {CurrentStateType}.");
                 throw new NullReferenceException($"GameStateManager::BuildGameState(): unknown game state [{CurrentStateType}] set; aborting.");

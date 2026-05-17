@@ -23,9 +23,11 @@ class Program
 
         var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Friendly = true;
-        max.EquipWeapon(new Weapon("Sword", 6, WeaponType.Sword, new WeaponRange(2, 2)));
+        max.Attack = 10;
+        max.EquipWeapon(new Weapon("Sword", 6, WeaponType.Sword, new WeaponRange(1, 1)));
         var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
         goblin.Friendly = false;
+        goblin.Defense = 5;
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;
 

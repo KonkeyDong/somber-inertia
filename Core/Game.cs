@@ -23,6 +23,19 @@ public class Game
         return Units[0];
     }
 
+    public void MoveFirstUnitToEndOfList()
+    {
+        if (Units.Count <= 1)
+        {
+            Logger.Error("Game::MoveFirstUnitToEndOfList(): Units list is empty.");
+            throw new InvalidOperationException("units list is empty.");
+        }
+        
+        var first = Units[0];
+        Units.RemoveAt(0);
+        Units.Add(first);
+    }
+
     public void AddUnit(Unit unit, int x, int y)
     {
         if (unit == null)
