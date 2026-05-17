@@ -299,7 +299,7 @@ public class Grid
 
         var tileSize = (int)GameConstants.TILE_SIZE * scale;
 
-        Rectangle highlightRect = new Rectangle(
+        var highlightRect = new Rectangle(
             block.X * tileSize,
             block.Y * tileSize,
             tileSize,
@@ -387,9 +387,18 @@ public class Grid
     public void RemoveDeadUnitsFromGrid(List<Unit> deadUnits)
     {
         Logger.Debug("Grid::RemoveDeadUnitsFromGrid(): removing dead units from grid.");
+
         foreach (var deadUnit in deadUnits)
         {
-            deadUnit.Block.PopOccupant();
+            if (deadUnit.Block != null)
+            {
+                deadUnit.Block.PopOccupant();
+            }
+            else
+            {
+                Logger.Error($"Grid::RemoveDeadUnitsFromGrid(): Dead unit '{deadUnit.Name}' had no Block reference.");
+                throw new NullReferenceException("dead unit has no block reference.");
+            }
         }
     }
 }
