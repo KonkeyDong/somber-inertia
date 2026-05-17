@@ -288,6 +288,27 @@ public class Grid
         }
     }
 
+    public void DrawRectangleAroundCurrentUnit(float scale, Unit currentUnit)
+    {
+        var block = currentUnit.Block;
+        if (block == null)
+        {
+            Logger.Error($"Grid::DrawRectangleAroundCurrentUnit(): current unit [{currentUnit.Name}] does not have a block assigned.");
+            throw new NullReferenceException("current unit does not have a block.");
+        }
+
+        var tileSize = (int)GameConstants.TILE_SIZE * scale;
+
+        Rectangle highlightRect = new Rectangle(
+            block.X * tileSize,
+            block.Y * tileSize,
+            tileSize,
+            tileSize
+        );
+
+        Raylib.DrawRectangleLinesEx(highlightRect, scale, Color.White);
+    }
+
     public void DrawUnits(List<Unit> units, float scale)
     {
         // We loop in reverse to get the drawing order correct.
