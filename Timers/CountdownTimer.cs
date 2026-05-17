@@ -1,0 +1,33 @@
+namespace SomberInertia.Timers;
+
+public class CountdownTimer : ITimers
+{
+    private int _maxNumberOfFrames { get; set; }
+    private int _frameCounter { get; set; }
+    private bool _isActive { get; set; }
+
+    public CountdownTimer(int frameCounter)
+    {
+        _maxNumberOfFrames = frameCounter;
+        _frameCounter = frameCounter;
+        _isActive = true;
+    }
+
+    public void Tick()
+    {
+        if (_frameCounter == 0)
+        {
+            return; // no op
+        }
+
+        _frameCounter--;
+
+        if (_frameCounter == 0)
+        {
+            _isActive = false;
+        }
+    }
+
+    public bool GetIsActive() => _isActive;
+    public void Reset() => _frameCounter = _maxNumberOfFrames;
+}
