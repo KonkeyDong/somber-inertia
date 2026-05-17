@@ -362,4 +362,13 @@ public class Grid
 
         PlaceUnit(unit, newX, newY);
     }
+
+    public void RemoveDeadUnitsFromGrid(List<Unit> deadUnits)
+    {
+        Logger.Debug("Grid::RemoveDeadUnitsFromGrid(): removing dead units from grid.");
+        foreach (var deadUnit in deadUnits)
+        {
+            deadUnit.Block.PopOccupant();
+        }
+    }
 }

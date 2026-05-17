@@ -19,7 +19,10 @@ public class EndTurn : IGameState
     {
         Logger.Debug("EndTurn::Enter()");
 
+        _game.ResetListOfUnitsInRange();
+        _game.Grid.RemoveDeadUnitsFromGrid(_game.RemoveDeadUnits());
         _game.MoveFirstUnitToEndOfList();
+        
         GameStateManager.ChangeStateType(GameStateType.CalculateUnitMovementRange);
     }
 

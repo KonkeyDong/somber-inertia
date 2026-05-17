@@ -14,7 +14,7 @@ public static class CombatSystem
         }
 
         Logger.Info("   Attack hits!");
-        var baseDamage = attacker.Attack - defender.Defense;
+        var baseDamage = (attacker.Attack + attacker.Weapon.Attack) - defender.Defense;
         if (baseDamage <= 0)
         {
             Logger.Info($"{attacker.Name}'s attack [{attacker.Attack}] is less than or equal to {defender.Name}'s defense [{defender.Defense}]. Minimum damage is 1");

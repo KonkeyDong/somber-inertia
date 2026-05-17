@@ -30,6 +30,7 @@ class Program
         goblin.Defense = 5;
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;
+        anri.EquipWeapon(new Weapon("Staff", 4, WeaponType.Staff, new WeaponRange(1, 1)));
 
         Game.AddUnit(max, 0, 0);
         Game.AddUnit(anri, 1, 1);
