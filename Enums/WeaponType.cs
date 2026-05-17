@@ -6,7 +6,7 @@ public enum WeaponType
     Sword,
     Axe,
     Staff,
-    Arrows,
-    Spears,
+    Arrow,
+    Spear,
     Lance
 }
