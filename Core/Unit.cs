@@ -64,7 +64,7 @@ public class Unit
         MP = new Stat(10);
 
         // default for now
-        EquipWeapon(new Weapon("Unarmed", 0, WeaponType.Unarmed, new WeaponRange(1, 1)));
+        EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
         Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
     }

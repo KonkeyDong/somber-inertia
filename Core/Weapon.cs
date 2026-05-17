@@ -28,8 +28,11 @@ public class Weapon
     public int Attack { get; set; }
     public WeaponType WeaponType { get; set; }
     public WeaponRange Range { get; set; }
+    public string Spell { get; set; } // not used... yet!
+    public Job AllowedJobs { get; set; }
+    public bool Cursed { get; set; }
 
-    public Weapon(string name, int attack, WeaponType weaponType, WeaponRange range)
+    public Weapon(string name, int attack, WeaponType weaponType, WeaponRange range, string spell, Job allowedJobs, bool cursed = false)
     {
         if (attack < 0)
         {
@@ -41,5 +44,8 @@ public class Weapon
         Attack = attack;
         WeaponType = weaponType;
         Range = range;
+        Spell = spell;
+        AllowedJobs = allowedJobs;
+        Cursed = cursed;
     }
 }

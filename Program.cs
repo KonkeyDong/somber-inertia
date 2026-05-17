@@ -20,17 +20,19 @@ class Program
         Raylib.SetTargetFPS(60);
 
         var Game = new Game(new Grid(11, 10));
+        WeaponManager.Initialize();
 
         var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Friendly = true;
         max.Attack = 10;
-        max.EquipWeapon(new Weapon("Sword", 6, WeaponType.Sword, new WeaponRange(1, 1)));
+        max.EquipWeapon(WeaponManager.Create(WeaponName.ShortSword));
         var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
         goblin.Friendly = false;
         goblin.Defense = 5;
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;
-        anri.EquipWeapon(new Weapon("Staff", 4, WeaponType.Staff, new WeaponRange(1, 1)));
+        anri.Attack = 3;
+        anri.EquipWeapon(WeaponManager.Create(WeaponName.WoodenStaff));
 
         Game.AddUnit(max, 0, 0);
         Game.AddUnit(anri, 1, 1);
