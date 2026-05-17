@@ -245,16 +245,17 @@ public class Grid
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
 
+        var position = new Vector2();
         for (var x = 0; x < Width; x++)
         {
             for (var y = 0; y < Height; y++)
             {
-                var screenX = x * BlockSize;
-                var screenY = y * BlockSize;
+                position.X = x * BlockSize;
+                position.Y = y * BlockSize;
 
                 Raylib.DrawTextureEx(
-                    Blocks[x, y].Texture, 
-                    new Vector2(screenX, screenY), 
+                    Blocks[x, y].Texture,
+                    position,
                     0.0f, // rotation
                     scale,
                     Color.White
@@ -263,7 +264,7 @@ public class Grid
                 if (debugFlag)
                 {
                     // Raylib.DrawText($"MC: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
-                    Raylib.DrawText(Blocks[x, y].PrintCoordinates(), screenX, screenY + 20, 16, Color.White);
+                    Raylib.DrawText(Blocks[x, y].PrintCoordinates(), (int)position.X, (int)position.Y + 20, 16, Color.White);
                 }
             }
         }
@@ -273,14 +274,15 @@ public class Grid
     public void DrawWeaponAttackRange(float scale) => DrawRangeBlockColor(scale, _weaponAttackRangeSet);
     private void DrawRangeBlockColor(float scale, HashSet<(int x, int y)> hashSet)
     {
+        var position = new Vector2();
         foreach((var x, var y) in hashSet)
         {
-            var screenX = x * BlockSize;
-            var screenY = y * BlockSize;
+            position.X = x * BlockSize;
+            position.Y = y * BlockSize;
 
             Raylib.DrawTextureEx(
                 Blocks[x, y].Texture,
-                new Vector2(screenX, screenY), 
+                position,
                 0.0f,
                 scale,
                 RangeTint.GetCurrentColor()
@@ -311,6 +313,8 @@ public class Grid
 
     public void DrawUnits(List<Unit> units, float scale)
     {
+        var position = new Vector2();
+
         // We loop in reverse to get the drawing order correct.
         // This allows current controlled unit to always be on top
         // of a block containing an occupant.
@@ -323,12 +327,12 @@ public class Grid
                 continue;
             }
 
-            var screenX = unit.Block.X * BlockSize;
-            var screenY = unit.Block.Y * BlockSize;
+            position.X = unit.Block.X * BlockSize;
+            position.Y = unit.Block.Y * BlockSize;
 
             Raylib.DrawTextureEx(
                 unit.Texture,
-                new Vector2(screenX, screenY), 
+                position,
                 0.0f,
                 scale,
                 Color.White
