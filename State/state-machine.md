@@ -1,3 +1,4 @@
+```mermaid
 stateDiagram-v2
     [*] --> CalculateUnitMovementRange
 
@@ -13,3 +14,4 @@ stateDiagram-v2
     SelectEnemyForPhysicalAttack --> EndTurn : Attack executed
 
     EndTurn --> CalculateUnitMovementRange : Next unit's turn
+```
