@@ -25,19 +25,24 @@ class Program
         var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Friendly = true;
         max.Attack = 10;
-        max.EquipWeapon(WeaponManager.Create(WeaponName.ShortSword));
-        var goblin = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
-        goblin.Friendly = false;
-        goblin.Defense = 5;
+        max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;
         anri.Attack = 3;
         anri.EquipWeapon(WeaponManager.Create(WeaponName.WoodenStaff));
 
+        var goblin1 = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
+        goblin1.Friendly = false;
+        goblin1.Defense = 5;
+
+        var goblin2 = new Unit("Assets/goblin.png", "Goblin", MovementType.Warrior, 5);
+        goblin2.Friendly = false;
+        goblin2.Defense = 5;
+
         Game.AddUnit(max, 0, 0);
         Game.AddUnit(anri, 1, 1);
-        Game.AddUnit(goblin, 2, 1);
-
+        Game.AddUnit(goblin1, 3, 1);
+        Game.AddUnit(goblin2, 4, 2);
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, Game);
 

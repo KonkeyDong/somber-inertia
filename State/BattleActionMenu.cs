@@ -111,8 +111,7 @@ public class BattleActionMenu : IGameState
 
         if (_selectedCommand == CommandIconType.Attack && _game.UnfriendlyUnitsInRange.Count() > 0)
         {
-            CombatSystem.Attack(_currentUnit, _game.UnfriendlyUnitsInRange[0]);
-            GameStateManager.ChangeStateType(GameStateType.EndTurn);
+            GameStateManager.ChangeStateType(GameStateType.SelectEnemyForPhysicalAttack);
         }
 
         if (_selectedCommand == CommandIconType.Stay)
