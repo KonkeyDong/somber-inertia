@@ -21,5 +21,6 @@ public enum GameStateType
     CalculateUnitMovementRange,
     CalculateWeaponAttackRange,
     BattleActionMenu,
-    SelectingAction
+    SelectingAction,
+    SelectEnemyForPhysicalAttack,
 }

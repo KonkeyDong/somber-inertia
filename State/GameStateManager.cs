@@ -34,11 +34,12 @@ public static class GameStateManager
     {
         IGameState newGameState = CurrentStateType switch
         {
-            GameStateType.UnitMoving                 => new UnitMoving(Game),
-            GameStateType.CalculateUnitMovementRange => new CalculateUnitMovementRange(Game),
-            GameStateType.CalculateWeaponAttackRange => new CalculateWeaponAttackRange(Game),
-            GameStateType.BattleActionMenu           => new BattleActionMenu(Game),
-            GameStateType.EndTurn                    => new EndTurn(Game),
+            GameStateType.UnitMoving                   => new UnitMoving(Game),
+            GameStateType.CalculateUnitMovementRange   => new CalculateUnitMovementRange(Game),
+            GameStateType.CalculateWeaponAttackRange   => new CalculateWeaponAttackRange(Game),
+            GameStateType.BattleActionMenu             => new BattleActionMenu(Game),
+            GameStateType.EndTurn                      => new EndTurn(Game),
+            GameStateType.SelectEnemyForPhysicalAttack => new SelectEnemyForPhysicalAttack(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };
