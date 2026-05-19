@@ -1,3 +1,7 @@
+using SomberInertia;
+using SomberInertia.State;
+using System.Numerics;
+
 namespace SomberInertia.Core;
 
 public class Game
@@ -88,5 +92,19 @@ public class Game
         Logger.Info($"Number of dead units removed: [{count}].");
 
         return deadUnits;
+    }
+
+    public int GetScaledBlockSize() => GameConstants.TILE_SIZE * (int)GameStateManager.CurrentScale;
+    public Vector2 GetScaledBlockVectorPosition(Block block) 
+    {
+        if (block == null)
+        {
+            Logger.Error("Game::GetScaledBlockSize(): block is null.");
+            throw new NullReferenceException("Block is null");
+        }
+
+        var tileSize = GetScaledBlockSize();
+
+        return new Vector2(block.X * tileSize, block.Y * tileSize);
     }
 }

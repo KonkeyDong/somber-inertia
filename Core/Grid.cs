@@ -290,23 +290,19 @@ public class Grid
         }
     }
 
-    public void DrawRectangleAroundCurrentUnit(float scale, Unit currentUnit)
+    public void DrawHighlightRectangle(float scale, Vector2 newPosition)
     {
-        var block = currentUnit.Block;
-        if (block == null)
-        {
-            Logger.Error($"Grid::DrawRectangleAroundCurrentUnit(): current unit [{currentUnit.Name}] does not have a block assigned.");
-            throw new NullReferenceException("current unit does not have a block.");
-        }
-
-        var tileSize = (int)GameConstants.TILE_SIZE * scale;
+        var tileSize = GameConstants.TILE_SIZE * scale;
 
         var highlightRect = new Rectangle(
-            block.X * tileSize,
-            block.Y * tileSize,
+            newPosition.X,
+            newPosition.Y,
             tileSize,
             tileSize
         );
+
+        // Optional nice pulsing effect
+        var pulse = 3f + MathF.Sin((float)Raylib.GetTime() * 10f) * 1.5f;
 
         Raylib.DrawRectangleLinesEx(highlightRect, scale, Color.White);
     }

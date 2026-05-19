@@ -23,7 +23,7 @@ public static class WeaponManager
 
     public static Weapon Create(WeaponName weaponName)
     {
-        if (_weaponsLookup.TryGetValue(weaponName, out Weapon? weapon))
+        if (_weaponsLookup.TryGetValue(weaponName, out var weapon))
         {
             // Return a brand new copy
             return weapon;
