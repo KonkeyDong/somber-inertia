@@ -1,5 +1,4 @@
 namespace SomberInertia.Core;
-
 using Raylib_cs;
 
 public static class CombatSystem
@@ -20,12 +19,12 @@ public static class CombatSystem
         {
             Logger.Info($"{attacker.Name}'s attack [{attacker.Attack}] is less than or equal to {defender.Name}'s defense [{defender.Defense}]. Minimum damage is 1");
             defender.TakeDamage(1);
-
+            
             return;
         }
 
         Logger.Info($"  Base attack damage: [{baseDamage}].");
-
+        
         var variance = Raylib.GetRandomValue(75, 125);
         var variantDamage = (baseDamage * variance) / 100;
 
@@ -42,7 +41,6 @@ public static class CombatSystem
         if (denominator <= 1)
         {
             Logger.Error("CombatSystem::Chance(): denominator must be greater than 1.");
-            throw new ArgumentOutOfRangeException(nameof(denominator));
         }
 
         var result = Raylib.GetRandomValue(0, denominator - 1);

@@ -30,7 +30,6 @@ public static class WeaponManager
         }
 
         Logger.Error($"WeaponManager::Create(): Unknown weapon [{weaponName}].");
-        throw new ArgumentException($"unknown weapon: [{weaponName}].");
     }
 
     private static void BuildSwords()
@@ -93,7 +92,7 @@ public static class WeaponManager
 
         Logger.Warning("WeaponManager::BuildSpears(): need to revisit which jobs can throw spears.");
         _weaponsLookup[WeaponName.Spear] = new Weapon(WeaponName.Spear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
-        _weaponsLookup[WeaponName.Spear] = new Weapon(WeaponName.Spear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
+        _weaponsLookup[WeaponName.PowerSpear] = new Weapon(WeaponName.PowerSpear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
     }
 
     private static void BuildLances()
