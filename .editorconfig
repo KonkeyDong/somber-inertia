@@ -27,3 +27,6 @@ csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
 # Using directive placement and sorting
 csharp_using_directive_placement = outside_namespace:suggestion
 dotnet_sort_system_directives_first = true:suggestion
+
+# Require a blank line after the closing brace of if/for/while/do/etc. blocks
+csharp_new_line_after_block = true:error

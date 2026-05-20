@@ -1,5 +1,5 @@
-using SomberInertia.Enums;
 using SomberInertia.Core;
+using SomberInertia.Enums;
 
 namespace SomberInertia.State;
 
@@ -14,7 +14,7 @@ public class EndTurn : IGameState
         var current = _game.GetCurrentUnit();
         Logger.Info($"{current.Name}'s turn ends.");
     }
-    
+
     public void Enter()
     {
         Logger.Debug("EndTurn::Enter()");
@@ -22,7 +22,7 @@ public class EndTurn : IGameState
         _game.ResetListOfUnitsInRange();
         _game.Grid.RemoveDeadUnitsFromGrid(_game.RemoveDeadUnits());
         _game.MoveFirstUnitToEndOfList();
-        
+
         GameStateManager.ChangeStateType(GameStateType.CalculateUnitMovementRange);
     }
 

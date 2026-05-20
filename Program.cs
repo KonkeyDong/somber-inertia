@@ -1,8 +1,8 @@
-﻿using SomberInertia.Core;
-using SomberInertia.State;
+﻿using Raylib_cs;
+using SomberInertia.Core;
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
-using Raylib_cs;
+using SomberInertia.State;
 
 namespace SomberInertia;
 
@@ -19,13 +19,14 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        var Game = new Game(new Grid(11, 10));
+        var game = new Game(new Grid(11, 10));
         WeaponManager.Initialize();
 
         var max = new Unit("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Friendly = true;
         max.Attack = 10;
         max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
+
         var anri = new Unit("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;
         anri.Attack = 3;
@@ -39,12 +40,12 @@ class Program
         goblin2.Friendly = false;
         goblin2.Defense = 5;
 
-        Game.AddUnit(max, 0, 0);
-        Game.AddUnit(anri, 1, 1);
-        Game.AddUnit(goblin1, 3, 1);
-        Game.AddUnit(goblin2, 4, 2);
+        game.AddUnit(max, 0, 0);
+        game.AddUnit(anri, 1, 1);
+        game.AddUnit(goblin1, 3, 1);
+        game.AddUnit(goblin2, 4, 2);
 
-        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, Game);
+        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
 
         while (!Raylib.WindowShouldClose())
         {

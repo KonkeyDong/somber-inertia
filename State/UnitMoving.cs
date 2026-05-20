@@ -1,10 +1,9 @@
+using System.Numerics;
+using Raylib_cs;
 using SomberInertia.Core;
+using SomberInertia.Enums;
 using SomberInertia.State;
 using SomberInertia.Timers;
-using SomberInertia.Enums;
-using System.Numerics;
-
-using Raylib_cs;
 
 namespace SomberInertia.State;
 

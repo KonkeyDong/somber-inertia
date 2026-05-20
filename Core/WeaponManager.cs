@@ -57,8 +57,8 @@ public static class WeaponManager
 
         _weaponsLookup[WeaponName.HandAxe] = new Weapon(WeaponName.HandAxe.GetDisplayName(), 7, weaponType, weaponRange, "", Job.Warrior);
         _weaponsLookup[WeaponName.MiddleAxe] = new Weapon(WeaponName.MiddleAxe.GetDisplayName(), 11, weaponType, weaponRange, "", Job.Warrior);
-        _weaponsLookup[WeaponName.BattleAxe] = new Weapon(WeaponName.BattleAxe.GetDisplayName(),16, weaponType, weaponRange, "", Job.Warrior);
-        _weaponsLookup[WeaponName.HeatAxe] = new Weapon(WeaponName.HeatAxe.GetDisplayName(),22, weaponType, weaponRange, "BLAZE 2", Job.Gladiator);
+        _weaponsLookup[WeaponName.BattleAxe] = new Weapon(WeaponName.BattleAxe.GetDisplayName(), 16, weaponType, weaponRange, "", Job.Warrior);
+        _weaponsLookup[WeaponName.HeatAxe] = new Weapon(WeaponName.HeatAxe.GetDisplayName(), 22, weaponType, weaponRange, "BLAZE 2", Job.Gladiator);
         _weaponsLookup[WeaponName.GreatAxe] = new Weapon(WeaponName.GreatAxe.GetDisplayName(), 26, weaponType, weaponRange, "", Job.Gladiator);
         _weaponsLookup[WeaponName.Atlas] = new Weapon(WeaponName.Atlas.GetDisplayName(), 33, weaponType, weaponRange, "BLAZE 3", Job.Gladiator);
     }

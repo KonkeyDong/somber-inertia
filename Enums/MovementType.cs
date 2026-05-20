@@ -1,4 +1,3 @@
-
 namespace SomberInertia.Enums;
 
 public enum MovementType

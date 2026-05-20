@@ -51,16 +51,16 @@ public class Sprite
     public void Draw(Vector2 position, float scale)
     {
         var source = new Rectangle(
-            x:      _currentFrame * FrameWidth + _offsetWidth,
-            y:      _currentRow * FrameHeight + _offsetHeight * _currentRow,
-            width:  FrameWidth,
+            x: _currentFrame * FrameWidth + _offsetWidth,
+            y: _currentRow * FrameHeight + _offsetHeight * _currentRow,
+            width: FrameWidth,
             height: FrameHeight
         );
 
         var dest = new Rectangle(
-            x:      position.X,
-            y:      position.Y,
-            width:  FrameWidth * scale,
+            x: position.X,
+            y: position.Y,
+            width: FrameWidth * scale,
             height: FrameHeight * scale
         );
 
