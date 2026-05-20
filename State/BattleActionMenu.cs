@@ -116,7 +116,7 @@ public class BattleActionMenu : IGameState
 
         if (_selectedCommand == CommandIconType.Stay)
         {
-            GameStateManager.ChangeStateType(GameStateType.EndTurn);
+            GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
         }
     }
 

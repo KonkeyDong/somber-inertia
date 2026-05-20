@@ -1,5 +1,8 @@
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
+using SomberInertia.State;
+using System.Numerics;
+
 using Raylib_cs;
 
 namespace SomberInertia.Core;
@@ -30,11 +33,11 @@ public class Block
     {
         if (_occupant.Count == 2)
         {
-            Logger.Error($"PushOccupant(): Block {PrintCoordinates()} contains two occupants; no more can be set at block.");
+            Logger.Error($"PushOccupant(): Block {PrintGridCoordinates()} contains two occupants; no more can be set at block.");
             throw new IndexOutOfRangeException("Stack<Unit> in Block class can at most contain two occupants.");
         }
 
-        Logger.Debug($"PushOccupant(): pushing unit {unit.Name} into block {PrintCoordinates()}.");
+        Logger.Debug($"PushOccupant(): pushing unit {unit.Name} into block {PrintGridCoordinates()}.");
         _occupant.Push(unit);
 
         if (unit != null)
@@ -51,7 +54,7 @@ public class Block
         }
 
         var unit = _occupant.Peek();
-        Logger.Debug($"PeekOccupant(): block {PrintCoordinates()} currently contains {unit?.Name ?? null}.");
+        Logger.Debug($"PeekOccupant(): block {PrintGridCoordinates()} currently contains {unit?.Name ?? null}.");
 
         return unit;
     }
@@ -60,7 +63,7 @@ public class Block
     {
         if (_occupant.Count == 0)
         {
-            Logger.Error($"PopOccupant(): Block {PrintCoordinates()} attempting to pop occupant stack with size zero.");
+            Logger.Error($"PopOccupant(): Block {PrintGridCoordinates()} attempting to pop occupant stack with size zero.");
             throw new IndexOutOfRangeException("Stack<Unit> in Block class has zero units and cannot be popped any further.");
         }
 
@@ -70,7 +73,18 @@ public class Block
         return unit;
     }
 
-    public string PrintCoordinates() => $"[{X}, {Y}]";
+    public string PrintGridCoordinates() => $"[{X}, {Y}]";
+
+    public Vector2 GetGridCoordinates() => new Vector2(X, Y);
+
+    public Vector2 GetPixelCoordinates() 
+    {   
+        var blockSize = GetScaledSize();
+
+        return new Vector2(X * blockSize, Y * blockSize);
+    }
+
+    public int GetScaledSize() => GameConstants.TILE_SIZE * (int)GameStateManager.CurrentScale;
 
     public override string ToString() => $"Block [{X}, {Y}] ({TerrainType})";
 }

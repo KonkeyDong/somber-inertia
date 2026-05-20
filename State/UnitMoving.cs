@@ -12,7 +12,6 @@ public class UnitMoving : IGameState
 {
     private Game _game { get; set; }
     private Unit _currentUnit { get; set; }
-    private Vector2 _currentUnitPosition { get; set; }
     private CountdownTimer _countdownTimer { get; set; }
 
     public UnitMoving(Game game)
@@ -20,17 +19,13 @@ public class UnitMoving : IGameState
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
         _countdownTimer = new CountdownTimer(60); // 60 frames / 1 second
-
-        if (_currentUnit.Block != null)
-        {
-            _currentUnitPosition = _game.GetScaledBlockVectorPosition(_currentUnit.Block);
-        }
     }
 
     public void Enter()
     {
         Logger.Debug("UnitMoving::Enter() called.");
         _game.Grid.RangeTint.Reset();
+        _game.InitializeHighlight();
     }
 
     public void Exit() => Logger.Debug("UnitMoving::Exit() called.");
@@ -59,7 +54,7 @@ public class UnitMoving : IGameState
 
         if (_countdownTimer.GetIsActive())
         {
-            _game.Grid.DrawHighlightRectangle(scale, _currentUnitPosition);
+            _game.Grid.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
         }
 
         _game.Grid.DrawUnits(_game.Units, scale);

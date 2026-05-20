@@ -2,6 +2,8 @@ using SomberInertia;
 using SomberInertia.State;
 using System.Numerics;
 
+using Raylib_cs;
+
 namespace SomberInertia.Core;
 
 public class Game
@@ -11,6 +13,10 @@ public class Game
     public List<Unit> FriendlyUnitsInRange { get; set; } = new List<Unit>();
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new List<Unit>();
 
+    private Vector2 _highlightCurrentPosition;
+    private Vector2 _highlightTargetPosition;
+    private bool _animationComplete = false;
+
     public Game(Grid grid)
     {
         Grid = grid;
@@ -18,7 +24,7 @@ public class Game
 
     public Unit GetCurrentUnit()
     {
-        if (Units.Count == 0)
+        if (Units.Count < 0)
         {
             Logger.Error("Game::GetCurrentUnit(): list of units is empty! Aborting...");
             throw new IndexOutOfRangeException("Game::GetCurrentUnit(): trying to index empty list at Units.");
@@ -26,6 +32,19 @@ public class Game
 
         return Units[0];
     }
+
+    public Unit GetNextUnit()
+    {
+        if (Units.Count() < 2)
+        {
+            Logger.Error("Game::GetNextUnit(): list of units is less than two. Aborting...");
+            throw new IndexOutOfRangeException("Game::GetNextUnit(): list of units is less than two. Aborting...");
+        }
+
+        return Units[1];
+    }
+
+    public Unit GetLastUnit() => Units.Count() > 0 ? Units[^1] : throw new NullReferenceException("Game::GetLastUnit() list Unit is empty.");
 
     public void MoveFirstUnitToEndOfList()
     {
@@ -94,17 +113,54 @@ public class Game
         return deadUnits;
     }
 
-    public int GetScaledBlockSize() => GameConstants.TILE_SIZE * (int)GameStateManager.CurrentScale;
-    public Vector2 GetScaledBlockVectorPosition(Block block) 
+    public void InitializeHighlight()
     {
-        if (block == null)
+        var currentUnit = GetCurrentUnit();
+        if (currentUnit == null || currentUnit.Block == null)
         {
-            Logger.Error("Game::GetScaledBlockSize(): block is null.");
-            throw new NullReferenceException("Block is null");
+            Logger.Error("Game::InitializeHighlight() currentUnit is null.");
+            throw new InvalidOperationException("currentUnit or currentUnit.Block is null.");
         }
 
-        var tileSize = GetScaledBlockSize();
+        _highlightCurrentPosition = currentUnit.Block.GetPixelCoordinates();
+        _highlightTargetPosition  = _highlightCurrentPosition;
+        _animationComplete = false;
+    }
 
-        return new Vector2(block.X * tileSize, block.Y * tileSize);
+    public Vector2 GetHighlightPosition() => _highlightCurrentPosition;
+    public bool IsHighlightSettled() => _animationComplete;
+
+    public void SetHighlightTarget(Unit targetUnit)
+    {
+        if (targetUnit == null || targetUnit.Block == null)
+        {
+            Logger.Error("Game::SetHighlightTarget() targetUnit or targetUnit.Block is null.");
+            throw new InvalidOperationException("currentUnit or currentUnit.Block is null.");
+        }
+
+        _highlightTargetPosition = targetUnit.Block.GetPixelCoordinates();
+    }
+
+    public void UpdateHighlightPosition()
+    {
+        var distance = Vector2.Distance(_highlightCurrentPosition, _highlightTargetPosition);
+
+        if (distance > 0.1f)
+        {
+            var direction = Vector2.Normalize(_highlightTargetPosition - _highlightCurrentPosition);
+            var moveDistance = GameConstants.HIGHLIGHT_TRANSITION_SPEED * Raylib.GetFrameTime();
+
+            if (moveDistance > distance)
+            {
+                moveDistance = distance;
+            }
+
+            _highlightCurrentPosition += direction * moveDistance;
+        }
+        else
+        {
+            _highlightCurrentPosition = _highlightTargetPosition;
+            _animationComplete = true;
+        }
     }
 }

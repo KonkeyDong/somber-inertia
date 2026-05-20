@@ -23,4 +23,5 @@ public enum GameStateType
     BattleActionMenu,
     SelectingAction,
     SelectEnemyForPhysicalAttack,
+    TransitionSelectorToNextUnit,
 }

@@ -10,4 +10,6 @@ public static class GameConstants
     // in pixels
     public const int TILE_SIZE = 24;
     public const int WORLD_MAP_SPRITE_SIZE = 24;
+
+    public const float HIGHLIGHT_TRANSITION_SPEED = 1000f; // lower number represents slower speed
 }
