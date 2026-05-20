@@ -263,8 +263,7 @@ public class Grid
 
                 if (debugFlag)
                 {
-                    // Raylib.DrawText($"MC: {Blocks[x, y].MovementCost}", screenX, screenY, 16, Color.White);
-                    Raylib.DrawText(Blocks[x, y].PrintCoordinates(), (int)position.X, (int)position.Y + 20, 16, Color.White);
+                    Raylib.DrawText(Blocks[x, y].PrintGridCoordinates(), (int)position.X, (int)position.Y + 20, 16, Color.White);
                 }
             }
         }
@@ -274,6 +273,8 @@ public class Grid
     public void DrawWeaponAttackRange(float scale) => DrawRangeBlockColor(scale, _weaponAttackRangeSet);
     private void DrawRangeBlockColor(float scale, HashSet<(int x, int y)> hashSet)
     {
+        var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
+
         var position = new Vector2();
         foreach((var x, var y) in hashSet)
         {
@@ -287,6 +288,11 @@ public class Grid
                 scale,
                 RangeTint.GetCurrentColor()
             );
+
+            if (debugFlag)
+            {
+                Raylib.DrawText(Blocks[x, y].PrintGridCoordinates(), (int)position.X, (int)position.Y + 20, 16, Color.White);
+            }
         }
     }
 
@@ -347,7 +353,7 @@ public class Grid
         // Place on new block
         Blocks[x, y].PushOccupant(unit);
 
-        Logger.Debug($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintCoordinates()}.");
+        Logger.Debug($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintGridCoordinates()}.");
     }
 
     public void MoveUnitInDirection(Unit unit, Direction direction)

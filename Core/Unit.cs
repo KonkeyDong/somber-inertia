@@ -91,5 +91,5 @@ public class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
-    public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintCoordinates() ?? "[null]"}";
+    public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintGridCoordinates() ?? "[null]"}";
 }

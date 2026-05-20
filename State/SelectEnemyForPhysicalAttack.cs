@@ -12,12 +12,6 @@ public class SelectEnemyForPhysicalAttack : IGameState
     private Unit _currentUnit { get; set; }
     private int _currentIndex { get; set; }
 
-    // Smooth highlight animation
-    private Vector2 _currentHighlightPos;
-    private Vector2 _targetHighlightPos;
-
-    private const float _highlightSpeed = 1000f; // lower number represents slower speed
-
     public SelectEnemyForPhysicalAttack(Game game)
     {
         _game = game;
@@ -28,14 +22,8 @@ public class SelectEnemyForPhysicalAttack : IGameState
     {
         if (_game.UnfriendlyUnitsInRange.Count > 0)
         {
+            _game.InitializeHighlight();
             _currentIndex = 0;
-
-            var block = _game.UnfriendlyUnitsInRange[_currentIndex].Block;
-            if (block != null)
-            {
-                _currentHighlightPos = _game.GetScaledBlockVectorPosition(block);
-                _targetHighlightPos = _currentHighlightPos;
-            }
         }
     }
 
@@ -66,7 +54,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
                 var newTarget = _game.UnfriendlyUnitsInRange[_currentIndex];
                 if (newTarget.Block != null)
                 {
-                    _targetHighlightPos = _game.GetScaledBlockVectorPosition(newTarget.Block);
+                    _game.SetHighlightTarget(newTarget);
                 }
             }
         }
@@ -75,7 +63,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
             CombatSystem.Attack(_currentUnit, _game.UnfriendlyUnitsInRange[_currentIndex]);
-            GameStateManager.ChangeStateType(GameStateType.EndTurn);
+            GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X)) { GameStateManager.ChangeStateType(GameStateType.BattleActionMenu); }
@@ -85,26 +73,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
     {
         _game.Grid.RangeTint.Tick();
 
-        // Move towards target at constant speed
-        var distance = Vector2.Distance(_currentHighlightPos, _targetHighlightPos);
-
-        if (distance > 0.1f)
-        {
-            var direction = Vector2.Normalize(_targetHighlightPos - _currentHighlightPos);
-            var moveDistance = _highlightSpeed * Raylib.GetFrameTime();
-
-            // Don't overshoot
-            if (moveDistance > distance)
-            {
-                moveDistance = distance;
-            }
-
-            _currentHighlightPos += direction * moveDistance;
-        }
-        else
-        {
-            _currentHighlightPos = _targetHighlightPos; // snap when very close
-        }
+        _game.UpdateHighlightPosition();
     }
 
     public void Draw(float scale)
@@ -113,6 +82,6 @@ public class SelectEnemyForPhysicalAttack : IGameState
         _game.Grid.DrawWeaponAttackRange(scale);
         _game.Grid.DrawUnits(_game.Units, scale);
 
-        _game.Grid.DrawHighlightRectangle(scale, _currentHighlightPos);
+        _game.Grid.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
     }
 }
