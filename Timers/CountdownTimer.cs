@@ -31,7 +31,7 @@ public class CountdownTimer : ITimers
     public void Stop()
     {
         _frameCounter = 0;
-        _isActive = false;       
+        _isActive = false;
     }
 
     public bool GetIsActive() => _isActive;

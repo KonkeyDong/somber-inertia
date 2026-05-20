@@ -1,6 +1,6 @@
-using SomberInertia.State;
-using SomberInertia.Enums;
 using SomberInertia.Core;
+using SomberInertia.Enums;
+using SomberInertia.State;
 
 namespace SomberInertia.State;
 
@@ -43,6 +43,6 @@ public class CalculateWeaponAttackRange : IGameState
 
     public void Draw(float scale)
     {
-        
+
     }
 }

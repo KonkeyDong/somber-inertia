@@ -1,8 +1,7 @@
+using System.Numerics;
+using Raylib_cs;
 using SomberInertia.Core;
 using SomberInertia.Enums;
-using System.Numerics;
-
-using Raylib_cs;
 
 namespace SomberInertia.State;
 
@@ -37,15 +36,15 @@ public class SelectEnemyForPhysicalAttack : IGameState
         if (_game.UnfriendlyUnitsInRange.Count() > 1)
         {
             var changed = false;
-            if (Raylib.IsKeyPressed(KeyboardKey.Left))  
+            if (Raylib.IsKeyPressed(KeyboardKey.Left))
             {
-                
-                _currentIndex  = (_currentIndex + 1) % _game.UnfriendlyUnitsInRange.Count();
+
+                _currentIndex = (_currentIndex + 1) % _game.UnfriendlyUnitsInRange.Count();
                 changed = true;
             }
-            if (Raylib.IsKeyPressed(KeyboardKey.Right)) 
-            { 
-                _currentIndex = (_currentIndex - 1 + _game.UnfriendlyUnitsInRange.Count() ) % _game.UnfriendlyUnitsInRange.Count();
+            if (Raylib.IsKeyPressed(KeyboardKey.Right))
+            {
+                _currentIndex = (_currentIndex - 1 + _game.UnfriendlyUnitsInRange.Count()) % _game.UnfriendlyUnitsInRange.Count();
                 changed = true;
             }
 
@@ -58,7 +57,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
                 }
             }
         }
-        
+
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {

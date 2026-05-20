@@ -1,5 +1,5 @@
-using SomberInertia.Enums;
 using Raylib_cs;
+using SomberInertia.Enums;
 
 namespace SomberInertia.Core;
 
@@ -29,7 +29,7 @@ public class Unit
         get => _block;
         set
         {
-            if (_block == value) 
+            if (_block == value)
             {
                 return; // avoid spam on same value
             }
@@ -82,7 +82,7 @@ public class Unit
     {
         Logger.Debug($"Unit::TakeDamage({amount})");
         Logger.Info($"Unit [{Name}] has been damaged for {amount}.");
-    
+
         HP.Current = HP.Current - amount;
         if (HP.Current < 0)
         {

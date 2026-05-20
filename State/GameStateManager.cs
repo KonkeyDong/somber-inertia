@@ -1,6 +1,6 @@
+using Raylib_cs;
 using SomberInertia.Core;
 using SomberInertia.Enums;
-using Raylib_cs;
 
 namespace SomberInertia.State;
 
@@ -34,11 +34,11 @@ public static class GameStateManager
     {
         IGameState newGameState = CurrentStateType switch
         {
-            GameStateType.UnitMoving                   => new UnitMoving(Game),
-            GameStateType.CalculateUnitMovementRange   => new CalculateUnitMovementRange(Game),
-            GameStateType.CalculateWeaponAttackRange   => new CalculateWeaponAttackRange(Game),
-            GameStateType.BattleActionMenu             => new BattleActionMenu(Game),
-            GameStateType.EndTurn                      => new EndTurn(Game),
+            GameStateType.UnitMoving => new UnitMoving(Game),
+            GameStateType.CalculateUnitMovementRange => new CalculateUnitMovementRange(Game),
+            GameStateType.CalculateWeaponAttackRange => new CalculateWeaponAttackRange(Game),
+            GameStateType.BattleActionMenu => new BattleActionMenu(Game),
+            GameStateType.EndTurn => new EndTurn(Game),
             GameStateType.SelectEnemyForPhysicalAttack => new SelectEnemyForPhysicalAttack(Game),
             GameStateType.TransitionSelectorToNextUnit => new TransitionSelectorToNextUnit(Game),
 
@@ -88,8 +88,8 @@ public static class GameStateManager
         // Logging toggle
         if (Raylib.IsKeyPressed(KeyboardKey.F1))
         {
-            Logger.MinimumLevel = Logger.MinimumLevel == LogLevel.Debug 
-                ? LogLevel.Info 
+            Logger.MinimumLevel = Logger.MinimumLevel == LogLevel.Debug
+                ? LogLevel.Info
                 : LogLevel.Debug;
 
             Logger.Info($"Logging level changed to: {Logger.MinimumLevel}");

@@ -29,8 +29,7 @@ public static class WeaponManager
             return weapon;
         }
 
-        Logger.Error($"WeaponManager::Create(): Unknown weapon [{weaponName}].");
-        throw new ArgumentException($"unknown weapon: [{weaponName}].");
+        throw new InvalidOperationException($"WeaponManager::Create(): Unknown weapon [{weaponName}].");
     }
 
     private static void BuildSwords()
@@ -57,8 +56,8 @@ public static class WeaponManager
 
         _weaponsLookup[WeaponName.HandAxe] = new Weapon(WeaponName.HandAxe.GetDisplayName(), 7, weaponType, weaponRange, "", Job.Warrior);
         _weaponsLookup[WeaponName.MiddleAxe] = new Weapon(WeaponName.MiddleAxe.GetDisplayName(), 11, weaponType, weaponRange, "", Job.Warrior);
-        _weaponsLookup[WeaponName.BattleAxe] = new Weapon(WeaponName.BattleAxe.GetDisplayName(),16, weaponType, weaponRange, "", Job.Warrior);
-        _weaponsLookup[WeaponName.HeatAxe] = new Weapon(WeaponName.HeatAxe.GetDisplayName(),22, weaponType, weaponRange, "BLAZE 2", Job.Gladiator);
+        _weaponsLookup[WeaponName.BattleAxe] = new Weapon(WeaponName.BattleAxe.GetDisplayName(), 16, weaponType, weaponRange, "", Job.Warrior);
+        _weaponsLookup[WeaponName.HeatAxe] = new Weapon(WeaponName.HeatAxe.GetDisplayName(), 22, weaponType, weaponRange, "BLAZE 2", Job.Gladiator);
         _weaponsLookup[WeaponName.GreatAxe] = new Weapon(WeaponName.GreatAxe.GetDisplayName(), 26, weaponType, weaponRange, "", Job.Gladiator);
         _weaponsLookup[WeaponName.Atlas] = new Weapon(WeaponName.Atlas.GetDisplayName(), 33, weaponType, weaponRange, "BLAZE 3", Job.Gladiator);
     }
@@ -93,7 +92,7 @@ public static class WeaponManager
 
         Logger.Warning("WeaponManager::BuildSpears(): need to revisit which jobs can throw spears.");
         _weaponsLookup[WeaponName.Spear] = new Weapon(WeaponName.Spear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
-        _weaponsLookup[WeaponName.Spear] = new Weapon(WeaponName.Spear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
+        _weaponsLookup[WeaponName.PowerSpear] = new Weapon(WeaponName.PowerSpear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
     }
 
     private static void BuildLances()

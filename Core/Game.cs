@@ -1,17 +1,16 @@
+using System.Numerics;
+using Raylib_cs;
 using SomberInertia;
 using SomberInertia.State;
-using System.Numerics;
-
-using Raylib_cs;
 
 namespace SomberInertia.Core;
 
 public class Game
 {
     public Grid Grid { get; set; }
-    public List<Unit> Units { get; set; } = new List<Unit>();
-    public List<Unit> FriendlyUnitsInRange { get; set; } = new List<Unit>();
-    public List<Unit> UnfriendlyUnitsInRange { get; set; } = new List<Unit>();
+    public List<Unit> Units { get; set; } = new();
+    public List<Unit> FriendlyUnitsInRange { get; set; } = new();
+    public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
 
     private Vector2 _highlightCurrentPosition;
     private Vector2 _highlightTargetPosition;
@@ -24,10 +23,9 @@ public class Game
 
     public Unit GetCurrentUnit()
     {
-        if (Units.Count < 0)
+        if (Units.Count == 0)
         {
             Logger.Error("Game::GetCurrentUnit(): list of units is empty! Aborting...");
-            throw new IndexOutOfRangeException("Game::GetCurrentUnit(): trying to index empty list at Units.");
         }
 
         return Units[0];
@@ -35,25 +33,31 @@ public class Game
 
     public Unit GetNextUnit()
     {
-        if (Units.Count() < 2)
+        if (Units.Count < 2)
         {
             Logger.Error("Game::GetNextUnit(): list of units is less than two. Aborting...");
-            throw new IndexOutOfRangeException("Game::GetNextUnit(): list of units is less than two. Aborting...");
         }
 
         return Units[1];
     }
 
-    public Unit GetLastUnit() => Units.Count() > 0 ? Units[^1] : throw new NullReferenceException("Game::GetLastUnit() list Unit is empty.");
+    public Unit GetLastUnit()
+    {
+        if (Units.Count == 0)
+        {
+            Logger.Error("Game::GetLastUnit() list Unit is empty.");
+        }
+
+        return Units[^1];
+    }
 
     public void MoveFirstUnitToEndOfList()
     {
         if (Units.Count <= 1)
         {
             Logger.Error("Game::MoveFirstUnitToEndOfList(): Units list is empty.");
-            throw new InvalidOperationException("units list is empty.");
         }
-        
+
         var first = Units[0];
         Units.RemoveAt(0);
         Units.Add(first);
@@ -63,13 +67,12 @@ public class Game
     {
         if (unit == null)
         {
-            Logger.Error("Game::Unit(): unit parameter is null; aborting.");
-            throw new ArgumentNullException("unit cannot be null when adding");
+            Logger.Error("Game::AddUnit(): unit parameter is null; aborting.");
         }
 
         if (x < 0 || x >= Grid.Width || y < 0 || y >= Grid.Height)
         {
-            throw new ArgumentOutOfRangeException($"Target position ({x}, {y}) is outside grid bounds.");
+            Logger.Error($"Target position ({x}, {y}) is outside grid bounds.");
         }
 
         Units.Add(unit);
@@ -99,7 +102,7 @@ public class Game
             }
         }
 
-        Logger.Info($"FriendlyUnitsInRange.Count = {FriendlyUnitsInRange.Count()}; UnfriendlyUnitsInRange.Count = {UnfriendlyUnitsInRange.Count()}.");
+        Logger.Info($"FriendlyUnitsInRange.Count = {FriendlyUnitsInRange.Count}; UnfriendlyUnitsInRange.Count = {UnfriendlyUnitsInRange.Count}.");
     }
 
     public List<Unit> RemoveDeadUnits()
@@ -116,14 +119,13 @@ public class Game
     public void InitializeHighlight()
     {
         var currentUnit = GetCurrentUnit();
-        if (currentUnit == null || currentUnit.Block == null)
+        if (currentUnit.Block == null)
         {
-            Logger.Error("Game::InitializeHighlight() currentUnit is null.");
-            throw new InvalidOperationException("currentUnit or currentUnit.Block is null.");
+            Logger.Error("Game::InitializeHighlight() currentUnit.Block is null.");
         }
 
         _highlightCurrentPosition = currentUnit.Block.GetPixelCoordinates();
-        _highlightTargetPosition  = _highlightCurrentPosition;
+        _highlightTargetPosition = _highlightCurrentPosition;
         _animationComplete = false;
     }
 
@@ -132,10 +134,9 @@ public class Game
 
     public void SetHighlightTarget(Unit targetUnit)
     {
-        if (targetUnit == null || targetUnit.Block == null)
+        if (targetUnit.Block == null)
         {
-            Logger.Error("Game::SetHighlightTarget() targetUnit or targetUnit.Block is null.");
-            throw new InvalidOperationException("currentUnit or currentUnit.Block is null.");
+            Logger.Error("Game::SetHighlightTarget() targetUnit.Block is null.");
         }
 
         _highlightTargetPosition = targetUnit.Block.GetPixelCoordinates();

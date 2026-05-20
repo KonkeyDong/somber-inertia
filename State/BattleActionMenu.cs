@@ -1,10 +1,9 @@
-using SomberInertia.Enums;
-using SomberInertia.Core;
-using SomberInertia.Graphics;
-
-using System.Numerics;
 using System.Collections.Generic;
+using System.Numerics;
 using Raylib_cs;
+using SomberInertia.Core;
+using SomberInertia.Enums;
+using SomberInertia.Graphics;
 
 namespace SomberInertia.State;
 
@@ -55,7 +54,7 @@ public class BattleActionMenu : IGameState
         _selectedCommand = CommandIconType.Attack;
 
         UpdateCenterPosition();
-        
+
         foreach (var icon in _icons)
         {
             icon.Reset();
@@ -75,9 +74,9 @@ public class BattleActionMenu : IGameState
     public void HandleInput()
     {
         // Directional selection (matches your original cross layout)
-        if (Raylib.IsKeyPressed(KeyboardKey.Up))    { SetSelectedCommand(CommandIconType.Attack); }
-        if (Raylib.IsKeyPressed(KeyboardKey.Down))  { SetSelectedCommand(CommandIconType.Stay); }
-        if (Raylib.IsKeyPressed(KeyboardKey.Left))  { SetSelectedCommand(CommandIconType.Magic); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Up)) { SetSelectedCommand(CommandIconType.Attack); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Down)) { SetSelectedCommand(CommandIconType.Stay); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Left)) { SetSelectedCommand(CommandIconType.Magic); }
         if (Raylib.IsKeyPressed(KeyboardKey.Right)) { SetSelectedCommand(CommandIconType.Item); }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
@@ -93,7 +92,7 @@ public class BattleActionMenu : IGameState
 
     private void SetSelectedCommand(CommandIconType newCommand)
     {
-        if (_selectedCommand == newCommand) 
+        if (_selectedCommand == newCommand)
         {
             return;
         }
@@ -122,8 +121,8 @@ public class BattleActionMenu : IGameState
 
     private void CancelMenu()
     {
-       Logger.Debug($"BattleActionMenu::CancelMenu() called; returning to [{GameStateType.UnitMoving}] state.");
-       GameStateManager.ChangeStateType(GameStateType.UnitMoving);
+        Logger.Debug($"BattleActionMenu::CancelMenu() called; returning to [{GameStateType.UnitMoving}] state.");
+        GameStateManager.ChangeStateType(GameStateType.UnitMoving);
     }
 
     public void Update()

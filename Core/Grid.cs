@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using SomberInertia.Timers;
-using SomberInertia.Enums;
 using Raylib_cs;
+using SomberInertia.Enums;
+using SomberInertia.Timers;
 
 namespace SomberInertia.Core;
 
@@ -86,13 +86,11 @@ public class Grid
         if (unit == null)
         {
             Logger.Error("CalculateUnitMovementRange() unit is null.");
-            return;
         }
 
-        if (unit.Block == null) 
+        if (unit.Block == null)
         {
             Logger.Error($"Unit {unit.Name} does not contain a block.");
-            return;
         }
 
         _movementRangeSet.Clear();
@@ -114,12 +112,11 @@ public class Grid
             {
                 if (neighbor == null)
                 {
-                    Logger.Error("CalculateUnitMovementRange() neighbor is null; ignoring.");
                     continue;
                 }
 
                 var coord = (neighbor.X, neighbor.Y);
-                if (_movementRangeSet.Contains(coord)) 
+                if (_movementRangeSet.Contains(coord))
                 {
                     continue;
                 }
@@ -202,7 +199,7 @@ public class Grid
             {
                 continue;
             }
-            
+
             unitsInRange.Add(occupant);
         }
 
@@ -276,7 +273,7 @@ public class Grid
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
 
         var position = new Vector2();
-        foreach((var x, var y) in hashSet)
+        foreach ((var x, var y) in hashSet)
         {
             position.X = x * BlockSize;
             position.Y = y * BlockSize;
@@ -358,7 +355,7 @@ public class Grid
 
     public void MoveUnitInDirection(Unit unit, Direction direction)
     {
-        if (unit?.Block == null) 
+        if (unit?.Block == null)
         {
             Logger.Warning("MoveUnitInDirection called with null unit or block.");
             return;
@@ -369,9 +366,9 @@ public class Grid
 
         switch (direction)
         {
-            case Direction.Up:    newY--; break;
-            case Direction.Down:  newY++; break;
-            case Direction.Left:  newX--; break;
+            case Direction.Up: newY--; break;
+            case Direction.Down: newY++; break;
+            case Direction.Left: newX--; break;
             case Direction.Right: newX++; break;
         }
 
@@ -403,7 +400,6 @@ public class Grid
             else
             {
                 Logger.Error($"Grid::RemoveDeadUnitsFromGrid(): Dead unit '{deadUnit.Name}' had no Block reference.");
-                throw new NullReferenceException("dead unit has no block reference.");
             }
         }
     }

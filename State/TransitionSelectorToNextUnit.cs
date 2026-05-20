@@ -1,16 +1,15 @@
-using SomberInertia.Core;
-using SomberInertia.State;
-using SomberInertia.Enums;
 using System.Numerics;
-
 using Raylib_cs;
+using SomberInertia.Core;
+using SomberInertia.Enums;
+using SomberInertia.State;
 
 namespace SomberInertia.State;
 
 public class TransitionSelectorToNextUnit : IGameState
 {
     private readonly Game _game;
-    
+
     public TransitionSelectorToNextUnit(Game game)
     {
         _game = game;
@@ -38,7 +37,7 @@ public class TransitionSelectorToNextUnit : IGameState
         {
             GameStateManager.ChangeStateType(GameStateType.EndTurn);
         }
-        
+
         _game.UpdateHighlightPosition();
     }
 

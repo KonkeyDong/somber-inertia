@@ -12,7 +12,6 @@ public readonly struct WeaponRange
         if (min < 0 || max < min)
         {
             Logger.Error("WeaponRange(): Min cannot be less than zero; Max cannot be less than Min.");
-            throw new ArgumentOutOfRangeException("Min cannot be less than zero; Max cannot be less than Min.");
         }
 
         Min = min;
