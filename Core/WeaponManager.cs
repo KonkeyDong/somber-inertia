@@ -29,7 +29,7 @@ public static class WeaponManager
             return weapon;
         }
 
-        Logger.Error($"WeaponManager::Create(): Unknown weapon [{weaponName}].");
+        throw new InvalidOperationException($"WeaponManager::Create(): Unknown weapon [{weaponName}].");
     }
 
     private static void BuildSwords()
