@@ -2,6 +2,7 @@ using System.Numerics;
 using Raylib_cs;
 using SomberInertia;
 using SomberInertia.State;
+using SomberInertia.Core.Units;
 
 namespace SomberInertia.Core;
 
