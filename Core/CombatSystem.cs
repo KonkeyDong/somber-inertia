@@ -1,5 +1,8 @@
-namespace SomberInertia.Core;
+using SomberInertia.Core.Units;
+
 using Raylib_cs;
+
+namespace SomberInertia.Core;
 
 public static class CombatSystem
 {
