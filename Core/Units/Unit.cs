@@ -1,9 +1,13 @@
-using Raylib_cs;
 using SomberInertia.Enums;
+using SomberInertia.Graphics;
+
+using System.Numerics;
+using System.Text.Json;
+using Raylib_cs;
 
 namespace SomberInertia.Core.Units;
 
-public class Unit
+public abstract class Unit
 {
     public class Stat
     {
@@ -17,13 +21,18 @@ public class Unit
         }
     }
 
-    public Texture2D Texture { get; private set; }
+    public Texture2D Texture { get; protected set; }
+    protected abstract string AssetRoot { get; }
 
-    public string Name { get; private set; }
-    public MovementType MovementType { get; private set; }
+    public string Name { get; protected set; }
+    public MovementType MovementType { get; protected set; }
+    public virtual bool Promoted { get; set; } =  false;
+
+    public Direction FacingDirection { get; set; } = Direction.Down;
+    private Dictionary<Direction, List<SpriteV2>> _walkAnimations = new();
 
     // Core reference - source of truth for position
-    private Block? _block;
+    protected Block? _block;
     public Block? Block
     {
         get => _block;
@@ -41,13 +50,11 @@ public class Unit
     // Stats
     public Stat HP { get; set; }
     public Stat MP { get; set; }
-    public Job Job { get; set; }
-    public int Exp { get; set; } // experience
     public int Attack { get; set; }
     public Weapon Weapon { get; set; } = null!;
     public int Defense { get; set; }
     public int Speed { get; set; }
-    public int Movement { get; private set; }
+    public int Movement { get; protected set; }
 
     public bool Friendly { get; set; }
 
@@ -92,4 +99,81 @@ public class Unit
     }
 
     public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintGridCoordinates() ?? "[null]"}";
+
+    public bool DrawFacingDirection(Vector2 position, float scale)
+    {
+        if (!_walkAnimations.Any())
+        {
+            return false;
+        }
+
+        _walkAnimations[FacingDirection][0].Draw(position, scale);
+        
+        return true;
+    }
+
+    public void LoadWalkAnimations()
+    {
+        var directions = new Direction[] 
+        {
+            Direction.Up,
+            Direction.Right,
+            Direction.Down,
+            Direction.Left,
+        };
+
+        var count = 0;
+        foreach (var direction in directions)
+        {
+            _walkAnimations[direction] = new List<SpriteV2>();
+
+            var path = $"{AssetRoot}/Overworld/walk_{direction.ToLower()}";
+            var json = $"{path}.json";
+            var png = $"{path}.png";
+
+            var frames = ExtractFrameData(json);
+
+            foreach (var frame in frames)
+            {
+                _walkAnimations[direction].Add(new SpriteV2(png, frame));
+                count++;
+            }
+        }
+
+        Logger.Info($"LoadWalkAnimations finished with count [{count}].");
+    }
+
+    private List<FrameRect> ExtractFrameData(string jsonFilePath)
+    {
+        if (string.IsNullOrWhiteSpace(jsonFilePath))
+        {
+            Logger.Error($"jsonFilePath is empty.");
+        }
+
+        Logger.Debug($"jsonFilePath = [{jsonFilePath}]");
+
+        var jsonText = File.ReadAllText(jsonFilePath);
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true   // handles "frame" vs "Frame" etc.
+        };
+
+        var sheet = JsonSerializer.Deserialize<AsepriteSheet>(jsonText, options);
+        if (sheet == null)
+        {
+            Logger.Error("Problem deserializing json data.");
+        }
+
+        var frameRects = new List<FrameRect>();
+        foreach (var entry in sheet.frames)
+        {
+            if (entry?.frame != null)
+            {
+                frameRects.Add(entry.frame);
+            }
+        }
+
+        return frameRects;
+    }
 }

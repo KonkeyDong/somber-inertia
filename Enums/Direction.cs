@@ -2,7 +2,7 @@ using SomberInertia.Enums;
 
 public enum Direction
 {
-    Up,
+    Up = 0,
     Right,
     Down,
     Left

@@ -330,6 +330,12 @@ public class Grid
             position.X = unit.Block.X * BlockSize;
             position.Y = unit.Block.Y * BlockSize;
 
+            if (unit.DrawFacingDirection(position, scale))
+            {
+                Logger.Warning("Need to add walking sprite sheets for other characters.");
+                continue;
+            }
+
             Raylib.DrawTextureEx(
                 unit.Texture,
                 position,
@@ -361,6 +367,8 @@ public class Grid
             Logger.Warning("MoveUnitInDirection called with null unit or block.");
             return;
         }
+
+        unit.FacingDirection = direction;
 
         var newX = unit.Block.X;
         var newY = unit.Block.Y;
