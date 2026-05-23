@@ -26,7 +26,6 @@ class Program
         var max = new ForceMember("Assets/max.png", "Max", MovementType.Warrior, 4);
         max.Attack = 10;
         max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
-        max.LoadWalkAnimations();
 
         var anri = new ForceMember("Assets/anri.png", "Anri", MovementType.Warrior, 4);
         anri.Friendly = true;

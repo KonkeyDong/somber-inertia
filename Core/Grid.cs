@@ -330,17 +330,28 @@ public class Grid
             position.X = unit.Block.X * BlockSize;
             position.Y = unit.Block.Y * BlockSize;
 
-            if (unit.DrawFacingDirection(position, scale))
-            {
-                Logger.Warning("Need to add walking sprite sheets for other characters.");
-                continue;
-            }
+            var sprite = unit.GetFacingDirectionTexture();
 
-            Raylib.DrawTextureEx(
-                unit.Texture,
-                position,
-                0.0f,
-                scale,
+            var source = new Rectangle(
+                x: sprite.FrameRect.x,
+                y: sprite.FrameRect.y,
+                width: sprite.FrameRect.w,
+                height: sprite.FrameRect.h
+            );
+
+            var dest = new Rectangle(
+                x: position.X,
+                y: position.Y,
+                width: sprite.FrameRect.w * scale,
+                height: sprite.FrameRect.h * scale
+            );
+
+            Raylib.DrawTexturePro(
+                sprite.Texture,
+                source,
+                dest,
+                new Vector2(0, 0),     // origin
+                0.0f,                  // rotation
                 Color.White
             );
         }
