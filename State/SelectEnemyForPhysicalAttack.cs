@@ -24,6 +24,8 @@ public class SelectEnemyForPhysicalAttack : IGameState
         {
             _game.InitializeHighlight();
             _currentIndex = 0;
+
+            _game.SetHighlightTarget(_game.UnfriendlyUnitsInRange[_currentIndex]);
         }
     }
 
@@ -58,7 +60,6 @@ public class SelectEnemyForPhysicalAttack : IGameState
                 }
             }
         }
-
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {

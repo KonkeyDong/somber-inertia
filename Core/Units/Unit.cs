@@ -60,7 +60,6 @@ public abstract class Unit
 
     public Unit(string texturePath, string name, MovementType movementType, int movement)
     {
-        Texture = Raylib.LoadTexture(texturePath);
         Name = name;
         MovementType = movementType;
 
@@ -73,6 +72,7 @@ public abstract class Unit
         // default for now
         EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
+        LoadWalkAnimations();
         Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
     }
 
@@ -100,16 +100,14 @@ public abstract class Unit
 
     public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintGridCoordinates() ?? "[null]"}";
 
-    public bool DrawFacingDirection(Vector2 position, float scale)
+    public SpriteV2 GetFacingDirectionTexture()
     {
         if (!_walkAnimations.Any())
         {
-            return false;
+            Logger.Error("no walk animations set.");
         }
 
-        _walkAnimations[FacingDirection][0].Draw(position, scale);
-        
-        return true;
+        return _walkAnimations[FacingDirection][0];
     }
 
     public void LoadWalkAnimations()
