@@ -3,11 +3,13 @@ using Raylib_cs;
 using SomberInertia;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
+using SomberInertia.Core.Graphics;
 
 namespace SomberInertia.Core;
 
 public class Game
 {
+    public Renderer Renderer = new();
     public Grid Grid { get; set; }
     public List<Unit> Units { get; set; } = new();
     public List<Unit> FriendlyUnitsInRange { get; set; } = new();

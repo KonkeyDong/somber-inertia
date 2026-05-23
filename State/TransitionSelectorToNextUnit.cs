@@ -43,10 +43,10 @@ public class TransitionSelectorToNextUnit : IGameState
 
     public void Draw(float scale)
     {
-        _game.Grid.DrawBackground(scale);
-        _game.Grid.DrawWeaponAttackRange(scale);
-        _game.Grid.DrawUnits(_game.Units, scale);
+        _game.Renderer.DrawBackground(scale, _game.Grid);
+        _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units);
 
-        _game.Grid.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
+        _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
     }
 }
