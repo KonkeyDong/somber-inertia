@@ -136,9 +136,9 @@ public class BattleActionMenu : IGameState
 
     public void Draw(float scale)
     {
-        _game.Grid.DrawBackground(scale);
-        _game.Grid.DrawWeaponAttackRange(scale);
-        _game.Grid.DrawUnits(_game.Units, scale);
+        _game.Renderer.DrawBackground(scale, _game.Grid);
+        _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units);
 
         for (var i = 0; i < _icons.Length; i++)
         {

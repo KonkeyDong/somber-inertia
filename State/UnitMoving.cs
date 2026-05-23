@@ -49,14 +49,14 @@ public class UnitMoving : IGameState
 
     public void Draw(float scale)
     {
-        _game.Grid.DrawBackground(scale);
-        _game.Grid.DrawMovementRange(scale);
+        _game.Renderer.DrawBackground(scale, _game.Grid);
+        _game.Renderer.DrawMovementRange(scale, _game.Grid);
 
         if (_countdownTimer.GetIsActive())
         {
-            _game.Grid.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
+            _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
         }
 
-        _game.Grid.DrawUnits(_game.Units, scale);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units);
     }
 }
