@@ -251,6 +251,12 @@ public class Grid
         // Place on new block
         Blocks[x, y].PushOccupant(unit);
 
+        // Only snap to grid if the unit is NOT currently sliding
+        if (!unit.IsAnimating)
+        {
+            unit.SnapToCurrentBlock();
+        }
+
         Logger.Debug($"Unit '{unit.Name}' placed at {Blocks[x, y].PrintGridCoordinates()}.");
     }
 
@@ -269,9 +275,9 @@ public class Grid
 
         switch (direction)
         {
-            case Direction.Up: newY--; break;
-            case Direction.Down: newY++; break;
-            case Direction.Left: newX--; break;
+            case Direction.Up:    newY--; break;
+            case Direction.Down:  newY++; break;
+            case Direction.Left:  newX--; break;
             case Direction.Right: newX++; break;
         }
 
@@ -287,6 +293,10 @@ public class Grid
             return;
         }
 
+        // === IMPORTANT: Start visual movement FIRST ===
+        unit.StartMovingTo(Blocks[newX, newY]);
+
+        // === Then update logical grid position ===
         PlaceUnit(unit, newX, newY);
     }
 
