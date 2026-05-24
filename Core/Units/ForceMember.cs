@@ -12,8 +12,8 @@ public class ForceMember : Unit
     protected override string AssetRoot =>
         $"Assets/Sprites/Characters/{Name}/{(Promoted ? "Promoted" : "Unpromoted")}";
 
-    public ForceMember(string texturePath, string name, MovementType movementType, int movement)
-        : base(texturePath, name, movementType, movement)
+    public ForceMember(string name, MovementType movementType, int movement)
+        : base(name, movementType, movement)
     {
         Name = name;
         MovementType = movementType;

@@ -1,10 +1,11 @@
+using SomberInertia;
+using SomberInertia.Enums;
+using SomberInertia.Timers;
+using SomberInertia.Core.Units;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Raylib_cs;
-using SomberInertia.Enums;
-using SomberInertia.Timers;
-using SomberInertia.Core.Units;
 
 namespace SomberInertia.Core;
 
@@ -20,7 +21,7 @@ public class Grid
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> WeaponAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public readonly MovementRangeTint RangeTint = new MovementRangeTint(6);
+    public readonly MovementRangeTint RangeTint = new MovementRangeTint(GameConfig.Animations.MovementRangeTintFrameDelay);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()

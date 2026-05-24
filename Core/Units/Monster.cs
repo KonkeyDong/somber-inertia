@@ -6,8 +6,8 @@ public class Monster : Unit
 {
     protected override string AssetRoot => $"Assets/Sprites/Monsters/{Name}/";
 
-    public Monster(string texturePath, string name, MovementType movementType, int movement)
-        : base(texturePath, name, movementType, movement)
+    public Monster(string name, MovementType movementType, int movement)
+        : base(name, movementType, movement)
         {
             Name = name;
             MovementType = movementType;
