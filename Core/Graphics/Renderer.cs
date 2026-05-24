@@ -85,7 +85,7 @@ public class Renderer
         Raylib.DrawRectangleLinesEx(highlightRect, scale, Color.White);
     }
 
-    public void DrawUnits(float scale, Grid grid, List<Unit> units)
+    public void DrawUnits(float scale, Grid grid, List<Unit> units, bool frameFlipperFlag)
     {
         var position = new Vector2();
 
@@ -104,7 +104,7 @@ public class Renderer
             position.X = unit.Block.X * grid.BlockSize;
             position.Y = unit.Block.Y * grid.BlockSize;
 
-            var sprite = unit.GetFacingDirectionTexture();
+            var sprite = unit.GetFacingDirectionTexture(frameFlipperFlag);
 
             var source = new Rectangle(
                 x: sprite.FrameRect.x,

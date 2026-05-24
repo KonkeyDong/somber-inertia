@@ -130,6 +130,7 @@ public class BattleActionMenu : IGameState
     {
         var currentIndex = _typeToIndex[_selectedCommand];
         _icons[currentIndex].Update();
+        _game.FrameFlipper.Tick();
 
         _game.Grid.RangeTint.Tick();
     }
@@ -138,7 +139,7 @@ public class BattleActionMenu : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
         for (var i = 0; i < _icons.Length; i++)
         {
