@@ -1,6 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 using SomberInertia;
+using SomberInertia.Timers;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
 using SomberInertia.Core.Graphics;
@@ -14,6 +15,7 @@ public class Game
     public List<Unit> Units { get; set; } = new();
     public List<Unit> FriendlyUnitsInRange { get; set; } = new();
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
+    public FrameFlipper FrameFlipper = new FrameFlipper(30);
 
     private Vector2 _highlightCurrentPosition;
     private Vector2 _highlightTargetPosition;

@@ -98,16 +98,21 @@ public abstract class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
+    public void ResetFacingDirection() => FacingDirection = Direction.Down;
+
     public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintGridCoordinates() ?? "[null]"}";
 
-    public SpriteV2 GetFacingDirectionTexture()
+    public SpriteV2 GetFacingDirectionTexture(bool frameFlipperFlag)
     {
         if (!_walkAnimations.Any())
         {
             Logger.Error("no walk animations set.");
         }
 
-        return _walkAnimations[FacingDirection][0];
+        var animations = _walkAnimations[FacingDirection];
+        var index = frameFlipperFlag == false ? 0 : 1;
+
+        return animations[index];
     }
 
     public void LoadWalkAnimations()

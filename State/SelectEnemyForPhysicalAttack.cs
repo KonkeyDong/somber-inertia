@@ -73,6 +73,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
+        _game.FrameFlipper.Tick();
 
         _game.UpdateHighlightPosition();
     }
@@ -81,7 +82,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
         _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
     }

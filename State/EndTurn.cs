@@ -10,15 +10,17 @@ public class EndTurn : IGameState
     public EndTurn(Game game)
     {
         _game = game;
-
-        var current = _game.GetCurrentUnit();
-        Logger.Info($"{current.Name}'s turn ends.");
     }
 
     public void Enter()
     {
         Logger.Debug("EndTurn::Enter()");
 
+        var current = _game.GetCurrentUnit();
+        current.ResetFacingDirection();
+        Logger.Info($"{current.Name}'s turn ends.");
+
+        _game.FrameFlipper.Reset();
         _game.ResetListOfUnitsInRange();
         _game.Grid.RemoveDeadUnitsFromGrid(_game.RemoveDeadUnits());
         _game.MoveFirstUnitToEndOfList();
@@ -29,6 +31,7 @@ public class EndTurn : IGameState
     public void Exit()
     {
         var current = _game.GetCurrentUnit();
+
         Logger.Info($"{current.Name}'s turn begins.");
     }
 
