@@ -1,3 +1,4 @@
+using SomberInertia;
 using System.Text.Json.Serialization;
 using System.Numerics;
 
@@ -74,9 +75,9 @@ public class Sprite
             Texture,
             source,
             dest,
-            new Vector2(0, 0),     // origin
-            0.0f,                  // rotation
-            Color.White
+            GameConfig.Textures.BaseOrigin,
+            GameConfig.Textures.BaseRotation,
+            GameConfig.Textures.ClearColor
         );
     }
 }
@@ -112,9 +113,9 @@ public class SpriteV2
             Texture,
             source,
             dest,
-            new Vector2(0, 0),     // origin
-            0.0f,                  // rotation
-            Color.White
+            GameConfig.Textures.BaseOrigin,
+            GameConfig.Textures.BaseRotation,
+            GameConfig.Textures.ClearColor
         );
     }
 }

@@ -28,9 +28,9 @@ public class Renderer
                 Raylib.DrawTextureEx(
                     grid.Blocks[x, y].Texture,
                     position,
-                    0.0f, // rotation
+                    GameConfig.Textures.BaseRotation,
                     scale,
-                    Color.White
+                    GameConfig.Textures.ClearColor
                 );
 
                 if (debugFlag)
@@ -56,7 +56,7 @@ public class Renderer
             Raylib.DrawTextureEx(
                 grid.Blocks[x, y].Texture,
                 position,
-                0.0f,
+                GameConfig.Textures.BaseRotation,
                 scale,
                 grid.RangeTint.GetCurrentColor()
             );
@@ -78,9 +78,6 @@ public class Renderer
             tileSize,
             tileSize
         );
-
-        // Optional nice pulsing effect
-        var pulse = 3f + MathF.Sin((float)Raylib.GetTime() * 10f) * 1.5f;
 
         Raylib.DrawRectangleLinesEx(highlightRect, scale, Color.White);
     }
@@ -124,9 +121,9 @@ public class Renderer
                 sprite.Texture,
                 source,
                 dest,
-                new Vector2(0, 0),     // origin
-                0.0f,                  // rotation
-                Color.White
+                GameConfig.Textures.BaseOrigin,
+                GameConfig.Textures.BaseRotation,
+                GameConfig.Textures.ClearColor
             );
         }
     }

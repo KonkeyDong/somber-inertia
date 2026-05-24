@@ -58,7 +58,7 @@ public abstract class Unit
 
     public bool Friendly { get; set; }
 
-    public Unit(string texturePath, string name, MovementType movementType, int movement)
+    public Unit(string name, MovementType movementType, int movement)
     {
         Name = name;
         MovementType = movementType;
@@ -117,66 +117,71 @@ public abstract class Unit
 
     public void LoadWalkAnimations()
     {
-        var directions = new Direction[] 
-        {
-            Direction.Up,
-            Direction.Right,
-            Direction.Down,
-            Direction.Left,
-        };
+        _walkAnimations.Clear();
 
-        var count = 0;
-        foreach (var direction in directions)
+        var totalFramesLoaded = 0;
+
+        foreach (var direction in Enum.GetValues<Direction>())
         {
             _walkAnimations[direction] = new List<SpriteV2>();
 
-            var path = $"{AssetRoot}/Overworld/walk_{direction.ToLower()}";
-            var json = $"{path}.json";
-            var png = $"{path}.png";
+            var basePath = $"{AssetRoot}/Overworld/walk_{direction.ToLower()}";
+            var jsonPath = Path.Combine(basePath + ".json");
+            var pngPath  = Path.Combine(basePath + ".png");
 
-            var frames = ExtractFrameData(json);
+            var frames = ExtractFrameData(jsonPath);
 
             foreach (var frame in frames)
             {
-                _walkAnimations[direction].Add(new SpriteV2(png, frame));
-                count++;
+                _walkAnimations[direction].Add(new SpriteV2(pngPath, frame));
+                totalFramesLoaded++;
             }
         }
 
-        Logger.Info($"LoadWalkAnimations finished with count [{count}].");
+        Logger.Info($"LoadWalkAnimations completed. Loaded {totalFramesLoaded} frames across 4 directions.");
     }
 
     private List<FrameRect> ExtractFrameData(string jsonFilePath)
     {
         if (string.IsNullOrWhiteSpace(jsonFilePath))
         {
-            Logger.Error($"jsonFilePath is empty.");
+            Logger.Error("ExtractFrameData: jsonFilePath is empty or null.");
+            return new List<FrameRect>();
         }
 
-        Logger.Debug($"jsonFilePath = [{jsonFilePath}]");
-
-        var jsonText = File.ReadAllText(jsonFilePath);
-
-        var options = new JsonSerializerOptions
+        try
         {
-            PropertyNameCaseInsensitive = true   // handles "frame" vs "Frame" etc.
-        };
+            var jsonText = File.ReadAllText(jsonFilePath);
 
-        var sheet = JsonSerializer.Deserialize<AsepriteSheet>(jsonText, options);
-        if (sheet == null)
-        {
-            Logger.Error("Problem deserializing json data.");
-        }
-
-        var frameRects = new List<FrameRect>();
-        foreach (var entry in sheet.frames)
-        {
-            if (entry?.frame != null)
+            var options = new JsonSerializerOptions
             {
-                frameRects.Add(entry.frame);
-            }
-        }
+                PropertyNameCaseInsensitive = true
+            };
 
-        return frameRects;
+            var sheet = JsonSerializer.Deserialize<AsepriteSheet>(jsonText, options);
+
+            if (sheet?.frames == null || sheet.frames.Count == 0)
+            {
+                Logger.Warning($"No frames found in JSON: {jsonFilePath}");
+                return new List<FrameRect>();
+            }
+
+            return sheet.frames
+                        .Where(entry => entry?.frame != null)
+                        .Select(entry => entry.frame)
+                        .ToList();
+        }
+        catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
+        {
+            Logger.Error($"JSON file not found: {jsonFilePath}");
+
+            return new List<FrameRect>();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Failed to load/parse JSON {jsonFilePath}: {ex.Message}");
+
+            return new List<FrameRect>();
+        }
     }
 }
