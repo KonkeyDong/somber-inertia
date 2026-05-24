@@ -1,4 +1,5 @@
 using SomberInertia.Enums;
+using SomberInertia.Timers;
 using SomberInertia.Graphics;
 
 using System.Numerics;
@@ -55,11 +56,13 @@ public abstract class Unit
 
     private Vector2 _startWorldPosition; // ← important for correct lerp
     private float _movementTimer;
-    private bool _isAnimating;
 
+    private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay / 5);
+    public const float MovementDuration = GameConfig.Animations.MovementDuration;
+
+    private bool _isAnimating;
     public bool IsAnimating => _isAnimating;
 
-    public const float MovementDuration = GameConfig.Animations.MovementDuration;
 
     // Stats
     public Stat HP { get; set; }
@@ -167,6 +170,8 @@ public abstract class Unit
 
         WorldPosition = Vector2.Lerp(_startWorldPosition, TargetWorldPosition, progress);
 
+        _movementFlipper.Tick();
+
         if (progress >= 1.0f)
         {
             StopMovement();
@@ -182,17 +187,29 @@ public abstract class Unit
 
     public void ResetFacingDirection() => FacingDirection = Direction.Down;
 
-    public SpriteV2 GetFacingDirectionTexture(bool frameFlipperFlag)
+    public SpriteV2 GetFacingDirectionTexture(bool globalFrameFlipperFlag)
     {
         if (!_walkAnimations.Any())
         {
-            Logger.Error("no walk animations set.");
+            Logger.Error("No walk animations loaded.");
+            return null!;
         }
 
         var animations = _walkAnimations[FacingDirection];
-        var index = frameFlipperFlag == false ? 0 : 1;
 
-        return animations[index];
+        int frameIndex;
+        if (_isAnimating)
+        {
+            // Use the fast movement flipper while sliding
+            frameIndex = _movementFlipper.IsOn ? 1 : 0;
+        }
+        else
+        {
+            // Use the global slow idle flipper when standing still
+            frameIndex = globalFrameFlipperFlag ? 1 : 0;
+        }
+
+        return animations[frameIndex];
     }
 
     // ---------------------------

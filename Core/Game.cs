@@ -15,7 +15,7 @@ public class Game
     public List<Unit> Units { get; set; } = new();
     public List<Unit> FriendlyUnitsInRange { get; set; } = new();
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
-    public FrameFlipper FrameFlipper = new FrameFlipper(30);
+    public FrameFlipper FrameFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay);
 
     private Vector2 _highlightCurrentPosition;
     private Vector2 _highlightTargetPosition;
