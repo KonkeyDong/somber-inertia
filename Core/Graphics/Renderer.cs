@@ -98,9 +98,7 @@ public class Renderer
                 continue;
             }
 
-            position.X = unit.Block.X * grid.BlockSize;
-            position.Y = unit.Block.Y * grid.BlockSize;
-
+            position = unit.WorldPosition;
             var sprite = unit.GetFacingDirectionTexture(frameFlipperFlag);
 
             var source = new Rectangle(

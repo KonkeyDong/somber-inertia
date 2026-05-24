@@ -26,12 +26,19 @@ public class UnitMoving : IGameState
         Logger.Debug("UnitMoving::Enter() called.");
         _game.Grid.RangeTint.Reset();
         _game.InitializeHighlight();
+        _currentUnit.ResetStartingWorldPosition();
     }
 
     public void Exit() => Logger.Debug("UnitMoving::Exit() called.");
 
     public void HandleInput()
     {
+        if (_currentUnit.IsAnimating)
+        {
+            Logger.Info("Unit is animating; ignoring input.");
+            return;
+        }
+
         // Arrow keys
         if (Raylib.IsKeyPressed(KeyboardKey.Up)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Up); }
         if (Raylib.IsKeyPressed(KeyboardKey.Down)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Down); }
@@ -46,6 +53,11 @@ public class UnitMoving : IGameState
         _game.Grid.RangeTint.Tick();
         _countdownTimer.Tick();
         _game.FrameFlipper.Tick();
+
+        if (_currentUnit.IsAnimating)
+        {
+            _currentUnit.UpdateMovement(Raylib.GetFrameTime());
+        }
     }
 
     public void Draw(float scale)

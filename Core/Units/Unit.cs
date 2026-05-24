@@ -47,6 +47,20 @@ public abstract class Unit
         }
     }
 
+    // ─────────────────────────────────────────────────────────────
+    // Movement Animation (smooth sliding between tiles)
+    // ─────────────────────────────────────────────────────────────
+    public Vector2 WorldPosition { get; private set; }
+    public Vector2 TargetWorldPosition { get; private set; }
+
+    private Vector2 _startWorldPosition; // ← important for correct lerp
+    private float _movementTimer;
+    private bool _isAnimating;
+
+    public bool IsAnimating => _isAnimating;
+
+    public const float MovementDuration = GameConfig.Animations.MovementDuration;
+
     // Stats
     public Stat HP { get; set; }
     public Stat MP { get; set; }
@@ -73,10 +87,9 @@ public abstract class Unit
         EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
         LoadWalkAnimations();
+
         Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
     }
-
-    public void SetPosition(Block block) => Block = block;
 
     public void EquipWeapon(Weapon weapon)
     {
@@ -98,9 +111,76 @@ public abstract class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
-    public void ResetFacingDirection() => FacingDirection = Direction.Down;
-
     public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintGridCoordinates() ?? "[null]"}";
+
+    // -----------------
+    // Animation methods
+    // -----------------
+    public void ResetStartingWorldPosition() 
+    {
+        if (Block == null)
+        {
+            Logger.Error("Block is null.");
+        }
+
+        WorldPosition = Block.GetPixelCoordinates();
+    }
+
+    public void StartMovingTo(Block targetBlock)
+    {
+        if (targetBlock == null) 
+        {
+            return;
+        }
+
+        _startWorldPosition = WorldPosition; // save where we are now
+        TargetWorldPosition = targetBlock.GetPixelCoordinates();
+        _movementTimer = 0f;
+        _isAnimating = true;
+    }
+
+    public void SnapToCurrentBlock()
+    {
+        if (Block == null)
+        {
+            Logger.Error("Cannot snap unit - Block is null.");
+            return;
+        }
+
+        var pos = Block.GetPixelCoordinates();
+
+        WorldPosition = pos;
+        TargetWorldPosition = pos;
+        _startWorldPosition = pos;
+    }
+
+    public void UpdateMovement(float deltaTime)
+    {
+        if (!_isAnimating) 
+        {
+            return;
+        }
+
+        _movementTimer += deltaTime;
+
+        var progress = Math.Clamp(_movementTimer / MovementDuration, 0f, 1f);
+
+        WorldPosition = Vector2.Lerp(_startWorldPosition, TargetWorldPosition, progress);
+
+        if (progress >= 1.0f)
+        {
+            StopMovement();
+        }
+    }
+
+    public void StopMovement()
+    {
+        WorldPosition = TargetWorldPosition;
+        _isAnimating = false;
+        _movementTimer = 0f;
+    }
+
+    public void ResetFacingDirection() => FacingDirection = Direction.Down;
 
     public SpriteV2 GetFacingDirectionTexture(bool frameFlipperFlag)
     {
@@ -115,6 +195,9 @@ public abstract class Unit
         return animations[index];
     }
 
+    // ---------------------------
+    // Read Spritesheet Frame Data
+    // ---------------------------
     public void LoadWalkAnimations()
     {
         _walkAnimations.Clear();
