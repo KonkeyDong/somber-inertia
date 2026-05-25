@@ -57,7 +57,7 @@ public abstract class Unit
     private Vector2 _startWorldPosition; // ← important for correct lerp
     private float _movementTimer;
 
-    private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay / 5);
+    private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay / 7);
     public const float MovementDuration = GameConfig.Animations.MovementDuration;
 
     private bool _isAnimating;
