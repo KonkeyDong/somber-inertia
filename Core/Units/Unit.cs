@@ -3,7 +3,6 @@ using SomberInertia.Timers;
 using SomberInertia.Graphics;
 
 using System.Numerics;
-using System.Text.Json;
 using Raylib_cs;
 
 namespace SomberInertia.Core.Units;
@@ -187,6 +186,17 @@ public abstract class Unit
 
     public void ResetFacingDirection() => FacingDirection = Direction.Down;
 
+    public SpriteV2 GetFacingDirectionTexture(Direction direction)
+    {
+        if (!_walkAnimations.Any())
+        {
+            Logger.Error("No walk animations loaded.");
+            return null!;
+        }
+
+        return _walkAnimations[direction][0];
+    }
+
     public SpriteV2 GetFacingDirectionTexture(bool globalFrameFlipperFlag)
     {
         if (!_walkAnimations.Any())
@@ -229,7 +239,7 @@ public abstract class Unit
             var jsonPath = Path.Combine(basePath + ".json");
             var pngPath  = Path.Combine(basePath + ".png");
 
-            var frames = ExtractFrameData(jsonPath);
+            var frames = SpriteManager.ExtractFrameData(jsonPath);
 
             foreach (var frame in frames)
             {
@@ -239,49 +249,5 @@ public abstract class Unit
         }
 
         Logger.Info($"LoadWalkAnimations completed. Loaded {totalFramesLoaded} frames across 4 directions.");
-    }
-
-    private List<FrameRect> ExtractFrameData(string jsonFilePath)
-    {
-        if (string.IsNullOrWhiteSpace(jsonFilePath))
-        {
-            Logger.Error("ExtractFrameData: jsonFilePath is empty or null.");
-            return new List<FrameRect>();
-        }
-
-        try
-        {
-            var jsonText = File.ReadAllText(jsonFilePath);
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-
-            var sheet = JsonSerializer.Deserialize<AsepriteSheet>(jsonText, options);
-
-            if (sheet?.frames == null || sheet.frames.Count == 0)
-            {
-                Logger.Warning($"No frames found in JSON: {jsonFilePath}");
-                return new List<FrameRect>();
-            }
-
-            return sheet.frames
-                        .Where(entry => entry?.frame != null)
-                        .Select(entry => entry.frame)
-                        .ToList();
-        }
-        catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
-        {
-            Logger.Error($"JSON file not found: {jsonFilePath}");
-
-            return new List<FrameRect>();
-        }
-        catch (Exception ex)
-        {
-            Logger.Error($"Failed to load/parse JSON {jsonFilePath}: {ex.Message}");
-
-            return new List<FrameRect>();
-        }
-    }
+    }   
 }

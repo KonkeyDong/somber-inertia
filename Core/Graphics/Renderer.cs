@@ -1,4 +1,5 @@
 using SomberInertia.Core;
+using SomberInertia.Graphics;
 using SomberInertia.Core.Units;
 using System.Numerics;
 
@@ -11,6 +12,32 @@ public class Renderer
     public Renderer()
     {
 
+    }
+
+    public void Draw(float scale, SpriteV2 sprite, Vector2 position)
+    {
+        var source = new Rectangle(
+            x: sprite.FrameRect.x,
+            y: sprite.FrameRect.y,
+            width: sprite.FrameRect.w,
+            height: sprite.FrameRect.h
+        );
+
+        var dest = new Rectangle(
+            x: position.X,
+            y: position.Y,
+            width: sprite.FrameRect.w * scale,
+            height: sprite.FrameRect.h * scale
+        );
+
+        Raylib.DrawTexturePro(
+            sprite.Texture,
+            source,
+            dest,
+            GameConfig.Textures.BaseOrigin,
+            GameConfig.Textures.BaseRotation,
+            GameConfig.Textures.ClearColor
+        );
     }
 
     public void DrawBackground(float scale, Grid grid)
@@ -82,47 +109,51 @@ public class Renderer
         Raylib.DrawRectangleLinesEx(highlightRect, scale, Color.White);
     }
 
-    public void DrawUnits(float scale, Grid grid, List<Unit> units, bool frameFlipperFlag)
+    public void DrawUnit(float scale, Grid grid, Unit unit, bool frameFlipperFlag)
     {
         var position = new Vector2();
 
+        if (unit.Block == null)
+        {
+            Logger.Error($"Unit {unit.Name} has no Block reference!");
+            return;
+        }
+
+        position = unit.WorldPosition;
+        var sprite = unit.GetFacingDirectionTexture(frameFlipperFlag);
+
+        var source = new Rectangle(
+            x: sprite.FrameRect.x,
+            y: sprite.FrameRect.y,
+            width: sprite.FrameRect.w,
+            height: sprite.FrameRect.h
+        );
+
+        var dest = new Rectangle(
+            x: position.X,
+            y: position.Y,
+            width: sprite.FrameRect.w * scale,
+            height: sprite.FrameRect.h * scale
+        );
+
+        Raylib.DrawTexturePro(
+            sprite.Texture,
+            source,
+            dest,
+            GameConfig.Textures.BaseOrigin,
+            GameConfig.Textures.BaseRotation,
+            GameConfig.Textures.ClearColor
+        );
+    }
+
+    public void DrawUnits(float scale, Grid grid, List<Unit> units, bool frameFlipperFlag)
+    {
         // We loop in reverse to get the drawing order correct.
         // This allows current controlled unit to always be on top
         // of a block containing an occupant.
         for (var i = units.Count - 1; i >= 0; i--)
         {
-            var unit = units[i];
-            if (unit.Block == null)
-            {
-                Logger.Error($"Unit {unit.Name} has no Block reference!");
-                continue;
-            }
-
-            position = unit.WorldPosition;
-            var sprite = unit.GetFacingDirectionTexture(frameFlipperFlag);
-
-            var source = new Rectangle(
-                x: sprite.FrameRect.x,
-                y: sprite.FrameRect.y,
-                width: sprite.FrameRect.w,
-                height: sprite.FrameRect.h
-            );
-
-            var dest = new Rectangle(
-                x: position.X,
-                y: position.Y,
-                width: sprite.FrameRect.w * scale,
-                height: sprite.FrameRect.h * scale
-            );
-
-            Raylib.DrawTexturePro(
-                sprite.Texture,
-                source,
-                dest,
-                GameConfig.Textures.BaseOrigin,
-                GameConfig.Textures.BaseRotation,
-                GameConfig.Textures.ClearColor
-            );
+            DrawUnit(scale, grid, units[i], frameFlipperFlag);
         }
     }
 }

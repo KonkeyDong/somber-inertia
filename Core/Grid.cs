@@ -205,6 +205,8 @@ public class Grid
             unitsInRange.Add(occupant);
         }
 
+        Logger.Debug($"   unitsInRange = [{unitsInRange.Count}]. ");
+
         return unitsInRange;
     }
 
@@ -308,7 +310,9 @@ public class Grid
         {
             if (deadUnit.Block != null)
             {
-                deadUnit.Block.PopOccupant();
+                var block = deadUnit.Block;
+
+                block.PopOccupant();
             }
             else
             {
