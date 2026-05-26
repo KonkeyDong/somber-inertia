@@ -27,6 +27,8 @@ public class Block
         Logger.Debug($"Block created at [{x}, {y}] - {terrainType}");
     }
 
+    public int OccupantCount() => _occupant.Count;
+
     public bool IsFullyOccupied() => _occupant.Count == 2;
 
     public void PushOccupant(Unit unit)
