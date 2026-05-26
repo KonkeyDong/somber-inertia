@@ -110,13 +110,25 @@ public class Game
         Logger.Info($"FriendlyUnitsInRange.Count = {FriendlyUnitsInRange.Count}; UnfriendlyUnitsInRange.Count = {UnfriendlyUnitsInRange.Count}.");
     }
 
-    public List<Unit> RemoveDeadUnits()
+    public List<Unit> FindAllDeadUnits()
     {
-        Logger.Debug("Game::RemoveDeadUnits(): removing all units that have 0 (current) HP.");
+        Logger.Debug("Game::FindAllDeadUnits(): removing all units that have 0 (current) HP.");
         var deadUnits = Units.FindAll(unit => unit.HP.Current == 0);
+
+        Logger.Info($"Number of dead units FOUND: [{deadUnits.Count}].");
+
+        return deadUnits;
+    }
+
+    public List<Unit> RemoveAllDeadUnits()
+    {
+        Logger.Debug("Game::RemoveAllDeadUnits(): removing all units that have 0 (current) HP.");
+        var deadUnits = FindAllDeadUnits();
         var count = Units.RemoveAll(unit => unit.HP.Current == 0);
 
-        Logger.Info($"Number of dead units removed: [{count}].");
+        Grid.RemoveDeadUnitsFromGrid(deadUnits);
+
+        Logger.Info($"Number of dead units REMOVED: [{count}].");
 
         return deadUnits;
     }

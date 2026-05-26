@@ -113,7 +113,7 @@ public abstract class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
-    public override string ToString() => $"{Name} ({MovementType}) at {Block?.PrintGridCoordinates() ?? "[null]"}";
+    public override string ToString() => $"{Name} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
 
     // -----------------
     // Animation methods

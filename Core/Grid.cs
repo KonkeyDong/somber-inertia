@@ -202,6 +202,7 @@ public class Grid
                 continue;
             }
 
+            Logger.Debug($"   occupant [{occupant.Name}] found at {Blocks[x, y].ToString()}");
             unitsInRange.Add(occupant);
         }
 
@@ -304,7 +305,12 @@ public class Grid
 
     public void RemoveDeadUnitsFromGrid(List<Unit> deadUnits)
     {
-        Logger.Debug("Grid::RemoveDeadUnitsFromGrid(): removing dead units from grid.");
+        if (deadUnits == null || deadUnits.Count == 0)
+        {
+            return;
+        }
+
+        Logger.Debug($"Grid::RemoveDeadUnitsFromGrid(): removing {deadUnits.Count} dead unit(s).");
 
         foreach (var deadUnit in deadUnits)
         {
@@ -312,11 +318,17 @@ public class Grid
             {
                 var block = deadUnit.Block;
 
-                block.PopOccupant();
+                var countBefore = block.OccupantCount();
+                Logger.Debug($"  → Removing {deadUnit.Name} from block {block.PrintGridCoordinates()} (stack size before = {countBefore})");
+
+                block.PopOccupant(); // ← only call once
+                deadUnit.Block = null; // clear reference
+
+                Logger.Debug($"  → Stack size after pop = {block.OccupantCount()}");
             }
             else
             {
-                Logger.Error($"Grid::RemoveDeadUnitsFromGrid(): Dead unit '{deadUnit.Name}' had no Block reference.");
+                Logger.Warning($"Dead unit '{deadUnit.Name}' had no Block reference.");
             }
         }
     }

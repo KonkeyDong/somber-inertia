@@ -32,7 +32,7 @@ public class AnimateUnitDeaths : IGameState
 
     public void Enter()
     {
-        _deadUnits = _game.RemoveDeadUnits();
+        _deadUnits = _game.FindAllDeadUnits();
         DeathSprites.Load();
 
         if (_deadUnits.Count == 0)
