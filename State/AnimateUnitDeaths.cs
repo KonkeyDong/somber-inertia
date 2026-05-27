@@ -30,6 +30,8 @@ public class AnimateUnitDeaths : IGameState
         _game = game;
     }
 
+    // This state only plays the death animation. It does not remove units
+    // from the game. Unit removal and cleanup is handled in the EndTurn state.
     public void Enter()
     {
         _deadUnits = _game.FindAllDeadUnits();
@@ -37,6 +39,7 @@ public class AnimateUnitDeaths : IGameState
 
         if (_deadUnits.Count == 0)
         {
+            Logger.Info("No dead units found; exiting state.");
             GameStateManager.ChangeStateType(GameStateType.EndTurn);
             return;
         }
@@ -81,7 +84,6 @@ public class AnimateUnitDeaths : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMovementRange(scale, _game.Grid);
 
         // Draw all living units normally
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
