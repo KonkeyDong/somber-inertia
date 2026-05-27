@@ -46,6 +46,7 @@ class Program
         game.AddUnit(goblin2, 4, 2);
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
+        CommandIcons.Load();
 
         while (!Raylib.WindowShouldClose())
         {

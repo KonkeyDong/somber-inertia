@@ -13,27 +13,16 @@ public class BattleActionMenu : IGameState
     private readonly Game _game;
     private Unit _currentUnit;
 
-    private readonly CommandIcon[] _icons;
+    // Command layout: type + relative offset from center (in tile units)
+    private static readonly (CommandIconType Type, Vector2 Offset)[] _commandLayout =
+    {
+        (CommandIconType.Attack, new Vector2( 0, -1)),  // Up
+        (CommandIconType.Magic,  new Vector2(-1,  0)),  // Left
+        (CommandIconType.Item,   new Vector2( 1,  0)),  // Right
+        (CommandIconType.Stay,   new Vector2( 0,  1))   // Down
+    };
 
     private CommandIconType _selectedCommand = CommandIconType.Attack;
-
-    // Layout data — super easy to add more commands later
-    private static readonly (CommandIconType Type, Vector2 Offset)[] _layout =
-    [
-        (CommandIconType.Attack, new Vector2( 0, -24)), // up
-        (CommandIconType.Magic,  new Vector2(-24,   0)), // left
-        (CommandIconType.Item,   new Vector2( 24,   0)), // right
-        (CommandIconType.Stay,   new Vector2( 0,  24))  // down
-    ];
-
-    // Quick lookup: type → array index
-    private static readonly Dictionary<CommandIconType, int> _typeToIndex = new()
-    {
-        { CommandIconType.Attack, 0 },
-        { CommandIconType.Magic,  1 },
-        { CommandIconType.Item,   2 },
-        { CommandIconType.Stay,   3 }
-    };
 
     private Vector2 _centerPosition;
 
@@ -41,44 +30,50 @@ public class BattleActionMenu : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-
-        _icons = new CommandIcon[_layout.Length];
-        for (var i = 0; i < _layout.Length; i++)
-        {
-            _icons[i] = new CommandIcon(_layout[i].Type);
-        }
     }
 
     public void Enter()
     {
-        _currentUnit = _game.GetCurrentUnit(); // refresh in case it changed
+        _currentUnit = _game.GetCurrentUnit();
         _selectedCommand = CommandIconType.Attack;
+        CommandIcons.SetSelectedIcon(_selectedCommand);
 
         UpdateCenterPosition();
-
-        foreach (var icon in _icons)
-        {
-            icon.Reset();
-        }
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+    }
 
     private void UpdateCenterPosition()
     {
         _centerPosition = new Vector2(
             GameStateManager.CurrentWidth / 2f,
-            3f * GameStateManager.CurrentHeight / 4f
+            GameStateManager.CurrentHeight * 0.75f
         );
     }
 
     public void HandleInput()
     {
-        // Directional selection (matches your original cross layout)
-        if (Raylib.IsKeyPressed(KeyboardKey.Up)) { SetSelectedCommand(CommandIconType.Attack); }
-        if (Raylib.IsKeyPressed(KeyboardKey.Down)) { SetSelectedCommand(CommandIconType.Stay); }
-        if (Raylib.IsKeyPressed(KeyboardKey.Left)) { SetSelectedCommand(CommandIconType.Magic); }
-        if (Raylib.IsKeyPressed(KeyboardKey.Right)) { SetSelectedCommand(CommandIconType.Item); }
+        if (Raylib.IsKeyPressed(KeyboardKey.Up))
+        {
+            SetSelectedCommand(CommandIconType.Attack);
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Down))
+        {
+            SetSelectedCommand(CommandIconType.Stay);
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Left))
+        {
+            SetSelectedCommand(CommandIconType.Magic);
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Right))
+        {
+            SetSelectedCommand(CommandIconType.Item);
+        }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
@@ -98,41 +93,41 @@ public class BattleActionMenu : IGameState
             return;
         }
 
-        // Reset the old icon's animation
-        var oldIndex = _typeToIndex[_selectedCommand];
-        _icons[oldIndex].Reset();
-
         _selectedCommand = newCommand;
+        CommandIcons.SetSelectedIcon(newCommand);
     }
 
     private void ConfirmSelection()
     {
-        Logger.Debug($"BattleActionMenu::ConfirmSelection() selected command: {_selectedCommand}.");
+        Logger.Debug($"BattleActionMenu: Confirmed command {_selectedCommand}");
 
-        if (_selectedCommand == CommandIconType.Attack && _game.UnfriendlyUnitsInRange.Count() > 0)
+        if (_selectedCommand == CommandIconType.Attack)
         {
-            GameStateManager.ChangeStateType(GameStateType.SelectEnemyForPhysicalAttack);
+            if (_game.UnfriendlyUnitsInRange.Count() > 0)
+            {
+                GameStateManager.ChangeStateType(GameStateType.SelectEnemyForPhysicalAttack);
+            }
         }
-
-        if (_selectedCommand == CommandIconType.Stay)
+        else if (_selectedCommand == CommandIconType.Stay)
         {
             GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
+        }
+        else
+        {
+            Logger.Warning($"BattleActionMenu: Command {_selectedCommand} not yet implemented.");
         }
     }
 
     private void CancelMenu()
     {
-        Logger.Debug($"BattleActionMenu::CancelMenu() called; returning to [{GameStateType.UnitMoving}] state.");
+        Logger.Debug("BattleActionMenu: Cancelled - returning to UnitMoving");
         GameStateManager.ChangeStateType(GameStateType.UnitMoving);
     }
 
     public void Update()
     {
-        var currentIndex = _typeToIndex[_selectedCommand];
-        _icons[currentIndex].Update();
-        _game.FrameFlipper.Tick();
-
         _game.Grid.RangeTint.Tick();
+        CommandIcons.Update();
     }
 
     public void Draw(float scale)
@@ -141,13 +136,15 @@ public class BattleActionMenu : IGameState
         _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        for (var i = 0; i < _icons.Length; i++)
+        for (var i = 0; i < _commandLayout.Length; i++)
         {
-            var position = _centerPosition + _layout[i].Offset * scale;
-            _icons[i].Draw(position, scale);
+            var (type, offset) = _commandLayout[i];
+            var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
+            var sprite = CommandIcons.GetSprite(type);
+
+            _game.Renderer.Draw(scale, sprite, position);
         }
     }
 
-    // Call this from your main game loop if the window is resized
     public void OnResize() => UpdateCenterPosition();
 }
