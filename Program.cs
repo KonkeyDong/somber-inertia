@@ -4,6 +4,7 @@ using SomberInertia.Enums;
 using SomberInertia.Graphics;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
+using SomberInertia.Core.Combat;
 
 namespace SomberInertia;
 

@@ -153,8 +153,8 @@ public class Grid
         var visited = new HashSet<(int x, int y)>();
         var start = unit.Block;
 
-        var minRange = unit.Weapon.Range.Min;
-        var maxRange = unit.Weapon.Range.Max;
+        var minRange = unit.Weapon.DistanceRange.Min;
+        var maxRange = unit.Weapon.DistanceRange.Max;
 
         queue.Enqueue(start);
         visited.Add((start.X, start.Y));

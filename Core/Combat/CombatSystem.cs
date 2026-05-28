@@ -2,7 +2,7 @@ using SomberInertia.Core.Units;
 
 using Raylib_cs;
 
-namespace SomberInertia.Core;
+namespace SomberInertia.Core.Combat;
 
 public static class CombatSystem
 {

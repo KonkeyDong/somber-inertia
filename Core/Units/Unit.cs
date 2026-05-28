@@ -1,6 +1,7 @@
 using SomberInertia.Enums;
 using SomberInertia.Timers;
 using SomberInertia.Graphics;
+using SomberInertia.Core.Combat;
 
 using System.Numerics;
 using Raylib_cs;
