@@ -22,7 +22,6 @@ public class EndTurn : IGameState
 
         _game.FrameFlipper.Reset();
         _game.ResetListOfUnitsInRange();
-        _game.RemoveAllDeadUnits();
         _game.MoveFirstUnitToEndOfList();
 
         GameStateManager.ChangeStateType(GameStateType.CalculateUnitMovementRange);

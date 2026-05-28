@@ -1,4 +1,5 @@
 using SomberInertia.Enums;
+using SomberInertia.Core.Combat;
 
 namespace SomberInertia.Core.Units;
 

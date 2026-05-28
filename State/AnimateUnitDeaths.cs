@@ -34,7 +34,7 @@ public class AnimateUnitDeaths : IGameState
     // from the game. Unit removal and cleanup is handled in the EndTurn state.
     public void Enter()
     {
-        _deadUnits = _game.FindAllDeadUnits();
+        _deadUnits = _game.RemoveAllDeadUnits();
         DeathSprites.Load();
 
         if (_deadUnits.Count == 0)

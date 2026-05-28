@@ -1,6 +1,6 @@
 using SomberInertia.Enums;
 
-namespace SomberInertia.Core;
+namespace SomberInertia.Core.Combat;
 
 public static class WeaponManager
 {
@@ -11,7 +11,7 @@ public static class WeaponManager
         _weaponsLookup.Clear();
 
         // Unarmed
-        _weaponsLookup[WeaponName.Unarmed] = new Weapon(WeaponName.Unarmed.GetDisplayName(), 0, WeaponType.Unarmed, new WeaponRange(1, 1), "", Job.Any);
+        _weaponsLookup[WeaponName.Unarmed] = new Weapon(WeaponName.Unarmed.GetDisplayName(), 0, WeaponType.Unarmed, new Range(1, 1), "", Job.Any);
 
         BuildSwords();
         BuildAxes();
@@ -35,7 +35,7 @@ public static class WeaponManager
     private static void BuildSwords()
     {
         var weaponType = WeaponType.Sword;
-        var weaponRange = new WeaponRange(1, 1);
+        var weaponRange = new Range(1, 1);
 
         _weaponsLookup[WeaponName.ShortSword] = new Weapon(WeaponName.ShortSword.GetDisplayName(), 5, weaponType, weaponRange, "", Job.Swordsman | Job.Warrior | Job.Birdman);
         _weaponsLookup[WeaponName.MiddleSword] = new Weapon(WeaponName.MiddleSword.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Swordsman | Job.Warrior | Job.Birdman);
@@ -52,7 +52,7 @@ public static class WeaponManager
     private static void BuildAxes()
     {
         var weaponType = WeaponType.Axe;
-        var weaponRange = new WeaponRange(1, 1);
+        var weaponRange = new Range(1, 1);
 
         _weaponsLookup[WeaponName.HandAxe] = new Weapon(WeaponName.HandAxe.GetDisplayName(), 7, weaponType, weaponRange, "", Job.Warrior);
         _weaponsLookup[WeaponName.MiddleAxe] = new Weapon(WeaponName.MiddleAxe.GetDisplayName(), 11, weaponType, weaponRange, "", Job.Warrior);
@@ -65,7 +65,7 @@ public static class WeaponManager
     private static void BuildStaves()
     {
         var weaponType = WeaponType.Staff;
-        var weaponRange = new WeaponRange(1, 1);
+        var weaponRange = new Range(1, 1);
 
         _weaponsLookup[WeaponName.WoodenStaff] = new Weapon(WeaponName.WoodenStaff.GetDisplayName(), 5, weaponType, weaponRange, "", Job.Healer | Job.Mage);
         _weaponsLookup[WeaponName.PowerStaff] = new Weapon(WeaponName.PowerStaff.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Healer | Job.Mage);
@@ -78,17 +78,17 @@ public static class WeaponManager
     {
         var weaponType = WeaponType.Arrow;
 
-        _weaponsLookup[WeaponName.WoodenArrow] = new Weapon(WeaponName.WoodenArrow.GetDisplayName(), 8, weaponType, new WeaponRange(2, 2), "", Job.Archer | Job.AssaultKnight);
-        _weaponsLookup[WeaponName.SteelArrow] = new Weapon(WeaponName.SteelArrow.GetDisplayName(), 13, weaponType, new WeaponRange(2, 2), "", Job.Archer | Job.AssaultKnight);
-        _weaponsLookup[WeaponName.ElvenArrow] = new Weapon(WeaponName.ElvenArrow.GetDisplayName(), 18, weaponType, new WeaponRange(2, 3), "", Job.Archer | Job.Sniper | Job.BowMaster | Job.AssaultKnight | Job.StrikeKnight);
-        _weaponsLookup[WeaponName.AssaultShell] = new Weapon(WeaponName.AssaultShell.GetDisplayName(), 27, weaponType, new WeaponRange(2, 3), "", Job.StrikeKnight | Job.BowMaster | Job.Sniper);
-        _weaponsLookup[WeaponName.BusterShot] = new Weapon(WeaponName.BusterShot.GetDisplayName(), 35, weaponType, new WeaponRange(2, 3), "", Job.StrikeKnight | Job.BowMaster | Job.Sniper);
+        _weaponsLookup[WeaponName.WoodenArrow] = new Weapon(WeaponName.WoodenArrow.GetDisplayName(), 8, weaponType, new Range(2, 2), "", Job.Archer | Job.AssaultKnight);
+        _weaponsLookup[WeaponName.SteelArrow] = new Weapon(WeaponName.SteelArrow.GetDisplayName(), 13, weaponType, new Range(2, 2), "", Job.Archer | Job.AssaultKnight);
+        _weaponsLookup[WeaponName.ElvenArrow] = new Weapon(WeaponName.ElvenArrow.GetDisplayName(), 18, weaponType, new Range(2, 3), "", Job.Archer | Job.Sniper | Job.BowMaster | Job.AssaultKnight | Job.StrikeKnight);
+        _weaponsLookup[WeaponName.AssaultShell] = new Weapon(WeaponName.AssaultShell.GetDisplayName(), 27, weaponType, new Range(2, 3), "", Job.StrikeKnight | Job.BowMaster | Job.Sniper);
+        _weaponsLookup[WeaponName.BusterShot] = new Weapon(WeaponName.BusterShot.GetDisplayName(), 35, weaponType, new Range(2, 3), "", Job.StrikeKnight | Job.BowMaster | Job.Sniper);
     }
 
     private static void BuildSpears()
     {
         var weaponType = WeaponType.Spear;
-        var weaponRange = new WeaponRange(1, 2);
+        var weaponRange = new Range(1, 2);
 
         Logger.Warning("WeaponManager::BuildSpears(): need to revisit which jobs can throw spears.");
         _weaponsLookup[WeaponName.Spear] = new Weapon(WeaponName.Spear.GetDisplayName(), 8, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
@@ -98,7 +98,7 @@ public static class WeaponManager
     private static void BuildLances()
     {
         var weaponType = WeaponType.Lance;
-        var weaponRange = new WeaponRange(1, 1);
+        var weaponRange = new Range(1, 1);
 
         _weaponsLookup[WeaponName.BronzeLance] = new Weapon(WeaponName.BronzeLance.GetDisplayName(), 9, weaponType, weaponRange, "", Job.Knight | Job.SkyKnight);
         _weaponsLookup[WeaponName.SteelLance] = new Weapon(WeaponName.SteelLance.GetDisplayName(), 18, weaponType, weaponRange, "", Job.Paladin | Job.SkyBaron | Job.SkyLord);
