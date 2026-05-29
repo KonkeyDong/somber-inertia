@@ -122,28 +122,7 @@ public class Renderer
         position = unit.WorldPosition;
         var sprite = unit.GetFacingDirectionTexture(frameFlipperFlag);
 
-        var source = new Rectangle(
-            x: sprite.FrameRect.x,
-            y: sprite.FrameRect.y,
-            width: sprite.FrameRect.w,
-            height: sprite.FrameRect.h
-        );
-
-        var dest = new Rectangle(
-            x: position.X,
-            y: position.Y,
-            width: sprite.FrameRect.w * scale,
-            height: sprite.FrameRect.h * scale
-        );
-
-        Raylib.DrawTexturePro(
-            sprite.Texture,
-            source,
-            dest,
-            GameConfig.Textures.BaseOrigin,
-            GameConfig.Textures.BaseRotation,
-            GameConfig.Textures.ClearColor
-        );
+        Draw(scale, sprite, position);
     }
 
     public void DrawUnits(float scale, Grid grid, List<Unit> units, bool frameFlipperFlag)
