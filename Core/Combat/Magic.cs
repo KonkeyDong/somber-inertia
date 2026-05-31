@@ -11,23 +11,28 @@ public class Magic
     public Range DistanceRange { get; set; }
     public Range TargetRange { get; set; }
 
-    public Magic(string name, int level, int mPCost, MagicType magicType, Range distanceRange, Range targetRange)
+    private readonly IMagicEffect _effect;
+
+    public Magic(string name, int level, int MPCost, MagicType magicType, Range distanceRange, Range targetRange, IMagicEffect effect)
     {
         if (level <= 0 || level > 4)
         {
             Logger.Error("Magic level has to be between 1 and 4.");
         }
 
-        if (mPCost < 0)
+        if (MPCost < 0)
         {
             Logger.Error("MP Cost cannot be less than 0.");
         }
 
         Name = name;
         Level = level;
-        MPCost = mPCost;
+        this.MPCost = MPCost;
         MagicType = magicType;
         DistanceRange = distanceRange;
         TargetRange = targetRange;
+        _effect = effect;
     }
+
+    public void Cast(MagicContext context) => _effect.Execute(context, this);
 }

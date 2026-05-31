@@ -1,4 +1,5 @@
 using SomberInertia.Core.Units;
+using SomberInertia.Enums;
 
 using Raylib_cs;
 
@@ -26,18 +27,36 @@ public static class CombatSystem
             return;
         }
 
-        Logger.Info($"  Base attack damage: [{baseDamage}].");
-        
-        var variance = Raylib.GetRandomValue(75, 125);
-        var variantDamage = (baseDamage * variance) / 100;
+        var variantDamage = CalculateVariance(baseDamage);
 
-        Logger.Info($"Variant damage: [{variantDamage}].");
+        defender.TakeDamage(Math.Max(variantDamage, 1));
+    }
+
+    public static void MagicAttack(Unit attacker, Unit defender, int baseDamage, MagicType magicType)
+    {
+        Logger.Info($"{attacker.Name} performs a {magicType.ToString()} magic attack upon {defender.Name}.");
+
+        // Magic attacks never miss, but they cost MP to cast (unless casted by using an item).
+        // Magic attacks can crit and a defender can be weak or strong against a magic attack.
+
+        var variantDamage = CalculateVariance(baseDamage);
 
         defender.TakeDamage(Math.Max(variantDamage, 1));
     }
 
     private static bool CheckHit(Unit attacker, Unit defender) => !Chance(16);
 
+    private static int CalculateVariance(int baseAmount)
+    {
+        Logger.Info($"  Base amount: [{baseAmount}].");
+        
+        var variance = Raylib.GetRandomValue(75, 125);
+        var variantDamage = (baseAmount * variance) / 100;
+
+        Logger.Info($"  Variant amount: [{variantDamage}].");
+
+        return variantDamage;
+    }
 
     private static bool Chance(int denominator)
     {
