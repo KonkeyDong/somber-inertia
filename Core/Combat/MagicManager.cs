@@ -6,52 +6,268 @@ namespace SomberInertia.Core.Combat;
 
 public static class MagicManager
 {
-    private static readonly Dictionary<string, Magic> _MagicLookup = new();
+    private static readonly Dictionary<MagicName, Magic> _MagicLookup = new();
 
     public static void Initialize()
     {
         _MagicLookup.Clear();
 
-        // Register all Magics here
         RegisterFireMagic();
-        // RegisterHealMagics();
-        // RegisterBuffMagics();
-        // ... add more categories as needed
+        RegisterIceMagic();
+        RegisterLightningMagic();
+        RegisterHealMagic();
+        RegisterBuffMagic();
+        RegisterDebuffMagic();
+        RegisterMiscMagic();
     }
 
-    // public static Magic Create(MagicName MagicName)
-    // {
-    //     if (_MagicsLookup.TryGetValue(MagicName, out var Magic))
-    //     {
-    //         return Magic;                    // You can decide later if you want to return a copy or the same instance
-    //     }
-
-    //     throw new InvalidOperationException($"MagicDatabase.Create(): Unknown Magic [{MagicName}].");
-    // }
-
-    // Example category
     private static void RegisterFireMagic()
     {
-        _MagicLookup["Fire 1"] = new Magic(
-            name: MagicType.Fire.ToString(),
+        var magicType = MagicType.Fire;
+        var distanceRange = new Range(1, 2);
+
+        _MagicLookup[MagicName.Blaze1] = new Magic(
+            name: MagicName.Blaze1.GetDisplayName(),
             level: 1,
             MPCost: 2,
-            magicType: MagicType.Fire,
+            magicType: magicType,
+            distanceRange: distanceRange,
+            targetRange: new Range(0, 0),
+            effect: new DamageEffect(7)
+        );
+
+        _MagicLookup[MagicName.Blaze2] = new Magic(
+            name: MagicName.Blaze2.GetDisplayName(),
+            level: 2,
+            MPCost: 5,
+            magicType: magicType,
+            distanceRange: distanceRange,
+            targetRange: new Range(0, 1),
+            effect: new DamageEffect(8)
+        );
+
+        _MagicLookup[MagicName.Blaze3] = new Magic(
+            name: MagicName.Blaze3.GetDisplayName(),
+            level: 3,
+            MPCost: 8,
+            magicType: magicType,
+            distanceRange: distanceRange,
+            targetRange: new Range(0, 1),
+            effect: new DamageEffect(12)
+        );
+
+        _MagicLookup[MagicName.Blaze4] = new Magic(
+            name: MagicName.Blaze4.GetDisplayName(),
+            level: 4,
+            MPCost: 8,
+            magicType: magicType,
+            distanceRange: distanceRange,
+            targetRange: new Range(0, 0),
+            effect: new DamageEffect(32)
+        );
+    }
+
+    private static void RegisterIceMagic()
+    {
+        var magicType = MagicType.Ice;
+
+        _MagicLookup[MagicName.Freeze1] = new Magic(
+            name: MagicName.Freeze1.GetDisplayName(),
+            level: 1,
+            MPCost: 3,
+            magicType: magicType,
             distanceRange: new Range(1, 2),
             targetRange: new Range(0, 0),
             effect: new DamageEffect(8)
         );
 
-        _MagicLookup["Fire 2"] = new Magic(
-            name: "Fire 2",
+        _MagicLookup[MagicName.Freeze2] = new Magic(
+            name: MagicName.Freeze2.GetDisplayName(),
             level: 2,
-            MPCost: 5,
-            magicType: MagicType.Fire,
+            MPCost: 7,
+            magicType: magicType,
+            distanceRange: new Range(1, 2),
+            targetRange: new Range(0, 1),
+            effect: new DamageEffect(10)
+        );
+
+        _MagicLookup[MagicName.Freeze3] = new Magic(
+            name: MagicName.Freeze3.GetDisplayName(),
+            level: 3,
+            MPCost: 10,
+            magicType: magicType,
+            distanceRange: new Range(1, 3),
+            targetRange: new Range(0, 1),
+            effect: new DamageEffect(15)
+        );
+
+        _MagicLookup[MagicName.Freeze4] = new Magic(
+            name: MagicName.Freeze4.GetDisplayName(),
+            level: 4,
+            MPCost: 10,
+            magicType: magicType,
+            distanceRange: new Range(1, 4),
+            targetRange: new Range(0, 0),
+            effect: new DamageEffect(40)
+        );
+    }
+
+    private static void RegisterLightningMagic()
+    {
+        var magicType = MagicType.Lightning;
+
+        _MagicLookup[MagicName.Bolt1] = new Magic(
+            name: MagicName.Bolt1.GetDisplayName(),
+            level: 1,
+            MPCost: 8,
+            magicType: magicType,
             distanceRange: new Range(1, 2),
             targetRange: new Range(0, 1),
             effect: new DamageEffect(12)
         );
+
+        _MagicLookup[MagicName.Bolt2] = new Magic(
+            name: MagicName.Bolt2.GetDisplayName(),
+            level: 2,
+            MPCost: 15,
+            magicType: magicType,
+            distanceRange: new Range(1, 3),
+            targetRange: new Range(0, 2),
+            effect: new DamageEffect(13)
+        );
+
+        _MagicLookup[MagicName.Bolt3] = new Magic(
+            name: MagicName.Bolt3.GetDisplayName(),
+            level: 3,
+            MPCost: 20,
+            magicType: magicType,
+            distanceRange: new Range(1, 3),
+            targetRange: new Range(0, 2),
+            effect: new DamageEffect(20)
+        );
+
+        _MagicLookup[MagicName.Bolt4] = new Magic(
+            name: MagicName.Bolt4.GetDisplayName(),
+            level: 4,
+            MPCost: 20,
+            magicType: magicType,
+            distanceRange: new Range(1, 3),
+            targetRange: new Range(0, 0),
+            effect: new DamageEffect(48)
+        );
     }
 
-    // Add more methods like RegisterHealMagics(), RegisterBuffMagics(), etc.
+    private static void RegisterHealMagic()
+    {
+        var magicType = MagicType.Heal;
+        var targetRange = new Range(0, 0);
+
+        // Heal
+        _MagicLookup[MagicName.Heal1] = new Magic(
+            name: MagicName.Heal1.GetDisplayName(),
+            level: 1,
+            MPCost: 3,
+            magicType: magicType,
+            distanceRange: new Range(0, 1),
+            targetRange: targetRange,
+            effect: new HealEffect(12)
+        );
+
+        _MagicLookup[MagicName.Heal2] = new Magic(
+            name: MagicName.Heal2.GetDisplayName(),
+            level: 2,
+            MPCost: 6,
+            magicType: magicType,
+            distanceRange: new Range(0, 2),
+            targetRange: targetRange,
+            effect: new HealEffect(12)
+        );
+
+        _MagicLookup[MagicName.Heal3] = new Magic(
+            name: MagicName.Heal3.GetDisplayName(),
+            level: 3,
+            MPCost: 10,
+            magicType: magicType,
+            distanceRange: new Range(0, 3),
+            targetRange: targetRange,
+            effect: new HealEffect(24)
+        );
+
+        _MagicLookup[MagicName.Heal4] = new Magic(
+            name: MagicName.Heal4.GetDisplayName(),
+            level: 4,
+            MPCost: 15, // originally 20, but why make Aura4 18?
+            magicType: magicType,
+            distanceRange: new Range(0, 1),
+            targetRange: targetRange,
+            effect: new HealEffect(1000) // full heal
+        );
+        
+        // Aura
+        _MagicLookup[MagicName.Aura1] = new Magic(
+            name: MagicName.Aura1.GetDisplayName(),
+            level: 1,
+            MPCost: 7,
+            magicType: magicType,
+            distanceRange: new Range(0, 3),
+            targetRange: new Range(0, 1),
+            effect: new HealEffect(12)
+        );
+
+        _MagicLookup[MagicName.Aura2] = new Magic(
+            name: MagicName.Aura2.GetDisplayName(),
+            level: 2,
+            MPCost: 11,
+            magicType: magicType,
+            distanceRange: new Range(0, 3),
+            targetRange: new Range(0, 2),
+            effect: new HealEffect(12)
+        );
+
+        _MagicLookup[MagicName.Aura3] = new Magic(
+            name: MagicName.Aura3.GetDisplayName(),
+            level: 3,
+            MPCost: 15,
+            magicType: magicType,
+            distanceRange: new Range(0, 3),
+            targetRange: new Range(0, 2),
+            effect: new HealEffect(24)
+        );
+
+        _MagicLookup[MagicName.Aura4] = new Magic(
+            name: MagicName.Aura4.GetDisplayName(),
+            level: 4,
+            MPCost: 18,
+            magicType: magicType,
+            distanceRange: new Range(0, 1000), // entire map
+            targetRange: new Range(0, 1000), // entire map
+            effect: new HealEffect(1000) // full heal
+        );
+    }
+
+    public static void RegisterBuffMagic()
+    {
+
+    }
+
+    public static void RegisterDebuffMagic()
+    {
+
+    }
+
+    public static void RegisterMiscMagic()
+    {
+        var magicType = MagicType.Misc;
+
+        Logger.Warning("Egress effect is DamageEffect. Change to different effect.");
+        _MagicLookup[MagicName.Egress1] = new Magic(
+            name: MagicName.Egress1.GetDisplayName(),
+            level: 1,
+            MPCost: 8,
+            magicType: magicType,
+            distanceRange: new Range(0, 0),
+            targetRange: new Range(0, 0),
+            effect: new DamageEffect(0) // full heal
+        );
+    }
 }

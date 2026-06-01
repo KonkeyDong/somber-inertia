@@ -25,3 +25,25 @@ public class DamageEffect : IMagicEffect
         }
     }
 }
+
+public class HealEffect : IMagicEffect
+{
+    private readonly int _healAmount;
+
+    public HealEffect(int healAmount)
+    {
+        _healAmount = healAmount;
+    }
+
+    public void Execute(MagicContext context, Magic magic)
+    {
+        foreach (var target in context.Targets)
+        {
+            if (context.Caster.Friendly != target.Friendly) // only damage enemies
+            {
+                Logger.Warning("HealEffect: change CombatSystem.MagicAttack to Heal.");
+                CombatSystem.MagicAttack(context.Caster, target, _healAmount, magic.MagicType);
+            }
+        }
+    }
+}
