@@ -25,4 +25,5 @@ public enum GameStateType
     SelectEnemyForPhysicalAttack,
     TransitionSelectorToNextUnit,
     AnimateUnitDeaths,
+    SelectMagic,
 }

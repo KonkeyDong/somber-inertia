@@ -112,6 +112,10 @@ public class BattleActionMenu : IGameState
         {
             GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
         }
+        else if (_selectedCommand == CommandIconType.Magic)
+        {
+            GameStateManager.ChangeStateType(GameStateType.SelectMagic);
+        }
         else
         {
             Logger.Warning($"BattleActionMenu: Command {_selectedCommand} not yet implemented.");
