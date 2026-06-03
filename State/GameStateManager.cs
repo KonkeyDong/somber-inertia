@@ -42,6 +42,7 @@ public static class GameStateManager
             GameStateType.SelectEnemyForPhysicalAttack => new SelectEnemyForPhysicalAttack(Game),
             GameStateType.TransitionSelectorToNextUnit => new TransitionSelectorToNextUnit(Game),
             GameStateType.AnimateUnitDeaths => new AnimateUnitDeaths(Game),
+            GameStateType.SelectMagic => new SelectMagic(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };
