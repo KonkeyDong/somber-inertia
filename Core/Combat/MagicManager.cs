@@ -27,7 +27,7 @@ public static class MagicManager
         var distanceRange = new Range(1, 2);
 
         _MagicLookup[MagicName.Blaze1] = new Magic(
-            name: MagicName.Blaze1.GetDisplayName(),
+            name: MagicName.Blaze1,
             level: 1,
             MPCost: 2,
             magicType: magicType,
@@ -37,7 +37,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Blaze2] = new Magic(
-            name: MagicName.Blaze2.GetDisplayName(),
+            name: MagicName.Blaze2,
             level: 2,
             MPCost: 5,
             magicType: magicType,
@@ -47,7 +47,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Blaze3] = new Magic(
-            name: MagicName.Blaze3.GetDisplayName(),
+            name: MagicName.Blaze3,
             level: 3,
             MPCost: 8,
             magicType: magicType,
@@ -57,7 +57,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Blaze4] = new Magic(
-            name: MagicName.Blaze4.GetDisplayName(),
+            name: MagicName.Blaze4,
             level: 4,
             MPCost: 8,
             magicType: magicType,
@@ -72,7 +72,7 @@ public static class MagicManager
         var magicType = MagicType.Ice;
 
         _MagicLookup[MagicName.Freeze1] = new Magic(
-            name: MagicName.Freeze1.GetDisplayName(),
+            name: MagicName.Freeze1,
             level: 1,
             MPCost: 3,
             magicType: magicType,
@@ -82,7 +82,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Freeze2] = new Magic(
-            name: MagicName.Freeze2.GetDisplayName(),
+            name: MagicName.Freeze2,
             level: 2,
             MPCost: 7,
             magicType: magicType,
@@ -92,7 +92,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Freeze3] = new Magic(
-            name: MagicName.Freeze3.GetDisplayName(),
+            name: MagicName.Freeze3,
             level: 3,
             MPCost: 10,
             magicType: magicType,
@@ -102,7 +102,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Freeze4] = new Magic(
-            name: MagicName.Freeze4.GetDisplayName(),
+            name: MagicName.Freeze4,
             level: 4,
             MPCost: 10,
             magicType: magicType,
@@ -117,7 +117,7 @@ public static class MagicManager
         var magicType = MagicType.Lightning;
 
         _MagicLookup[MagicName.Bolt1] = new Magic(
-            name: MagicName.Bolt1.GetDisplayName(),
+            name: MagicName.Bolt1,
             level: 1,
             MPCost: 8,
             magicType: magicType,
@@ -127,7 +127,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Bolt2] = new Magic(
-            name: MagicName.Bolt2.GetDisplayName(),
+            name: MagicName.Bolt2,
             level: 2,
             MPCost: 15,
             magicType: magicType,
@@ -137,7 +137,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Bolt3] = new Magic(
-            name: MagicName.Bolt3.GetDisplayName(),
+            name: MagicName.Bolt3,
             level: 3,
             MPCost: 20,
             magicType: magicType,
@@ -147,7 +147,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Bolt4] = new Magic(
-            name: MagicName.Bolt4.GetDisplayName(),
+            name: MagicName.Bolt4,
             level: 4,
             MPCost: 20,
             magicType: magicType,
@@ -164,7 +164,7 @@ public static class MagicManager
 
         // Heal
         _MagicLookup[MagicName.Heal1] = new Magic(
-            name: MagicName.Heal1.GetDisplayName(),
+            name: MagicName.Heal1,
             level: 1,
             MPCost: 3,
             magicType: magicType,
@@ -174,7 +174,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Heal2] = new Magic(
-            name: MagicName.Heal2.GetDisplayName(),
+            name: MagicName.Heal2,
             level: 2,
             MPCost: 6,
             magicType: magicType,
@@ -184,7 +184,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Heal3] = new Magic(
-            name: MagicName.Heal3.GetDisplayName(),
+            name: MagicName.Heal3,
             level: 3,
             MPCost: 10,
             magicType: magicType,
@@ -194,7 +194,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Heal4] = new Magic(
-            name: MagicName.Heal4.GetDisplayName(),
+            name: MagicName.Heal4,
             level: 4,
             MPCost: 15, // originally 20, but why make Aura4 18?
             magicType: magicType,
@@ -205,7 +205,7 @@ public static class MagicManager
         
         // Aura
         _MagicLookup[MagicName.Aura1] = new Magic(
-            name: MagicName.Aura1.GetDisplayName(),
+            name: MagicName.Aura1,
             level: 1,
             MPCost: 7,
             magicType: magicType,
@@ -215,7 +215,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Aura2] = new Magic(
-            name: MagicName.Aura2.GetDisplayName(),
+            name: MagicName.Aura2,
             level: 2,
             MPCost: 11,
             magicType: magicType,
@@ -225,7 +225,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Aura3] = new Magic(
-            name: MagicName.Aura3.GetDisplayName(),
+            name: MagicName.Aura3,
             level: 3,
             MPCost: 15,
             magicType: magicType,
@@ -235,7 +235,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Aura4] = new Magic(
-            name: MagicName.Aura4.GetDisplayName(),
+            name: MagicName.Aura4,
             level: 4,
             MPCost: 18,
             magicType: magicType,
@@ -261,13 +261,13 @@ public static class MagicManager
 
         Logger.Warning("Egress effect is DamageEffect. Change to different effect.");
         _MagicLookup[MagicName.Egress1] = new Magic(
-            name: MagicName.Egress1.GetDisplayName(),
+            name: MagicName.Egress1,
             level: 1,
             MPCost: 8,
             magicType: magicType,
             distanceRange: new Range(0, 0),
             targetRange: new Range(0, 0),
-            effect: new DamageEffect(0) // full heal
+            effect: new DamageEffect(0)
         );
     }
 }

@@ -48,6 +48,8 @@ class Program
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
         CommandIcons.Load();
+        MagicIcons.Load();
+        DeathSprites.Load();
 
         while (!Raylib.WindowShouldClose())
         {

@@ -2,7 +2,7 @@ namespace SomberInertia.Enums;
 
 public static class MagicNameExtensions
 {
-    public static string GetDisplayName(this MagicName magicName)
+    public static string GetFullName(this MagicName magicName)
     {
         return magicName switch
         {
@@ -49,5 +49,50 @@ public static class MagicNameExtensions
 
             _ => magicName.ToString()
         };
+    }
+
+    public static string GetBaseName(this MagicName magicName, bool capitalize = false)
+    {
+        var result = magicName switch
+        {
+            // All Blaze levels share the same sprite
+            MagicName.Blaze1 or MagicName.Blaze2 or MagicName.Blaze3 or MagicName.Blaze4 
+                => "blaze",
+
+            // All Freeze levels share the same sprite
+            MagicName.Freeze1 or MagicName.Freeze2 or MagicName.Freeze3 or MagicName.Freeze4 
+                => "freeze",
+
+            // All Bolt levels share the same sprite
+            MagicName.Bolt1 or MagicName.Bolt2 or MagicName.Bolt3 or MagicName.Bolt4 
+                => "bolt",
+
+            // All Heal levels share the same sprite
+            MagicName.Heal1 or MagicName.Heal2 or MagicName.Heal3 or MagicName.Heal4 
+                => "heal",
+
+            // All Aura levels share the same sprite
+            MagicName.Aura1 or MagicName.Aura2 or MagicName.Aura3 or MagicName.Aura4 
+                => "aura",
+
+            // Level 1 + Level 2 variants that share the same sprite
+            MagicName.Slow1 or MagicName.Slow2   => "slow",
+            MagicName.Quick1 or MagicName.Quick2 => "quick",
+            MagicName.Desoul1 or MagicName.Desoul2 => "desoul",
+
+            // Single-level spells (no number in filename)
+            MagicName.Dispel1 => "dispel",
+            MagicName.Muddle1 => "muddle",
+            MagicName.Sleep1  => "sleep",
+            MagicName.Egress1 => "egress",
+            MagicName.Detox1  => "detox",
+            MagicName.Shield1 => "shield",
+            MagicName.Boost1  => "boost",
+
+            // Fallback (just in case)
+            _ => magicName.ToString().ToLowerInvariant()
+        };
+
+        return capitalize ? result.ToUpper() : result;
     }
 }

@@ -8,7 +8,7 @@ namespace SomberInertia.Graphics;
 
 public static class CommandIcons
 {
-    private static readonly FrameFlipper _frameFlipper = new FrameFlipper(GameConfig.Animations.CommandIconDelay);
+    private static readonly FrameFlipper _frameFlipper = new FrameFlipper(GameConfig.Animations.IconDelay);
     private static readonly string _rootPath = "Assets/Sprites/Shared/Command Icons";
     private static Dictionary<CommandIconType, List<SpriteV2>> _commandIconAnimations = new();
     private static CommandIconType _currentSelectedIcon = CommandIconType.Yes;

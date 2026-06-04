@@ -13,7 +13,7 @@ public static class GameConfig
         public const int CountdownTimerDelay = 60;
         public const float MovementDuration = 0.20f; // 0.25 = quarter second (15 frames)
         public const int FrameFlipperDelay = 30;
-        public const int CommandIconDelay = 6;
+        public const int IconDelay = 6;
     }
 
     public static class Textures

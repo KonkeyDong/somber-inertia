@@ -7,6 +7,14 @@ public class SelectMagic : IGameState
 {
     private readonly Game _game;
 
+    private static readonly Dictionary<Direction, int> _spellIndexByDirection = new()
+    {
+        { Direction.Up,    0 },   // First spell in the list
+        { Direction.Left,  1 },
+        { Direction.Right, 2 },
+        { Direction.Down,  3 }
+    };
+
     public SelectMagic(Game game)
     {
         _game = game;

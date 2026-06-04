@@ -4,7 +4,7 @@ namespace SomberInertia.Core.Combat;
 
 public class Magic
 {
-    public string Name { get; set; }
+    public MagicName Name { get; set; }
     public int Level { get; set; }
     public int MPCost { get; set; }
     public MagicType MagicType { get; set; }
@@ -13,7 +13,7 @@ public class Magic
 
     private readonly IMagicEffect _effect;
 
-    public Magic(string name, int level, int MPCost, MagicType magicType, Range distanceRange, Range targetRange, IMagicEffect effect)
+    public Magic(MagicName name, int level, int MPCost, MagicType magicType, Range distanceRange, Range targetRange, IMagicEffect effect)
     {
         if (level <= 0 || level > 4)
         {

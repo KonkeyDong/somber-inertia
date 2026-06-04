@@ -14,14 +14,13 @@ public class BattleActionMenu : IGameState
     private Unit _currentUnit;
 
     // Command layout: type + relative offset from center (in tile units)
-    private static readonly (CommandIconType Type, Vector2 Offset)[] _commandLayout =
+    private static readonly Dictionary<Direction, CommandIconType> _commandByDirection = new()
     {
-        (CommandIconType.Attack, new Vector2( 0, -1)),  // Up
-        (CommandIconType.Magic,  new Vector2(-1,  0)),  // Left
-        (CommandIconType.Item,   new Vector2( 1,  0)),  // Right
-        (CommandIconType.Stay,   new Vector2( 0,  1))   // Down
+        { Direction.Up,    CommandIconType.Attack },
+        { Direction.Left,  CommandIconType.Magic  },
+        { Direction.Right, CommandIconType.Item   },
+        { Direction.Down,  CommandIconType.Stay   }
     };
-
     private CommandIconType _selectedCommand = CommandIconType.Attack;
 
     private Vector2 _centerPosition;
@@ -140,12 +139,12 @@ public class BattleActionMenu : IGameState
         _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        for (var i = 0; i < _commandLayout.Length; i++)
+    foreach (var (direction, commandType) in _commandByDirection)
         {
-            var (type, offset) = _commandLayout[i];
+            var offset = direction.GetMenuOffset();
             var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
-            var sprite = CommandIcons.GetSprite(type);
 
+            var sprite = CommandIcons.GetSprite(commandType);
             _game.Renderer.Draw(scale, sprite, position);
         }
     }
