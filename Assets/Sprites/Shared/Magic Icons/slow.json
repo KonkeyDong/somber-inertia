@@ -5,7 +5,7 @@
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.3.17.2-arm64",
-  "image": "muddle.png",
+  "image": "slow.png",
   "format": "RGBA8888",
   "size": { "w": 34, "h": 25 },
   "scale": "1",
