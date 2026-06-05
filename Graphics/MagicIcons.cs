@@ -10,6 +10,7 @@ public static class MagicIcons
 {
     private static readonly FrameFlipper _frameFlipper = new FrameFlipper(GameConfig.Animations.IconDelay);
     private static readonly string _rootPath = "Assets/Sprites/Shared/Magic Icons";
+    private static readonly string _jsonPath = Path.Combine(_rootPath, "frame_data.json");
 
     private static Dictionary<MagicName, List<SpriteV2>> _magicIconAnimations = new();
     private static MagicName _currentSelectedSpell = MagicName.Egress1;
@@ -19,7 +20,7 @@ public static class MagicIcons
         _magicIconAnimations.Clear();
 
         var totalFramesLoaded = 0;
-        var cache = new HashSet<string>();
+        var frames = SpriteManager.ExtractFrameData(_jsonPath);
 
         foreach (var magicName in Enum.GetValues<MagicName>())
         {
@@ -27,18 +28,7 @@ public static class MagicIcons
 
             var baseName = magicName.GetBaseName();
             var basePath = Path.Combine(_rootPath, baseName);
-
-            var jsonPath = Path.Combine(basePath + ".json");
             var pngPath  = Path.Combine(basePath + ".png");
-
-            if (cache.Contains(jsonPath))
-            {
-                continue;
-            }
-
-            cache.Add(jsonPath);
-
-            var frames = SpriteManager.ExtractFrameData(jsonPath);
 
             foreach (var frame in frames)
             {
