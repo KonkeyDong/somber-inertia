@@ -30,7 +30,7 @@ public abstract class Unit
     public virtual bool Promoted { get; set; } =  false;
 
     public Direction FacingDirection { get; set; } = Direction.Down;
-    private Dictionary<Direction, List<SpriteV2>> _walkAnimations = new();
+    private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
 
     // Core reference - source of truth for position
     protected Block? _block;
@@ -187,7 +187,7 @@ public abstract class Unit
 
     public void ResetFacingDirection() => FacingDirection = Direction.Down;
 
-    public SpriteV2 GetFacingDirectionTexture(Direction direction)
+    public Sprite GetFacingDirectionTexture(Direction direction)
     {
         if (!_walkAnimations.Any())
         {
@@ -198,7 +198,7 @@ public abstract class Unit
         return _walkAnimations[direction][0];
     }
 
-    public SpriteV2 GetFacingDirectionTexture(bool globalFrameFlipperFlag)
+    public Sprite GetFacingDirectionTexture(bool globalFrameFlipperFlag)
     {
         if (!_walkAnimations.Any())
         {
@@ -234,7 +234,7 @@ public abstract class Unit
 
         foreach (var direction in Enum.GetValues<Direction>())
         {
-            _walkAnimations[direction] = new List<SpriteV2>();
+            _walkAnimations[direction] = new List<Sprite>();
 
             var basePath = $"{AssetRoot}/Overworld/walk_{direction.ToLower()}";
             var jsonPath = Path.Combine(basePath + ".json");
@@ -244,7 +244,7 @@ public abstract class Unit
 
             foreach (var frame in frames)
             {
-                _walkAnimations[direction].Add(new SpriteV2(pngPath, frame));
+                _walkAnimations[direction].Add(new Sprite(pngPath, frame));
                 totalFramesLoaded++;
             }
         }
