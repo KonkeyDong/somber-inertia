@@ -2,7 +2,7 @@ namespace SomberInertia.Graphics;
 
 public static class DeathSprites
 {
-    public static List<SpriteV2> Frames { get; private set; } = new();
+    public static List<Sprite> Frames { get; private set; } = new();
 
     public static void Load()
     {
@@ -18,7 +18,7 @@ public static class DeathSprites
 
         foreach (var frame in SpriteManager.ExtractFrameData(jsonPath))
         {
-            Frames.Add(new SpriteV2(pngPath, frame));
+            Frames.Add(new Sprite(pngPath, frame));
         }
 
         Logger.Info("Death sprites have been loaded.");

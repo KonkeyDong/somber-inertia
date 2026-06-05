@@ -14,7 +14,7 @@ public class Renderer
 
     }
 
-    public void Draw(float scale, SpriteV2 sprite, Vector2 position)
+    public void Draw(float scale, Sprite sprite, Vector2 position)
     {
         var source = new Rectangle(
             x: sprite.FrameRect.x,

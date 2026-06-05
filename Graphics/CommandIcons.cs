@@ -14,6 +14,6 @@ public static class CommandIcons
     public static void Load() => _icons.Load();
     public static void Update() => _icons.Update();
     public static void SetSelectedIcon(CommandIconType type) => _icons.SetSelected(type);
-    public static SpriteV2 GetSprite(CommandIconType type) => _icons.GetSprite(type);
+    public static Sprite GetSprite(CommandIconType type) => _icons.GetSprite(type);
     public static void Reset() => _icons.Reset();
 }

@@ -13,7 +13,7 @@ public interface IIconSet<TKey> where TKey : Enum
     void Load();
     void Update();
     void SetSelected(TKey key);
-    SpriteV2 GetSprite(TKey key);
+    Sprite GetSprite(TKey key);
     void Reset();
 }
 
@@ -21,7 +21,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
 {
     private readonly FrameFlipper _frameFlipper;
     private readonly string _rootPath;
-    private readonly Dictionary<TKey, List<SpriteV2>> _animations = new();
+    private readonly Dictionary<TKey, List<Sprite>> _animations = new();
     private TKey _selectedKey = default!;
     private readonly Func<TKey, string> _getBaseName;   // ← New
 
@@ -45,7 +45,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
         foreach (var key in Enum.GetValues(typeof(TKey)))
         {
             var enumValue = (TKey)key;
-            _animations[enumValue] = new List<SpriteV2>();
+            _animations[enumValue] = new List<Sprite>();
 
             var baseName = _getBaseName(enumValue);
             var basePath = Path.Combine(_rootPath, baseName);
@@ -53,7 +53,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
 
             foreach (var frame in frames)
             {
-                _animations[enumValue].Add(new SpriteV2(pngPath, frame));
+                _animations[enumValue].Add(new Sprite(pngPath, frame));
                 totalFrames++;
             }
         }
@@ -69,7 +69,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
 
     public void Update() => _frameFlipper.Tick();
 
-    public SpriteV2 GetSprite(TKey key)
+    public Sprite GetSprite(TKey key)
     {
         if (!_animations.ContainsKey(key))
         {
