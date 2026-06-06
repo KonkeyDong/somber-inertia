@@ -57,37 +57,37 @@ public static class MagicNameExtensions
         {
             // All Blaze levels share the same sprite
             MagicName.Blaze1 or MagicName.Blaze2 or MagicName.Blaze3 or MagicName.Blaze4 
-                => "blaze",
+                => "Blaze",
 
             // All Freeze levels share the same sprite
             MagicName.Freeze1 or MagicName.Freeze2 or MagicName.Freeze3 or MagicName.Freeze4 
-                => "freeze",
+                => "Freeze",
 
             // All Bolt levels share the same sprite
             MagicName.Bolt1 or MagicName.Bolt2 or MagicName.Bolt3 or MagicName.Bolt4 
-                => "bolt",
+                => "Bolt",
 
             // All Heal levels share the same sprite
             MagicName.Heal1 or MagicName.Heal2 or MagicName.Heal3 or MagicName.Heal4 
-                => "heal",
+                => "Heal",
 
             // All Aura levels share the same sprite
             MagicName.Aura1 or MagicName.Aura2 or MagicName.Aura3 or MagicName.Aura4 
-                => "aura",
+                => "Aura",
 
             // Level 1 + Level 2 variants that share the same sprite
-            MagicName.Slow1 or MagicName.Slow2   => "slow",
-            MagicName.Quick1 or MagicName.Quick2 => "quick",
-            MagicName.Desoul1 or MagicName.Desoul2 => "desoul",
+            MagicName.Slow1 or MagicName.Slow2   => "Slow",
+            MagicName.Quick1 or MagicName.Quick2 => "Quick",
+            MagicName.Desoul1 or MagicName.Desoul2 => "Desoul",
 
             // Single-level spells (no number in filename)
-            MagicName.Dispel1 => "dispel",
-            MagicName.Muddle1 => "muddle",
-            MagicName.Sleep1  => "sleep",
-            MagicName.Egress1 => "egress",
-            MagicName.Detox1  => "detox",
-            MagicName.Shield1 => "shield",
-            MagicName.Boost1  => "boost",
+            MagicName.Dispel1 => "Dispel",
+            MagicName.Muddle1 => "Muddle",
+            MagicName.Sleep1  => "Sleep",
+            MagicName.Egress1 => "Egress",
+            MagicName.Detox1  => "Detox",
+            MagicName.Shield1 => "Shield",
+            MagicName.Boost1  => "Boost",
 
             // Fallback (just in case)
             _ => magicName.ToString().ToLowerInvariant()
