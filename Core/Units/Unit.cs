@@ -232,15 +232,15 @@ public abstract class Unit
 
         var totalFramesLoaded = 0;
 
+        var basePath = Path.Combine(AssetRoot, GameConstants.OVERWORLD_FOLDER_NAME);
+        var jsonPath = Path.Combine(basePath, GameConstants.FRAME_DATA_FILE_NAME);
+        var frames = SpriteManager.ExtractFrameData(jsonPath);
+
         foreach (var direction in Enum.GetValues<Direction>())
         {
             _walkAnimations[direction] = new List<Sprite>();
 
-            var basePath = $"{AssetRoot}/Overworld/walk_{direction.ToLower()}";
-            var jsonPath = Path.Combine(basePath + ".json");
-            var pngPath  = Path.Combine(basePath + ".png");
-
-            var frames = SpriteManager.ExtractFrameData(jsonPath);
+            var pngPath = Path.Combine(basePath, direction.WalkImage());
 
             foreach (var frame in frames)
             {

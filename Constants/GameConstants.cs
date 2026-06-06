@@ -12,4 +12,8 @@ public static class GameConstants
     public const int WORLD_MAP_SPRITE_SIZE = 24;
 
     public const float HIGHLIGHT_TRANSITION_SPEED = 1000f; // lower number represents slower speed
+
+    // files and folders
+    public const string OVERWORLD_FOLDER_NAME = "Overworld";
+    public const string FRAME_DATA_FILE_NAME = "FrameData.json";
 }
