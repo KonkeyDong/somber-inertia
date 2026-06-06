@@ -17,4 +17,7 @@ public static class DirectionExtensions
             _ => Vector2.Zero
         };
     }
+
+    // Gets the walk direction base name for file name
+    public static string WalkImage(this Direction direction) => $"Walk{direction.ToString()}.png";
 }
