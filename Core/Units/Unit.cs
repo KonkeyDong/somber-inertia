@@ -25,7 +25,7 @@ public abstract class Unit
     public Texture2D Texture { get; protected set; }
     protected abstract string AssetRoot { get; }
 
-    public string Name { get; protected set; }
+    public UnitName Name { get; protected set; }
     public MovementType MovementType { get; protected set; }
     public virtual bool Promoted { get; set; } =  false;
 
@@ -75,7 +75,7 @@ public abstract class Unit
 
     public bool Friendly { get; set; }
 
-    public Unit(string name, MovementType movementType, int movement)
+    public Unit(UnitName name, MovementType movementType, int movement)
     {
         Name = name;
         MovementType = movementType;
@@ -91,7 +91,7 @@ public abstract class Unit
 
         LoadWalkAnimations();
 
-        Logger.Info($"Unit created → {Name} ({movementType}), Movement: {movement}");
+        Logger.Info($"Unit created → {Name.GetDisplayName()} ({movementType}), Movement: {movement}");
     }
 
     public void EquipWeapon(Weapon weapon)
@@ -104,7 +104,7 @@ public abstract class Unit
     public void TakeDamage(int amount)
     {
         Logger.Debug($"Unit::TakeDamage({amount})");
-        Logger.Info($"Unit [{Name}] has been damaged for {amount}.");
+        Logger.Info($"Unit [{Name.GetDisplayName()}] has been damaged for {amount}.");
 
         HP.Current = HP.Current - amount;
         if (HP.Current < 0)
@@ -114,7 +114,7 @@ public abstract class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
-    public override string ToString() => $"{Name} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
+    public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
 
     // -----------------
     // Animation methods
