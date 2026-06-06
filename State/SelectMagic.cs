@@ -1,11 +1,13 @@
 using SomberInertia.Enums;
 using SomberInertia.Core;
+using SomberInertia.Core.Units;
 
 namespace SomberInertia.State;
 
 public class SelectMagic : IGameState
 {
     private readonly Game _game;
+    private readonly Unit _currentUnit;
 
     private static readonly Dictionary<Direction, int> _spellIndexByDirection = new()
     {
@@ -18,6 +20,7 @@ public class SelectMagic : IGameState
     public SelectMagic(Game game)
     {
         _game = game;
+        _currentUnit = _game.GetCurrentUnit();
     }
 
     public void Enter()

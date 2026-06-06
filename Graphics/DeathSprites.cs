@@ -12,7 +12,7 @@ public static class DeathSprites
             return;
         }
 
-        var basePath = "Assets/Sprites/Shared/battle_field_death";
+        var basePath = "Assets/Sprites/Shared/BattleFieldDeath";
         var pngPath = Path.Combine(basePath + ".png");
         var jsonPath = Path.Combine(basePath + ".json");
 

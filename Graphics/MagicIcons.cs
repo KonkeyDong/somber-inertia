@@ -7,7 +7,7 @@ public static class MagicIcons
 {
     private static readonly IconSet<MagicName> _icons =
         new IconSet<MagicName>(
-            "Assets/Sprites/Shared/Magic Icons",
+            "Assets/Sprites/Shared/MagicIcons",
             GameConfig.Animations.IconDelay,
             getBaseName: icon => icon.GetBaseName());
 
