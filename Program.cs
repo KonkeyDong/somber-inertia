@@ -24,20 +24,20 @@ class Program
         var game = new Game(new Grid(11, 10));
         WeaponManager.Initialize();
 
-        var max = new ForceMember("Max", MovementType.Warrior, 4);
+        var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 10;
         max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
 
-        var anri = new ForceMember("Anri", MovementType.Warrior, 4);
+        var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Friendly = true;
         anri.Attack = 3;
         anri.EquipWeapon(WeaponManager.Create(WeaponName.WoodenStaff));
 
-        var goblin1 = new Monster("Goblin", MovementType.Warrior, 5);
+        var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
         goblin1.Friendly = false;
         goblin1.Defense = 5;
 
-        var goblin2 = new Monster("Goblin", MovementType.Warrior, 5);
+        var goblin2 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
         goblin2.Friendly = false;
         goblin2.Defense = 5;
 

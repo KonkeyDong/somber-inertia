@@ -9,11 +9,15 @@ public class ForceMember : Unit
     public override bool Promoted { get; set; }
     public Job Job { get; set; }
     public int Exp { get; set; } // experience
+    public int Level { get; set; }
+
+    // if only i called the class Spells...
+    public List<Magic> KnownSpells { get; } = new();
 
     protected override string AssetRoot =>
-        $"Assets/Sprites/Characters/{Name}/{(Promoted ? "Promoted" : "Unpromoted")}";
+        $"Assets/Sprites/Characters/{Name.GetBaseName()}/{(Promoted ? "Promoted" : "Unpromoted")}";
 
-    public ForceMember(string name, MovementType movementType, int movement)
+    public ForceMember(UnitName name, MovementType movementType, int movement)
         : base(name, movementType, movement)
     {
         Name = name;
@@ -27,6 +31,6 @@ public class ForceMember : Unit
         Promoted = false;
         EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
-        Logger.Info($"Force Member created -> {Name} ({MovementType}), Movement: {Movement}.");
+        Logger.Info($"Force Member created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
     }
 }

@@ -23,7 +23,7 @@ public enum UnitName
     Khris,
     Kokichi,
     Lowe,
-    Luke, // Lug
+    Luke, // Lug in other versions
     Lyle,
     Mae,
     Max,

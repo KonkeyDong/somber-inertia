@@ -5,9 +5,9 @@ namespace SomberInertia.Core.Units;
 
 public class Monster : Unit
 {
-    protected override string AssetRoot => $"Assets/Sprites/Monsters/{Name}/";
+    protected override string AssetRoot => $"Assets/Sprites/Monsters/{Name.GetBaseName()}/";
 
-    public Monster(string name, MovementType movementType, int movement)
+    public Monster(UnitName name, MovementType movementType, int movement)
         : base(name, movementType, movement)
         {
             Name = name;
@@ -21,6 +21,6 @@ public class Monster : Unit
             Promoted = false;
             EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
-            Logger.Info($"Monster created -> {Name} ({MovementType}), Movement: {Movement}.");
+            Logger.Info($"Monster created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
         }
 }

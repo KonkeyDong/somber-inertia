@@ -2,7 +2,7 @@ namespace SomberInertia.Enums;
 
 public static class MagicNameExtensions
 {
-    public static string GetFullName(this MagicName magicName)
+    public static string GetDisplayName(this MagicName magicName)
     {
         return magicName switch
         {
