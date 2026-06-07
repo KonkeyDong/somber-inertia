@@ -21,6 +21,17 @@ public static class MagicManager
         RegisterMiscMagic();
     }
 
+        public static Magic Create(MagicName magicName)
+    {
+        if (_MagicLookup.TryGetValue(magicName, out var spell))
+        {
+            // Return a brand new copy
+            return spell;
+        }
+
+        throw new InvalidOperationException($"Unknown spell [{magicName}].");
+    }
+
     private static void RegisterFireMagic()
     {
         var magicType = MagicType.Fire;

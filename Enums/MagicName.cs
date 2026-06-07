@@ -48,4 +48,6 @@ public enum MagicName
     Aura2,
     Aura3,
     Aura4,
+
+    NoSpell,
 }
