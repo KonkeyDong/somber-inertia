@@ -10,10 +10,7 @@ public class ForceMember : Unit
     public Job Job { get; set; }
     public int Exp { get; set; } // experience
     public int Level { get; set; }
-
-    // if only i called the class Spells...
-    public List<Magic> KnownSpells { get; } = new();
-
+    
     protected override string AssetRoot =>
         $"Assets/Sprites/Characters/{Name.GetBaseName()}/{(Promoted ? "Promoted" : "Unpromoted")}";
 

@@ -4,7 +4,7 @@ public enum MagicType
 {
     Ice,
     Fire,
-    Lightning,
+    Lightning, // bolt
     Heal,
     Buff,
     Debuff,

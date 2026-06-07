@@ -23,10 +23,12 @@ class Program
 
         var game = new Game(new Grid(11, 10));
         WeaponManager.Initialize();
+        MagicManager.Initialize();
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 10;
         max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
+        max.LearnSpell(MagicManager.Create(MagicName.Egress1));
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Friendly = true;

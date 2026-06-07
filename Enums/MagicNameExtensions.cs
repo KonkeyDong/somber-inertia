@@ -89,10 +89,41 @@ public static class MagicNameExtensions
             MagicName.Shield1 => "Shield",
             MagicName.Boost1  => "Boost",
 
+            MagicName.NoSpell => "NoSpell",
+
             // Fallback (just in case)
             _ => magicName.ToString().ToLowerInvariant()
         };
 
         return capitalize ? result.ToUpper() : result;
+    }
+
+    /// <summary>
+    /// Converts a MagicName into its logical spell family (bucket).
+    /// Example: Blaze1, Blaze2, Blaze3, Blaze4 → MagicFamily.Blaze
+    /// </summary>
+    public static MagicFamily ToFamily(this MagicName magicName)
+    {
+        return magicName.GetBaseName() switch
+        {
+            "Blaze"  => MagicFamily.Blaze,
+            "Freeze" => MagicFamily.Freeze,
+            "Bolt"   => MagicFamily.Bolt,
+            "Heal"   => MagicFamily.Heal,
+            "Aura"   => MagicFamily.Aura,
+            "Slow"   => MagicFamily.Slow,
+            "Quick"  => MagicFamily.Quick,
+            "Desoul" => MagicFamily.Desoul,
+            "Dispel" => MagicFamily.Dispel,
+            "Muddle" => MagicFamily.Muddle,
+            "Sleep"  => MagicFamily.Sleep,
+            "Egress" => MagicFamily.Egress,
+            "Detox"  => MagicFamily.Detox,
+            "Shield" => MagicFamily.Shield,
+            "Boost"  => MagicFamily.Boost,
+            "NoSpell" => MagicFamily.NoSpell,
+
+            _ => throw new ArgumentException($"Invalid MagicName passed to ToFamily(): {magicName.GetBaseName()}"),
+        };
     }
 }

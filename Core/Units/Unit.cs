@@ -29,6 +29,9 @@ public abstract class Unit
     public MovementType MovementType { get; protected set; }
     public virtual bool Promoted { get; set; } =  false;
 
+    public Dictionary<MagicFamily, List<Magic>> KnownSpells { get; } = new();
+    public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
+
     public Direction FacingDirection { get; set; } = Direction.Down;
     private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
 
@@ -115,6 +118,46 @@ public abstract class Unit
     }
 
     public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
+    public bool HasSpells() => KnownSpells.Count > 0;
+
+    public void LearnSpell(Magic spell)
+    {
+        Logger.Debug("LearnSpell():");
+        var family = spell.Name.ToFamily();
+
+        if (!MagicFamilyBuckets.Contains(family))
+        {
+            Logger.Debug($"  Creating new bucket for magic family [{family}].");
+            FillFirstAvailableBucket(family);
+        }
+
+        if (!KnownSpells.ContainsKey(family))
+        {
+            Logger.Debug("  Initializing new List<Magic>().");
+            KnownSpells[family] = new List<Magic>();
+        }
+
+        if (!KnownSpells[family].Any(s => s.Name == spell.Name))
+        {
+            Logger.Debug($"  Adding spell [{spell.Name.GetDisplayName()}].");
+            KnownSpells[family].Add(spell);
+        }
+    }
+
+    private void FillFirstAvailableBucket(MagicFamily family)
+    {
+        for (var i = 0; i < GameConstants.MAX_BUCKET_SIZE; i++)
+        {
+            if (MagicFamilyBuckets[i] == null)
+            {
+                MagicFamilyBuckets[i] = family;
+                return;
+            }
+        }
+
+        Logger.Error($"magic family [{family}] could not be added to bucket as bucket as reached capacity.");
+    }
+
 
     // -----------------
     // Animation methods

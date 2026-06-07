@@ -130,6 +130,7 @@ public class BattleActionMenu : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
+        _game.FrameFlipper.Tick();
         CommandIcons.Update();
     }
 
