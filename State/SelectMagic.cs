@@ -31,11 +31,10 @@ public class SelectMagic : IGameState
 
     public void Enter()
     {
-        Logger.Warning("SelectMagic::Enter(): WORK IN PROGRESS");
-
         if (!_currentUnit.HasSpells())
         {
             Logger.Info($"Unit [{_currentUnit.Name.GetDisplayName()}] has no spells learned.");
+            Logger.Warning("Need to implement 'No Magic Available' message if no spells are learned.");
             GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
         }
 
@@ -77,6 +76,11 @@ public class SelectMagic : IGameState
         {
             SetSelectedMagic(Direction.Down);
         }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        {
+            CancelMenu();
+        }
     }
 
     private void SetSelectedMagic(Direction direction)
@@ -99,6 +103,12 @@ public class SelectMagic : IGameState
             }
 
         }
+    }
+
+    private void CancelMenu()
+    {
+        Logger.Debug("SelectMagic(): Cancelled - returning to BattleActionMenu.");
+        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
     public void Update()

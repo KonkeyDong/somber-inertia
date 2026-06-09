@@ -35,7 +35,6 @@ public class UnitMoving : IGameState
     {
         if (_currentUnit.IsAnimating)
         {
-            Logger.Info("Unit is animating; ignoring input.");
             return;
         }
 
