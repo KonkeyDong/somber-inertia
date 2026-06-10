@@ -159,6 +159,24 @@ public abstract class Unit
     }
 
 
+    public Magic GetHighestMagicLevelInBucket(MagicFamily magicFamily)
+    {
+        if (KnownSpells.TryGetValue(magicFamily, out var spells))
+        {
+            var spell = spells.LastOrDefault();
+            if (spell == null)
+            {
+                Logger.Error("Last spell in dictionary KnownSpells is null.");
+            }
+
+            return spell;
+        }
+
+        Logger.Error($"Magic family [{magicFamily}] could not be found in KnownSpells dictionary.");
+        return MagicManager.Create(MagicName.NoSpell);
+    }
+
+
     // -----------------
     // Animation methods
     // -----------------

@@ -29,6 +29,9 @@ class Program
         max.Attack = 10;
         max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
         max.LearnSpell(MagicManager.Create(MagicName.Egress1));
+        max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
+        max.LearnSpell(MagicManager.Create(MagicName.Blaze2));
+        max.LearnSpell(MagicManager.Create(MagicName.Blaze3));
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Friendly = true;

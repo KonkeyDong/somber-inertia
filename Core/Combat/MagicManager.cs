@@ -280,5 +280,16 @@ public static class MagicManager
             targetRange: new Range(0, 0),
             effect: new DamageEffect(0)
         );
+
+        // Dummy spell for error returning purposes (although, Logger.Error() should throw an exception)
+        _MagicLookup[MagicName.NoSpell] = new Magic(
+            name: MagicName.NoSpell,
+            level: 1,
+            MPCost: 0,
+            magicType: magicType,
+            distanceRange: new Range(0, 0),
+            targetRange: new Range(0, 0),
+            effect: new DamageEffect(0)
+        );
     }
 }
