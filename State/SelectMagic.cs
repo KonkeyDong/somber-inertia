@@ -77,6 +77,16 @@ public class SelectMagic : IGameState
             SetSelectedMagic(Direction.Down);
         }
 
+        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        {
+            var bucket = _currentUnit.MagicFamilyBuckets[_selectedMagicIndex];
+            if (bucket != null)
+            {
+                var spell = _currentUnit.GetHighestMagicLevelInBucket((MagicFamily)bucket);
+                Logger.Info(spell.ToString());
+            }
+        }
+
         if (Raylib.IsKeyPressed(KeyboardKey.X))
         {
             CancelMenu();
