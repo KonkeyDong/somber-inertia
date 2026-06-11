@@ -113,7 +113,14 @@ public class BattleActionMenu : IGameState
         }
         else if (_selectedCommand == CommandIconType.Magic)
         {
-            GameStateManager.ChangeStateType(GameStateType.SelectMagic);
+            if (_currentUnit.HasSpells)
+            {
+                GameStateManager.ChangeStateType(GameStateType.SelectMagic);
+            }
+            else
+            {
+                GameStateManager.ChangeStateType(GameStateType.NoMagicAvailable);
+            }
         }
         else
         {
