@@ -31,7 +31,7 @@ public class SelectMagic : IGameState
 
     public void Enter()
     {
-        if (!_currentUnit.HasSpells())
+        if (!_currentUnit.HasSpells)
         {
             Logger.Info($"Unit [{_currentUnit.Name.GetDisplayName()}] has no spells learned.");
             Logger.Warning("Need to implement 'No Magic Available' message if no spells are learned.");

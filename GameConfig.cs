@@ -14,6 +14,7 @@ public static class GameConfig
         public const float MovementDuration = 0.20f; // 0.25 = quarter second (15 frames)
         public const int FrameFlipperDelay = 30;
         public const int IconDelay = 6;
+        public const int SwitchStateCountdownTimer = 180;
     }
 
     public static class Textures
@@ -21,5 +22,6 @@ public static class GameConfig
         public static readonly Vector2 BaseOrigin = new Vector2(0, 0);
         public const float BaseRotation = 0.0f;
         public static readonly Color ClearColor = Color.White;
+        public static readonly Color BlueBackground = new Color(38, 74, 220, 255);
     }
 }

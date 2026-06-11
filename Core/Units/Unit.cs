@@ -31,6 +31,7 @@ public abstract class Unit
 
     public Dictionary<MagicFamily, List<Magic>> KnownSpells { get; } = new();
     public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
+    public bool HasSpells => KnownSpells.Count > 0;
 
     public Direction FacingDirection { get; set; } = Direction.Down;
     private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
@@ -118,7 +119,6 @@ public abstract class Unit
     }
 
     public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
-    public bool HasSpells() => KnownSpells.Count > 0;
 
     public void LearnSpell(Magic spell)
     {
@@ -158,7 +158,8 @@ public abstract class Unit
         Logger.Error($"magic family [{family}] could not be added to bucket as bucket as reached capacity.");
     }
 
-
+    // This assumes that the last spell is the strongest. Spells should only
+    // be added in ascending level order upon level requirement met.
     public Magic GetHighestMagicLevelInBucket(MagicFamily magicFamily)
     {
         if (KnownSpells.TryGetValue(magicFamily, out var spells))

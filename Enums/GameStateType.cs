@@ -26,4 +26,5 @@ public enum GameStateType
     TransitionSelectorToNextUnit,
     AnimateUnitDeaths,
     SelectMagic,
+    NoMagicAvailable,
 }
