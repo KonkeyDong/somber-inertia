@@ -22,6 +22,9 @@ public static class GameConfig
         public static readonly Vector2 BaseOrigin = new Vector2(0, 0);
         public const float BaseRotation = 0.0f;
         public static readonly Color ClearColor = Color.White;
-        public static readonly Color BlueBackground = new Color(38, 74, 220, 255);
+        public static readonly Color Blue = new Color(38, 74, 220, 255);
+        public static readonly Color DarkOrange = new Color(177, 82, 24, 255);
+        public static readonly Color LightOrange = new Color(255, 203, 94, 255);
+        public static readonly Color OffWhite = new Color(248, 235, 244, 255);
     }
 }
