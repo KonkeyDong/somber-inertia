@@ -135,4 +135,56 @@ public class Renderer
             DrawUnit(scale, grid, units[i], frameFlipperFlag);
         }
     }
+
+    public void DrawBattleMenuMessage(float scale, string text, int xPosition, int yPosition)
+    {
+        var textPos = new Vector2(xPosition, yPosition);
+        var fontSize = (int)(8 * scale);
+        var textColor = Color.White;
+
+        var textSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, 1);
+        var padding = 14;
+
+        var boxWidth = (int)textSize.X + padding * 2;
+        var boxHeight = (int)textSize.Y + padding * 2;
+        var boxX = (int)textPos.X - padding;
+        var boxY = (int)textPos.Y - padding;
+
+        // Colors from your config
+        var darkOrange = GameConfig.Textures.DarkOrange;
+        var lightOrange = GameConfig.Textures.LightOrange;
+        var offWhite = GameConfig.Textures.OffWhite;
+        var blue = GameConfig.Textures.Blue;
+
+        // === Outer dark orange border ===
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
+
+        // === Light orange bevel (top + left) ===
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
+        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
+
+        // === OffWhite inner layer ===
+        var offWhiteX = boxX + 3;
+        var offWhiteY = boxY + 3;
+        var offWhiteW = boxWidth - 6;
+        var offWhiteH = boxHeight - 6;
+
+        Raylib.DrawRectangle(offWhiteX, offWhiteY, offWhiteW, offWhiteH, offWhite);
+
+        // === Blue fill ===
+        var blueX = offWhiteX + 3;
+        var blueY = offWhiteY + 3;
+        var blueW = offWhiteW - 6;
+        var blueH = offWhiteH - 6;
+
+        Raylib.DrawRectangle(blueX, blueY, blueW, blueH, blue);
+
+        // === Draw text centered ===
+        var finalTextPos = new Vector2(
+            boxX + (boxWidth - textSize.X) / 2,
+            boxY + (boxHeight - textSize.Y) / 2
+        );
+
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), text, finalTextPos, fontSize, 1, textColor);
+    }
 }
