@@ -84,9 +84,7 @@ public abstract class Unit
         Name = name;
         MovementType = movementType;
 
-        // Original terrain movement costs could use values like 1.5.
-        // Multiply by two to get rid of the decimal.
-        Movement = (movement * 2);
+        Movement = movement;
         HP = new Stat(10);
         MP = new Stat(10);
 

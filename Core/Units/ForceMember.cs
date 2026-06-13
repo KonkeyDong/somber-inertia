@@ -19,7 +19,7 @@ public class ForceMember : Unit
     {
         Name = name;
         MovementType = movementType;
-        Movement = movement * 2;
+        Movement = movement;
 
         HP = new Stat(10);
         MP = new Stat(10);

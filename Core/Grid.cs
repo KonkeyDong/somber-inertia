@@ -30,12 +30,12 @@ public class Grid
         {
             [MovementType.Warrior] = new Dictionary<TerrainType, int>
             {
-                { TerrainType.Road, 2 },
-                { TerrainType.Plains, 2 },
-                { TerrainType.Overgrowth, 3 },
-                { TerrainType.Forest, 4 },
+                { TerrainType.Road, 1 },
+                { TerrainType.Plains, 1 },
+                { TerrainType.Overgrowth, 1 },
+                { TerrainType.Forest, 2 },
                 { TerrainType.Hill, 3 },
-                { TerrainType.Sand, 3 }
+                { TerrainType.Sand, 2 }
             },
         };
     }
