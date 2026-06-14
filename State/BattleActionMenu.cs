@@ -147,7 +147,7 @@ public class BattleActionMenu : IGameState
         _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-    foreach (var (direction, commandType) in _commandByDirection)
+        foreach (var (direction, commandType) in _commandByDirection)
         {
             var offset = direction.GetMenuOffset();
             var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
@@ -155,6 +155,8 @@ public class BattleActionMenu : IGameState
             var sprite = CommandIcons.GetSprite(commandType);
             _game.Renderer.Draw(scale, sprite, position);
         }
+
+        _game.Renderer.DrawBattleMenuMessage(scale, _selectedCommand.GetBaseName(), new Vector2(_centerPosition.X + 200, _centerPosition.Y - 50));
     }
 
     public void OnResize() => UpdateCenterPosition();

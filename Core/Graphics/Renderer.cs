@@ -136,9 +136,8 @@ public class Renderer
         }
     }
 
-    public void DrawBattleMenuMessage(float scale, string text, int xPosition, int yPosition)
+    public void DrawBattleMenuMessage(float scale, string text, Vector2 textPos)
     {
-        var textPos = new Vector2(xPosition, yPosition);
         var fontSize = (int)(8 * scale);
         var textColor = Color.White;
 
