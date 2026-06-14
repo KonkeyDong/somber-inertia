@@ -48,7 +48,7 @@ public class UnitMoving : IGameState
         {
             if (_currentUnit.Block != null && !_currentUnit.Block.IsFullyOccupied())
             {
-                GameStateManager.ChangeStateType(GameStateType.CalculateWeaponAttackRange); 
+                GameStateManager.ChangeStateType(GameStateType.BattleActionMenu); 
             }
         }
     }
