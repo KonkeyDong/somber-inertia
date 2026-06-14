@@ -24,7 +24,14 @@ public class CalculateWeaponAttackRange : IGameState
         var unitsInRange = _game.Grid.BuildListOfUnitsInAttackRange(_currentUnit);
         _game.SeparateListOfUnitsInRange(_currentUnit, unitsInRange);
 
-        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
+        if (_game.UnfriendlyUnitsInRange.Count > 0)
+        {
+            GameStateManager.ChangeStateType(GameStateType.SelectEnemyForPhysicalAttack);
+        }
+        else 
+        {
+            GameStateManager.ChangeStateType(GameStateType.NoAttackTargetAvailable);
+        }
     }
 
     public void Exit()

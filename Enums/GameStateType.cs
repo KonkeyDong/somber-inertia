@@ -27,4 +27,5 @@ public enum GameStateType
     AnimateUnitDeaths,
     SelectMagic,
     NoMagicAvailable,
+    NoAttackTargetAvailable,
 }

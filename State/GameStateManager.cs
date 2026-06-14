@@ -44,6 +44,7 @@ public static class GameStateManager
             GameStateType.AnimateUnitDeaths => new AnimateUnitDeaths(Game),
             GameStateType.SelectMagic => new SelectMagic(Game),
             GameStateType.NoMagicAvailable => new NoMagicAvailable(Game),
+            GameStateType.NoAttackTargetAvailable => new NoAttackTargetAvailable(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };

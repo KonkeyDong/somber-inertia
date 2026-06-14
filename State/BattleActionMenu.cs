@@ -102,10 +102,8 @@ public class BattleActionMenu : IGameState
 
         if (_selectedCommand == CommandIconType.Attack)
         {
-            if (_game.UnfriendlyUnitsInRange.Count() > 0)
-            {
-                GameStateManager.ChangeStateType(GameStateType.SelectEnemyForPhysicalAttack);
-            }
+            GameStateManager.ChangeStateType(GameStateType.CalculateWeaponAttackRange);
+
         }
         else if (_selectedCommand == CommandIconType.Stay)
         {
@@ -144,7 +142,7 @@ public class BattleActionMenu : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawMovementRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
         foreach (var (direction, commandType) in _commandByDirection)
