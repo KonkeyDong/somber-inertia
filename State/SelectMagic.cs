@@ -132,23 +132,15 @@ public class SelectMagic : IGameState
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        foreach (var (direction, i) in _spellIndexByDirection)
+        foreach (var (direction, index) in _spellIndexByDirection)
         {
             var offset = direction.GetMenuOffset();
             var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
 
+            var bucket = _currentUnit.MagicFamilyBuckets[index];
+            var family = bucket != null ? (MagicFamily)bucket : MagicFamily.NoSpell;
 
-            var bucket = _currentUnit.MagicFamilyBuckets[i];
-            if (bucket != null)
-            {
-                var sprite = MagicIcons.GetSprite((MagicFamily)bucket);
-                _game.Renderer.Draw(scale, sprite, position);
-            }
-            else
-            {
-                var sprite = MagicIcons.GetSprite(MagicFamily.NoSpell);
-                _game.Renderer.Draw(scale, sprite, position);
-            }
+            _game.Renderer.DrawMagicIcon(scale, family, position);
         }
     }
 }

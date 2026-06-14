@@ -1,6 +1,7 @@
 using SomberInertia.Core;
 using SomberInertia.Graphics;
 using SomberInertia.Core.Units;
+using SomberInertia.Enums;
 using System.Numerics;
 
 using Raylib_cs;
@@ -134,6 +135,12 @@ public class Renderer
         {
             DrawUnit(scale, grid, units[i], frameFlipperFlag);
         }
+    }
+
+    public void DrawMagicIcon(float scale, MagicFamily family, Vector2 position)
+    {
+        var sprite = MagicIcons.GetSprite(family);
+        Draw(scale, sprite, position);
     }
 
     public void DrawBattleMenuMessage(float scale, string text, Vector2 textPos)
