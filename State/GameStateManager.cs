@@ -122,7 +122,3 @@ public static class GameStateManager
         Raylib.EndDrawing();
     }
 }
-
-
-
-
