@@ -156,23 +156,28 @@ public abstract class Unit
         Logger.Error($"magic family [{family}] could not be added to bucket as bucket as reached capacity.");
     }
 
+    public List<Magic> GetMagicListInBucket(MagicFamily magicFamily)
+    {
+        if (KnownSpells.TryGetValue(magicFamily, out var spells))
+        {
+            return spells;
+        }
+
+        Logger.Error($"Magic family [{magicFamily}] could not be found in KnownSpells dictionary.");
+        return new List<Magic>() { MagicManager.Create(MagicName.NoSpell) };
+    }
+
     // This assumes that the last spell is the strongest. Spells should only
     // be added in ascending level order upon level requirement met.
     public Magic GetHighestMagicLevelInBucket(MagicFamily magicFamily)
     {
-        if (KnownSpells.TryGetValue(magicFamily, out var spells))
+        var spell = GetMagicListInBucket(magicFamily).LastOrDefault();
+        if (spell == null)
         {
-            var spell = spells.LastOrDefault();
-            if (spell == null)
-            {
-                Logger.Error("Last spell in dictionary KnownSpells is null.");
-            }
-
-            return spell;
+            Logger.Error("Last spell in dictionary KnownSpells is null.");
         }
 
-        Logger.Error($"Magic family [{magicFamily}] could not be found in KnownSpells dictionary.");
-        return MagicManager.Create(MagicName.NoSpell);
+        return spell;
     }
 
 

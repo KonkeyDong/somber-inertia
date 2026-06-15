@@ -12,16 +12,6 @@ public class SelectMagic : IGameState
 {
     private readonly Game _game;
     private readonly Unit _currentUnit;
-    private int _selectedMagicIndex = -1;
-    private Vector2 _centerPosition;
-
-    private static readonly Dictionary<Direction, int> _spellIndexByDirection = new()
-    {
-        { Direction.Up,    0 },   // First spell in the list
-        { Direction.Left,  1 },
-        { Direction.Right, 2 },
-        { Direction.Down,  3 }
-    };
 
     public SelectMagic(Game game)
     {
@@ -31,28 +21,12 @@ public class SelectMagic : IGameState
 
     public void Enter()
     {
-        if (!_currentUnit.HasSpells)
-        {
-            Logger.Info($"Unit [{_currentUnit.Name.GetDisplayName()}] has no spells learned.");
-            Logger.Warning("Need to implement 'No Magic Available' message if no spells are learned.");
-            GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
-        }
-
         SetSelectedMagic(Direction.Up);
-        UpdateCenterPosition();
     }
 
     public void Exit()
     {
 
-    }
-
-    private void UpdateCenterPosition()
-    {
-        _centerPosition = new Vector2(
-            GameStateManager.CurrentWidth / 2f,
-            GameStateManager.CurrentHeight * 0.75f
-        );
     }
 
     public void HandleInput()
@@ -79,12 +53,9 @@ public class SelectMagic : IGameState
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
-            var bucket = _currentUnit.MagicFamilyBuckets[_selectedMagicIndex];
-            if (bucket != null)
-            {
-                var spell = _currentUnit.GetHighestMagicLevelInBucket((MagicFamily)bucket);
-                Logger.Info(spell.ToString());
-            }
+            var family = _game.MagicUI.GetSelectedFamily();
+            var spell = _currentUnit.GetHighestMagicLevelInBucket(family);
+            Logger.Info(spell.ToString());
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X))
@@ -95,24 +66,7 @@ public class SelectMagic : IGameState
 
     private void SetSelectedMagic(Direction direction)
     {
-        if (_spellIndexByDirection.TryGetValue(direction, out var index))
-        {
-            if (_selectedMagicIndex == index)
-            {
-                return;
-            }
-
-            var bucket = _currentUnit.MagicFamilyBuckets[index];
-            if (bucket != null)
-            {
-                // var sprite = MagicIcons.GetSprite((MagicFamily)bucket);
-                // _game.Renderer.Draw(scale, sprite, position);
-                _selectedMagicIndex = index;
-                Logger.Debug($"Selected magic index: [{index}].");
-                MagicIcons.SetSelectedSpell((MagicFamily)bucket);
-            }
-
-        }
+        _game.MagicUI.SetSelected(direction, _currentUnit);
     }
 
     private void CancelMenu()
@@ -132,15 +86,9 @@ public class SelectMagic : IGameState
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        foreach (var (direction, index) in _spellIndexByDirection)
+        foreach (var iconData in _game.MagicUI.GetMagicIconsToDraw(scale, _currentUnit))
         {
-            var offset = direction.GetMenuOffset();
-            var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
-
-            var bucket = _currentUnit.MagicFamilyBuckets[index];
-            var family = bucket != null ? (MagicFamily)bucket : MagicFamily.NoSpell;
-
-            _game.Renderer.DrawMagicIcon(scale, family, position);
+            _game.Renderer.DrawMagicIcon(scale, iconData.Family, iconData.Position);
         }
     }
 }

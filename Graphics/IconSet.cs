@@ -23,7 +23,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
     private readonly string _rootPath;
     private readonly Dictionary<TKey, List<Sprite>> _animations = new();
     private TKey _selectedKey = default!;
-    private readonly Func<TKey, string> _getBaseName;   // ← New
+    private readonly Func<TKey, string> _getBaseName;
 
     public IconSet(string rootPath, int animationDelay, Func<TKey, string>? getBaseName = null)
     {
