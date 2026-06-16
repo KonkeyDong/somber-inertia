@@ -2,6 +2,7 @@ using System.Numerics;
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 using SomberInertia.State;
+using SomberInertia.Core.Combat;
 
 namespace SomberInertia.Graphics.UI;
 
@@ -10,8 +11,11 @@ public class MagicUI
     public record MagicIconData(Vector2 Position, MagicFamily Family);
 
     private Vector2 _centerPosition;
+    private Vector2 _magicInformationBoxCoordinates;
     private int _selectedMagicIndex;
     private MagicFamily _selectedMagicFamily;
+    private List<Magic> _selectedMagicList = new();
+    private Magic _selectedMagic;
 
     private readonly Dictionary<Direction, int> _spellIndexByDirection = new()
     {
@@ -28,6 +32,9 @@ public class MagicUI
             GameStateManager.CurrentHeight * 0.75f
         );
 
+        _magicInformationBoxCoordinates = new Vector2(_centerPosition.X + 200, _centerPosition.Y);
+        _selectedMagic = MagicManager.Create(MagicName.NoSpell);
+
         Reset();
     }
 
@@ -35,6 +42,8 @@ public class MagicUI
     {
         _selectedMagicIndex = -1;
         _selectedMagicFamily = MagicFamily.NoSpell;
+        _selectedMagicList = new();
+        _selectedMagic = MagicManager.Create(MagicName.NoSpell);
     }
 
     public void SetSelected(Direction direction, Unit currentUnit)
@@ -50,14 +59,18 @@ public class MagicUI
             return;
         }
 
-        var bucket = currentUnit.MagicFamilyBuckets[index];
+        var family = currentUnit.MagicFamilyBuckets[index];
 
-        if (bucket != null)
+        if (family != null)
         {
             _selectedMagicIndex = index;
-            _selectedMagicFamily = (MagicFamily)bucket;
+            _selectedMagicFamily = (MagicFamily)family;
+            _selectedMagicList = currentUnit.GetMagicListInBucket(_selectedMagicFamily);
+            _selectedMagic = currentUnit.GetHighestMagicLevelInBucket(_selectedMagicFamily);
 
+            // for setting the red border
             MagicIcons.SetSelectedSpell(_selectedMagicFamily);
+
             Logger.Debug($"Selected magic index: [{index}].");
         }
     }
@@ -75,6 +88,16 @@ public class MagicUI
     public bool HasSelection()
     {
         return _selectedMagicIndex != -1;
+    }
+
+    public Magic GetSelectedMagic()
+    {
+        return _selectedMagic;
+    }
+
+    public Vector2 GetMagicInformationBoxCoordinates()
+    {
+        return _magicInformationBoxCoordinates;
     }
 
     public IEnumerable<MagicIconData> GetMagicIconsToDraw(float scale, Unit currentUnit)

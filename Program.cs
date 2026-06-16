@@ -21,9 +21,9 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        var game = new Game(new Grid(11, 10));
         WeaponManager.Initialize();
         MagicManager.Initialize();
+        var game = new Game(new Grid(11, 10));
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 10;
