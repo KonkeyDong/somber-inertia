@@ -90,5 +90,7 @@ public class SelectMagic : IGameState
         {
             _game.Renderer.DrawMagicIcon(scale, iconData.Family, iconData.Position);
         }
+
+        _game.Renderer.DrawSpellInfoBox(scale, _game.MagicUI.GetSelectedMagic(), _game.MagicUI.GetMagicInformationBoxCoordinates());
     }
 }
