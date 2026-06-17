@@ -2,7 +2,7 @@ namespace SomberInertia.Timers;
 
 using Raylib_cs;
 
-public class MovementRangeTint : ITimers
+public class RangeTint : ITimers
 {
     private readonly int _maxNumberOfFrames;
     private int _frameCounter { get; set; }
@@ -18,7 +18,7 @@ public class MovementRangeTint : ITimers
         new Color(80,  120, 255, 160)    // 3: Strong blue (~50% darken)
     };
 
-    public MovementRangeTint(int framesPerTint = 8)
+    public RangeTint(int framesPerTint = 8)
     {
         _maxNumberOfFrames = framesPerTint;
         _frameCounter = framesPerTint;

@@ -67,6 +67,7 @@ public class SelectMagic : IGameState
     private void SetSelectedMagic(Direction direction)
     {
         _game.MagicUI.SetSelected(direction, _currentUnit);
+        _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
     }
 
     private void CancelMenu()
@@ -77,6 +78,7 @@ public class SelectMagic : IGameState
 
     public void Update()
     {
+        _game.Grid.RangeTint.Tick();
         _game.FrameFlipper.Tick();
         MagicIcons.Update();
     }
@@ -84,6 +86,7 @@ public class SelectMagic : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
+        _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
         foreach (var iconData in _game.MagicUI.GetMagicIconsToDraw(scale, _currentUnit))

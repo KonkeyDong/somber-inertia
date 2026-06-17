@@ -2,6 +2,7 @@ using SomberInertia;
 using SomberInertia.Enums;
 using SomberInertia.Timers;
 using SomberInertia.Core.Units;
+using SomberInertia.Core.Combat;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -21,7 +22,8 @@ public class Grid
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> WeaponAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public readonly MovementRangeTint RangeTint = new MovementRangeTint(GameConfig.Animations.MovementRangeTintFrameDelay);
+    public HashSet<(int x, int y)> MagicAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
+    public readonly RangeTint RangeTint = new RangeTint(GameConfig.Animations.RangeTintFrameDelay);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()
@@ -147,14 +149,35 @@ public class Grid
             return;
         }
 
-        WeaponAttackRangeSet.Clear();
+        WeaponAttackRangeSet = CalculateEffectDistanceRange(unit, unit.Weapon.DistanceRange);
+    }
+
+    public void CalculateMagicAttackRange(Unit unit, Magic magic)
+    {
+        if (unit?.Block == null)
+        {
+            return;
+        }
+
+        MagicAttackRangeSet = CalculateEffectDistanceRange(unit, magic.DistanceRange);
+    }
+
+    // Effect meaning magical or weapon attack.
+    private HashSet<(int, int)> CalculateEffectDistanceRange(Unit unit, SomberInertia.Core.Combat.Range range)
+    {
+        if (unit?.Block == null)
+        {
+            Logger.Error("Unit is not on a block.");
+            return new HashSet<(int x, int y)>();
+        }
 
         var queue = new Queue<Block>();
         var visited = new HashSet<(int x, int y)>();
+        var effectRangeSet = new HashSet<(int x, int y)>();
         var start = unit.Block;
 
-        var minRange = unit.Weapon.DistanceRange.Min;
-        var maxRange = unit.Weapon.DistanceRange.Max;
+        var minRange = range.Min;
+        var maxRange = range.Max;
 
         queue.Enqueue(start);
         visited.Add((start.X, start.Y));
@@ -167,7 +190,7 @@ public class Grid
             // Add tile if it's within min and max range (inclusive)
             if (distance >= minRange && distance <= maxRange)
             {
-                WeaponAttackRangeSet.Add((current.X, current.Y));
+                effectRangeSet.Add((current.X, current.Y));
             }
 
             if (distance >= maxRange)
@@ -186,6 +209,8 @@ public class Grid
                 }
             }
         }
+
+        return effectRangeSet;
     }
 
     // Note: attack range could be spell range, or item range.
