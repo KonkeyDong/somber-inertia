@@ -72,6 +72,7 @@ public class Renderer
 
     public void DrawMovementRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MovementRangeSet);
     public void DrawWeaponAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.WeaponAttackRangeSet);
+    public void DrawMagicAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MagicAttackRangeSet);
     private void DrawRangeBlockColor(float scale, Grid grid, HashSet<(int x, int y)> hashSet)
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
