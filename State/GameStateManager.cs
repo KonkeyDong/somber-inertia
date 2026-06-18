@@ -43,13 +43,14 @@ public static class GameStateManager
             GameStateType.TransitionSelectorToNextUnit => new TransitionSelectorToNextUnit(Game),
             GameStateType.AnimateUnitDeaths => new AnimateUnitDeaths(Game),
             GameStateType.SelectMagic => new SelectMagic(Game),
+            GameStateType.SelectMagicLevel => new SelectMagicLevel(Game),
             GameStateType.NoMagicAvailable => new NoMagicAvailable(Game),
             GameStateType.NoAttackTargetAvailable => new NoAttackTargetAvailable(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };
 
-        _gameState?.Exit();           // ← safer than checking != null
+        _gameState?.Exit();
 
         _gameState = newGameState;
         _gameState.Enter();

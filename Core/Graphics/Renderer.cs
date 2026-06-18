@@ -196,7 +196,7 @@ public class Renderer
         Raylib.DrawTextEx(Raylib.GetFontDefault(), text, finalTextPos, fontSize, 1, textColor);
     }
 
-    public void DrawSpellInfoBox(float scale, Magic spell, Vector2 position)
+    public void DrawSpellInfoBox(float scale, Magic spell, Vector2 position, bool highlightLevel = false)
     {
         var spellName = spell.Name.GetBaseName();
         var level = spell.Level;
@@ -206,12 +206,12 @@ public class Renderer
         var textColor = Color.White;
 
         // Prepare lines
-        var line1 = spellName;             // e.g. "Aura"
-        var line2 = $"Level {level}";      // e.g. "Level 2"
+        var line1 = spellName;
+        var line2 = $"Level {level}";
         var line3Left = "MP";
         var line3Right = mpCost.ToString();
 
-        // Measure
+        // Measure text
         var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
         var size2 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line2, fontSize, 1);
         var sizeLeft = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line3Left, fontSize, 1);
@@ -219,9 +219,9 @@ public class Renderer
 
         var padding = 12;
         var lineSpacing = 4;
-        var leftMargin = 8; // left padding inside the blue area
+        var leftMargin = 8;
 
-        // Calculate box size
+        // Calculate box dimensions
         var contentWidth = Math.Max(size1.X, Math.Max(size2.X, sizeLeft.X + sizeRight.X + 20));
         var contentHeight = size1.Y + size2.Y + sizeLeft.Y + (lineSpacing * 2);
 
@@ -231,7 +231,7 @@ public class Renderer
         var boxX = (int)position.X - padding;
         var boxY = (int)position.Y - padding;
 
-        // === Border layers (same as before) ===
+        // === Border layers ===
         var darkOrange = GameConfig.Textures.DarkOrange;
         var lightOrange = GameConfig.Textures.LightOrange;
         var offWhite = GameConfig.Textures.OffWhite;
@@ -255,15 +255,27 @@ public class Renderer
 
         Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
 
-        // === Text positioning (left justified) ===
+        // === Text positioning ===
         var textStartY = fillY + 6;
         var textLeftX = fillX + leftMargin;
 
         // Line 1 - Name (left justified)
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
 
-        // Line 2 - Level (left justified)
+        // Line 2 - Level (with optional red highlight)
         var text2Y = textStartY + size1.Y + lineSpacing;
+
+        if (highlightLevel)
+        {
+            var highlightPadding = 2;
+            var highlightX = (int)(textLeftX - highlightPadding);
+            var highlightY = (int)(text2Y - highlightPadding);
+            var highlightWidth = (int)(size2.X + (highlightPadding * 2));
+            var highlightHeight = (int)(size2.Y + (highlightPadding * 2));
+
+            Raylib.DrawRectangle(highlightX, highlightY, highlightWidth, highlightHeight, GameConfig.Textures.DarkRed);
+        }
+
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
 
         // Line 3 - MP left + Cost right
