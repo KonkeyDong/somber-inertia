@@ -8,7 +8,7 @@ public static class MagicIcons
     private static readonly IconSet<MagicFamily> _icons =
         new IconSet<MagicFamily>(
             "Assets/Sprites/Shared/MagicIcons",
-            GameConfig.Animations.IconDelay,
+            GameConfig.Animations.BlinkDelay,
             getBaseName: icon => icon.GetBaseName());
 
     public static void Load() => _icons.Load();

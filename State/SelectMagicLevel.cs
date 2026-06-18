@@ -8,20 +8,22 @@ using Raylib_cs;
 
 namespace SomberInertia.State;
 
-public class SelectMagic : IGameState
+public class SelectMagicLevel : IGameState
 {
     private readonly Game _game;
     private readonly Unit _currentUnit;
+    private readonly FrameFlipper _blinker;
 
-    public SelectMagic(Game game)
+    public SelectMagicLevel(Game game)
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
+        _blinker = new FrameFlipper(GameConfig.Animations.BlinkDelay);
     }
 
     public void Enter()
     {
-        SetSelectedMagic(Direction.Up);
+
     }
 
     public void Exit()
@@ -31,47 +33,41 @@ public class SelectMagic : IGameState
 
     public void HandleInput()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Up))
-        {
-            SetSelectedMagic(Direction.Up);
-        }
-
         if (Raylib.IsKeyPressed(KeyboardKey.Left))
         {
-            SetSelectedMagic(Direction.Left);
+            _game.MagicUI.PreviousSpellLevel();
+            _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Right))
         {
-            SetSelectedMagic(Direction.Right);
-        }
-
-        if (Raylib.IsKeyPressed(KeyboardKey.Down))
-        {
-            SetSelectedMagic(Direction.Down);
+            _game.MagicUI.NextSpellLevel();
+            _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
-            GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
+            var spell = _game.MagicUI.GetSelectedMagic();
+            Logger.Info(spell.ToString());
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X))
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
+            GameStateManager.ChangeStateType(GameStateType.SelectMagic);
         }
     }
 
-    private void SetSelectedMagic(Direction direction)
+    private void CancelMenu()
     {
-        _game.MagicUI.SetSelected(direction, _currentUnit);
-        _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
+        Logger.Debug("SelectMagic(): Cancelled - returning to BattleActionMenu.");
+        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
         _game.FrameFlipper.Tick();
+        _blinker.Tick();
         MagicIcons.Update();
     }
 
@@ -86,6 +82,6 @@ public class SelectMagic : IGameState
             _game.Renderer.DrawMagicIcon(scale, iconData.Family, iconData.Position);
         }
 
-        _game.Renderer.DrawSpellInfoBox(scale, _game.MagicUI.GetSelectedMagic(), _game.MagicUI.GetMagicInformationBoxCoordinates());
+        _game.Renderer.DrawSpellInfoBox(scale, _game.MagicUI.GetSelectedMagic(), _game.MagicUI.GetMagicInformationBoxCoordinates(), _blinker.IsOn);
     }
 }

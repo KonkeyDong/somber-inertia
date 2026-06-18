@@ -35,5 +35,5 @@ public class Magic
     }
 
     public void Cast(MagicContext context) => _effect.Execute(context, this);
-    public override string ToString() => $"{Name.GetDisplayName()}: level = [{Level}]; MP cost: [{MPCost}].";
+    public override string ToString() => $"{Name.GetDisplayName()}: level = [{Level}]; MP cost: [{MPCost}]; DistanceRange: [{DistanceRange.ToString()}].";
 }

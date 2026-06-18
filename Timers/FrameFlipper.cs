@@ -1,6 +1,6 @@
 using SomberInertia.Timers;
 
-public class FrameFlipper : ITimers   // note: singular "ITimer" is more common
+public class FrameFlipper : ITimers
 {
     private readonly int _framesPerFlip;
     private int _counter;

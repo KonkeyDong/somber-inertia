@@ -13,7 +13,7 @@ public static class GameConfig
         public const int CountdownTimerDelay = 60;
         public const float MovementDuration = 0.20f; // 0.25 = quarter second (15 frames)
         public const int FrameFlipperDelay = 30;
-        public const int IconDelay = 6;
+        public const int BlinkDelay = 7;
         public const int SwitchStateCountdownTimer = 180;
     }
 
@@ -26,5 +26,6 @@ public static class GameConfig
         public static readonly Color DarkOrange = new Color(177, 82, 24, 255);
         public static readonly Color LightOrange = new Color(255, 203, 94, 255);
         public static readonly Color OffWhite = new Color(248, 235, 244, 255);
+        public static readonly Color DarkRed = new Color(180, 40, 40, 255);
     }
 }
