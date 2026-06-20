@@ -10,10 +10,11 @@ public class Magic
     public MagicType MagicType { get; set; }
     public Range DistanceRange { get; set; }
     public Range TargetRange { get; set; }
+    public bool Offensive { get; set; }
 
     private readonly IMagicEffect _effect;
 
-    public Magic(MagicName name, int level, int MPCost, MagicType magicType, Range distanceRange, Range targetRange, IMagicEffect effect)
+    public Magic(MagicName name, int level, int MPCost, MagicType magicType, Range distanceRange, Range targetRange, bool offensive, IMagicEffect effect)
     {
         if (level <= 0 || level > 4)
         {
@@ -31,6 +32,7 @@ public class Magic
         MagicType = magicType;
         DistanceRange = distanceRange;
         TargetRange = targetRange;
+        Offensive = offensive;
         _effect = effect;
     }
 

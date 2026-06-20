@@ -36,6 +36,7 @@ public static class MagicManager
     {
         var magicType = MagicType.Fire;
         var distanceRange = new Range(1, 2);
+        var offensive = true;
 
         _MagicLookup[MagicName.Blaze1] = new Magic(
             name: MagicName.Blaze1,
@@ -44,6 +45,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: distanceRange,
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(7)
         );
 
@@ -54,6 +56,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: distanceRange,
             targetRange: new Range(0, 1),
+            offensive: offensive,
             effect: new DamageEffect(8)
         );
 
@@ -64,6 +67,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: distanceRange,
             targetRange: new Range(0, 1),
+            offensive: offensive,
             effect: new DamageEffect(12)
         );
 
@@ -74,6 +78,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: distanceRange,
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(32)
         );
     }
@@ -81,6 +86,7 @@ public static class MagicManager
     private static void RegisterIceMagic()
     {
         var magicType = MagicType.Ice;
+        var offensive = true;
 
         _MagicLookup[MagicName.Freeze1] = new Magic(
             name: MagicName.Freeze1,
@@ -89,6 +95,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 2),
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(8)
         );
 
@@ -99,6 +106,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 2),
             targetRange: new Range(0, 1),
+            offensive: offensive,
             effect: new DamageEffect(10)
         );
 
@@ -109,6 +117,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 3),
             targetRange: new Range(0, 1),
+            offensive: offensive,
             effect: new DamageEffect(15)
         );
 
@@ -119,6 +128,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 4),
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(40)
         );
     }
@@ -126,6 +136,7 @@ public static class MagicManager
     private static void RegisterLightningMagic()
     {
         var magicType = MagicType.Lightning;
+        var offensive = true;
 
         _MagicLookup[MagicName.Bolt1] = new Magic(
             name: MagicName.Bolt1,
@@ -134,6 +145,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 2),
             targetRange: new Range(0, 1),
+            offensive: offensive,
             effect: new DamageEffect(12)
         );
 
@@ -144,6 +156,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 3),
             targetRange: new Range(0, 2),
+            offensive: offensive,
             effect: new DamageEffect(13)
         );
 
@@ -154,6 +167,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 3),
             targetRange: new Range(0, 2),
+            offensive: offensive,
             effect: new DamageEffect(20)
         );
 
@@ -164,6 +178,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(1, 3),
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(48)
         );
     }
@@ -172,6 +187,7 @@ public static class MagicManager
     {
         var magicType = MagicType.Heal;
         var targetRange = new Range(0, 0);
+        var offensive = false;
 
         // Heal
         _MagicLookup[MagicName.Heal1] = new Magic(
@@ -181,6 +197,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 1),
             targetRange: targetRange,
+            offensive: offensive,
             effect: new HealEffect(12)
         );
 
@@ -191,6 +208,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 2),
             targetRange: targetRange,
+            offensive: offensive,
             effect: new HealEffect(12)
         );
 
@@ -201,6 +219,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 3),
             targetRange: targetRange,
+            offensive: offensive,
             effect: new HealEffect(24)
         );
 
@@ -211,6 +230,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 1),
             targetRange: targetRange,
+            offensive: offensive,
             effect: new HealEffect(1000) // full heal
         );
         
@@ -222,6 +242,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 3),
             targetRange: new Range(0, 1),
+            offensive: offensive,
             effect: new HealEffect(12)
         );
 
@@ -232,6 +253,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 3),
             targetRange: new Range(0, 2),
+            offensive: offensive,
             effect: new HealEffect(12)
         );
 
@@ -242,6 +264,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 3),
             targetRange: new Range(0, 2),
+            offensive: offensive,
             effect: new HealEffect(24)
         );
 
@@ -252,6 +275,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 1000), // entire map
             targetRange: new Range(0, 1000), // entire map
+            offensive: offensive,
             effect: new HealEffect(1000) // full heal
         );
     }
@@ -269,6 +293,7 @@ public static class MagicManager
     public static void RegisterMiscMagic()
     {
         var magicType = MagicType.Misc;
+        var offensive = false;
 
         Logger.Warning("Egress effect is DamageEffect. Change to different effect.");
         _MagicLookup[MagicName.Egress1] = new Magic(
@@ -278,6 +303,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 0),
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(0)
         );
 
@@ -289,6 +315,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 0),
             targetRange: new Range(0, 0),
+            offensive: offensive,
             effect: new DamageEffect(0)
         );
     }

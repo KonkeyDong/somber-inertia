@@ -49,6 +49,7 @@ public class SelectMagicLevel : IGameState
         {
             var spell = _game.MagicUI.GetSelectedMagic();
             Logger.Info(spell.ToString());
+            GameStateManager.ChangeStateType(GameStateType.CalculateMagicRange);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X))

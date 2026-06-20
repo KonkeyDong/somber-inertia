@@ -216,10 +216,23 @@ public class Grid
     // Note: attack range could be spell range, or item range.
     public List<Unit> BuildListOfUnitsInAttackRange(Unit unit)
     {
-        Logger.Debug("Grid::BuildListOfUnitsInAttackRange() building list of units in attack/spell range.");
+        Logger.Debug("Grid::BuildListOfUnitsInAttackRange() building list of units in attack.");
+
+        return BuildListOfUnitsInRangeRange(unit, WeaponAttackRangeSet);
+    }
+
+    public List<Unit> BuildListOfUnitsInMagicRange(Unit unit)
+    {
+        Logger.Debug("Grid::BuildListOfUnitsInMagicRange() building list of units in magic range.");
+
+        return BuildListOfUnitsInRangeRange(unit, MagicAttackRangeSet);
+    }
+
+    private List<Unit> BuildListOfUnitsInRangeRange(Unit unit, HashSet<(int x, int y)> rangeSet)
+    {
         var unitsInRange = new List<Unit>();
 
-        foreach (var (x, y) in WeaponAttackRangeSet)
+        foreach (var (x, y) in rangeSet)
         {
             var occupant = Blocks[x, y].PeekOccupant();
             if (occupant == null)

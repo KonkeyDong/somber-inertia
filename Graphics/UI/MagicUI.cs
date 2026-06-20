@@ -103,6 +103,11 @@ public class MagicUI
         return _magicInformationBoxCoordinates;
     }
 
+    public bool IsSelectedMagicOffensive()
+    {
+        return _selectedMagic.Offensive;
+    }
+
     public void NextSpellLevel()
     {
         if (_selectedMagicList.Count == 1)
