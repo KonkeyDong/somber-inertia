@@ -37,6 +37,7 @@ public static class GameStateManager
             GameStateType.UnitMoving => new UnitMoving(Game),
             GameStateType.CalculateUnitMovementRange => new CalculateUnitMovementRange(Game),
             GameStateType.CalculateWeaponAttackRange => new CalculateWeaponAttackRange(Game),
+            GameStateType.CalculateMagicRange => new CalculateMagicRange(Game),
             GameStateType.BattleActionMenu => new BattleActionMenu(Game),
             GameStateType.EndTurn => new EndTurn(Game),
             GameStateType.SelectEnemyForPhysicalAttack => new SelectEnemyForPhysicalAttack(Game),
@@ -46,6 +47,7 @@ public static class GameStateManager
             GameStateType.SelectMagicLevel => new SelectMagicLevel(Game),
             GameStateType.NoMagicAvailable => new NoMagicAvailable(Game),
             GameStateType.NoAttackTargetAvailable => new NoAttackTargetAvailable(Game),
+            GameStateType.NoMagicTargetAvailable => new NoMagicTargetAvailable(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };

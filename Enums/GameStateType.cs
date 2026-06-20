@@ -20,6 +20,7 @@ public enum GameStateType
     EndTurn,
     CalculateUnitMovementRange,
     CalculateWeaponAttackRange,
+    CalculateMagicRange,
     BattleActionMenu,
     SelectingAction,
     SelectEnemyForPhysicalAttack,
@@ -29,4 +30,5 @@ public enum GameStateType
     SelectMagicLevel,
     NoMagicAvailable,
     NoAttackTargetAvailable,
+    NoMagicTargetAvailable,
 }
