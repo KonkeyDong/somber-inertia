@@ -2,8 +2,8 @@ namespace SomberInertia.State;
 
 public interface IGameState
 {
-    void Enter(); // Called when entering this state
-    void Exit();  // Called when leaving this state
+    void Enter();
+    void Exit();
 
     void HandleInput();
     void Update();
