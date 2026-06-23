@@ -12,7 +12,7 @@ public static class CommandIcons
             getBaseName: icon => icon.GetBaseName());
 
     public static void Load() => _icons.Load();
-    public static void Update() => _icons.Update();
+    public static void Tick() => _icons.Tick();
     public static void SetSelectedIcon(CommandIconType type) => _icons.SetSelected(type);
     public static Sprite GetSprite(CommandIconType type) => _icons.GetSprite(type);
     public static void Reset() => _icons.Reset();

@@ -72,7 +72,7 @@ public class SelectMagic : IGameState
     {
         _game.Grid.RangeTint.Tick();
         _game.FrameFlipper.Tick();
-        MagicIcons.Update();
+        MagicIcons.Tick();
     }
 
     public void Draw(float scale)
