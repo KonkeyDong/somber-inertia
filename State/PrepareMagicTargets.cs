@@ -5,12 +5,12 @@ using SomberInertia.Core.Units;
 
 namespace SomberInertia.State;
 
-public class CalculateMagicRange : IGameState
+public class PrepareMagicTargets : IGameState
 {
     private Game _game { get; set; }
     private Unit _currentUnit { get; set; }
 
-    public CalculateMagicRange(Game game)
+    public PrepareMagicTargets(Game game)
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
@@ -18,7 +18,6 @@ public class CalculateMagicRange : IGameState
 
     public void Enter()
     {
-        // _game.Grid.CalculateMagicAttackRange(_currentUnit);
         var unitsInRange = _game.Grid.BuildListOfUnitsInMagicRange(_currentUnit);
         _game.SeparateListOfUnitsInRange(_currentUnit, unitsInRange);
 
@@ -27,9 +26,7 @@ public class CalculateMagicRange : IGameState
             Logger.Info("Spell is offensive-type.");
             if (_game.UnfriendlyUnitsInRange.Count > 0)
             {
-                // GameStateManager.ChangeStateType(GameStateType.SelectEnemyForPhysicalAttack);
-                Logger.Warning("Select unit for magic attack not implemented.");
-                GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
+                GameStateManager.ChangeStateType(GameStateType.SelectMagicTargets);
             }
             else 
             {
@@ -41,8 +38,7 @@ public class CalculateMagicRange : IGameState
             Logger.Info("Spell is defensive-type.");
             if (_game.FriendlyUnitsInRange.Count > 0)
             {
-                Logger.Warning("Select unit for magic attack not implemented.");
-                GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
+                GameStateManager.ChangeStateType(GameStateType.SelectMagicTargets);
             }
             else 
             {

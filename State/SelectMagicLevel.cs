@@ -49,7 +49,7 @@ public class SelectMagicLevel : IGameState
         {
             var spell = _game.MagicUI.GetSelectedMagic();
             Logger.Info(spell.ToString());
-            GameStateManager.ChangeStateType(GameStateType.CalculateMagicRange);
+            GameStateManager.ChangeStateType(GameStateType.PrepareMagicTargets);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X))
@@ -69,7 +69,7 @@ public class SelectMagicLevel : IGameState
         _game.Grid.RangeTint.Tick();
         _game.FrameFlipper.Tick();
         _blinker.Tick();
-        MagicIcons.Update();
+        MagicIcons.Tick();
     }
 
     public void Draw(float scale)

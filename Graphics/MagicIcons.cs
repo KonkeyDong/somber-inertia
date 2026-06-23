@@ -12,7 +12,7 @@ public static class MagicIcons
             getBaseName: icon => icon.GetBaseName());
 
     public static void Load() => _icons.Load();
-    public static void Update() => _icons.Update();
+    public static void Tick() => _icons.Tick();
     public static void SetSelectedSpell(MagicFamily family) => _icons.SetSelected(family);
     public static Sprite GetSprite(MagicFamily family) => _icons.GetSprite(family);
     public static void Reset() => _icons.Reset();

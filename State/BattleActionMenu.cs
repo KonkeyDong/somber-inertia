@@ -136,7 +136,7 @@ public class BattleActionMenu : IGameState
     {
         _game.Grid.RangeTint.Tick();
         _game.FrameFlipper.Tick();
-        CommandIcons.Update();
+        CommandIcons.Tick();
     }
 
     public void Draw(float scale)

@@ -11,7 +11,7 @@ namespace SomberInertia.Graphics;
 public interface IIconSet<TKey> where TKey : Enum
 {
     void Load();
-    void Update();
+    void Tick();
     void SetSelected(TKey key);
     Sprite GetSprite(TKey key);
     void Reset();
@@ -67,7 +67,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
         Reset();
     }
 
-    public void Update() => _frameFlipper.Tick();
+    public void Tick() => _frameFlipper.Tick();
 
     public Sprite GetSprite(TKey key)
     {
