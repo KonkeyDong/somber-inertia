@@ -1,5 +1,6 @@
 using SomberInertia.Enums;
 using SomberInertia.Core;
+using SomberInertia.Core.Combat;
 using SomberInertia.Core.Units;
 using SomberInertia.Graphics;
 using System.Numerics;
@@ -15,6 +16,7 @@ public class SelectMagicTargets : IGameState
     private readonly List<Unit> _listOfUnits;
     private int _currentIndex;
     private readonly FrameFlipper _blinker;
+    private MagicContext _magicContext = null!;
 
     public SelectMagicTargets(Game game)
     {
@@ -34,6 +36,7 @@ public class SelectMagicTargets : IGameState
             _currentIndex = 0;
 
             _game.SetHighlightTarget(_listOfUnits[_currentIndex]);
+            SetMagicContext();
         }
     }
 
@@ -49,7 +52,6 @@ public class SelectMagicTargets : IGameState
             var changed = false;
             if (Raylib.IsKeyPressed(KeyboardKey.Left))
             {
-
                 _currentIndex = (_currentIndex + 1) % _listOfUnits.Count();
                 changed = true;
             }
@@ -65,21 +67,31 @@ public class SelectMagicTargets : IGameState
                 if (newTarget.Block != null)
                 {
                     _game.SetHighlightTarget(newTarget);
+                    SetMagicContext();
                 }
             }
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
-            var spell = _game.MagicUI.GetSelectedMagic();
-            Logger.Info(spell.ToString());
-            // GameStateManager.ChangeStateType(GameStateType.PrepareMagicTargets);
+            Logger.Info(_magicContext.ToString());
+            _game.MagicUI.GetSelectedMagic().Cast(_magicContext);
+            GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X))
         {
             GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
         }
+    }
+
+    private void SetMagicContext()
+    {
+        var selectedUnit = _listOfUnits[_currentIndex];
+        _game.Grid.CalculateSpellEffectRange(selectedUnit, _game.MagicUI.GetSelectedMagic());
+        var lsitOfUnitsInSpellEffectRange = _game.Grid.BuildListOfUnitsInSpellEffectRange(selectedUnit);
+
+        _magicContext = new MagicContext(_currentUnit, lsitOfUnitsInSpellEffectRange, _game.Grid);
     }
 
     private void CancelMenu()

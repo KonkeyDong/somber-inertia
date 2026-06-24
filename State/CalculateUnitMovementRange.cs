@@ -18,7 +18,6 @@ public class CalculateUnitMovementRange : IGameState
     public void Enter()
     {
         Logger.Debug("CalculateUnitMovementRange::Enter(): called.");
-        _game.Grid.ResetGridMovementCosts();
         _game.Grid.CalculateUnitMovementRange(_currentUnit);
         GameStateManager.ChangeStateType(GameStateType.UnitMoving);
     }

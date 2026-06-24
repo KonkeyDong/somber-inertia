@@ -117,6 +117,7 @@ public abstract class Unit
     }
 
     public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
+    public string GetDisplayName() => Name.GetDisplayName();
 
     public void LearnSpell(Magic spell)
     {
