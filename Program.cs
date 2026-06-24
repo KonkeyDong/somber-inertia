@@ -50,10 +50,15 @@ class Program
         goblin2.Friendly = false;
         goblin2.Defense = 5;
 
+        var goblin3 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
+        goblin2.Friendly = false;
+        goblin2.Defense = 5;
+
         game.AddUnit(max, 0, 0);
         game.AddUnit(anri, 1, 1);
         game.AddUnit(goblin1, 3, 1);
         game.AddUnit(goblin2, 4, 2);
+        game.AddUnit(goblin3, 4, 3);
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
         CommandIcons.Load();

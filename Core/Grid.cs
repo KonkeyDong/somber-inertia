@@ -23,6 +23,7 @@ public class Grid
     public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> WeaponAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> MagicAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
+    public HashSet<(int x, int y)> SpellEffectRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public readonly RangeTint RangeTint = new RangeTint(GameConfig.Animations.RangeTintFrameDelay);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
@@ -73,16 +74,12 @@ public class Grid
         Logger.Info("Grid initialization complete.");
     }
 
-    public void ResetGridMovementCosts()
+    public void ResetAllRangeSets()
     {
-        Logger.Info("ResetGridMovementCosts(): resetting visited HashSet and Blocks[,].MovementCost values.");
         MovementRangeSet.Clear();
-    }
-
-    public void ResetAttackRangeCosts()
-    {
-        Logger.Info("ResetAttackRangeCosts(): resetting attack range HashSet.");
         WeaponAttackRangeSet.Clear();
+        MagicAttackRangeSet.Clear();
+        SpellEffectRangeSet.Clear();
     }
 
     public void CalculateUnitMovementRange(Unit unit)
@@ -162,6 +159,19 @@ public class Grid
         MagicAttackRangeSet = CalculateEffectDistanceRange(unit, magic.DistanceRange);
     }
 
+    // Similar to CalculateMagicAttackRange(), but sets the SpellEffectRangeSet.
+    // Used for when you cast an AOE spell on a unit and you need to get all units
+    // at that unit's location, not the caster's location.
+    public void CalculateSpellEffectRange(Unit unit, Magic magic)
+    {
+        if (unit?.Block == null)
+        {
+            return;
+        }
+
+        SpellEffectRangeSet = CalculateEffectDistanceRange(unit, magic.TargetRange);
+    }
+
     // Effect meaning magical or weapon attack.
     private HashSet<(int, int)> CalculateEffectDistanceRange(Unit unit, SomberInertia.Core.Combat.Range range)
     {
@@ -218,17 +228,24 @@ public class Grid
     {
         Logger.Debug("Grid::BuildListOfUnitsInAttackRange() building list of units in attack.");
 
-        return BuildListOfUnitsInRangeRange(unit, WeaponAttackRangeSet);
+        return BuildListOfUnitsInRange(unit, WeaponAttackRangeSet);
     }
 
     public List<Unit> BuildListOfUnitsInMagicRange(Unit unit)
     {
         Logger.Debug("Grid::BuildListOfUnitsInMagicRange() building list of units in magic range.");
 
-        return BuildListOfUnitsInRangeRange(unit, MagicAttackRangeSet);
+        return BuildListOfUnitsInRange(unit, MagicAttackRangeSet);
     }
 
-    private List<Unit> BuildListOfUnitsInRangeRange(Unit unit, HashSet<(int x, int y)> rangeSet)
+    public List<Unit> BuildListOfUnitsInSpellEffectRange(Unit unit)
+    {
+        Logger.Debug("Grid::BuildListOfUnitsInSpellEffectRange() building list of units in spell effect range.");
+
+        return BuildListOfUnitsInRange(unit, SpellEffectRangeSet);
+    }
+
+    private List<Unit> BuildListOfUnitsInRange(Unit unit, HashSet<(int x, int y)> rangeSet)
     {
         var unitsInRange = new List<Unit>();
 

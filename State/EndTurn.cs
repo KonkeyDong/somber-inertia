@@ -20,6 +20,7 @@ public class EndTurn : IGameState
         current.ResetFacingDirection();
         Logger.Info($"{current.Name}'s turn ends.");
 
+        _game.Grid.ResetAllRangeSets();
         _game.FrameFlipper.Reset();
         _game.ResetListOfUnitsInRange();
         _game.MagicUI.Reset();
