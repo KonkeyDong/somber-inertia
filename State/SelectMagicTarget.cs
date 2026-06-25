@@ -17,6 +17,7 @@ public class SelectMagicTargets : IGameState
     private int _currentIndex;
     private readonly FrameFlipper _blinker;
     private MagicContext _magicContext = null!;
+    private List<Block> _areaOfEffect = null!;
 
     public SelectMagicTargets(Game game)
     {
@@ -88,10 +89,15 @@ public class SelectMagicTargets : IGameState
     private void SetMagicContext()
     {
         var selectedUnit = _listOfUnits[_currentIndex];
-        _game.Grid.CalculateSpellEffectRange(selectedUnit, _game.MagicUI.GetSelectedMagic());
-        var lsitOfUnitsInSpellEffectRange = _game.Grid.BuildListOfUnitsInSpellEffectRange(selectedUnit);
 
-        _magicContext = new MagicContext(_currentUnit, lsitOfUnitsInSpellEffectRange, _game.Grid);
+        // Recalculate the spell effect range based on the current target
+        _game.Grid.CalculateSpellEffectRange(selectedUnit, _game.MagicUI.GetSelectedMagic());
+
+        // Update both the magic context and the visual AoE
+        var unitsInRange = _game.Grid.BuildListOfUnitsInSpellEffectRange(selectedUnit);
+        _magicContext = new MagicContext(_currentUnit, unitsInRange, _game.Grid);
+
+        _areaOfEffect = _game.Grid.GetBlocksFromRangeSet(_game.Grid.SpellEffectRangeSet);
     }
 
     private void CancelMenu()
@@ -112,6 +118,16 @@ public class SelectMagicTargets : IGameState
         _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
+        if (_game.IsHighlightSettled())
+        {
+            foreach (var block in _areaOfEffect)
+            {
+                _game.Renderer.DrawHighlightRectangle(scale, block.GetPixelCoordinates());
+            }
+        }
+        else
+        {
+            _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
+        }
     }
 }

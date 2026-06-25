@@ -159,6 +159,7 @@ public class Game
         }
 
         _highlightTargetPosition = targetUnit.Block.GetPixelCoordinates();
+        _animationComplete = false;
     }
 
     public void UpdateHighlightPosition()

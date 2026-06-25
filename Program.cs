@@ -36,6 +36,7 @@ class Program
         max.LearnSpell(MagicManager.Create(MagicName.Heal2));
         max.LearnSpell(MagicManager.Create(MagicName.Heal3));
         max.LearnSpell(MagicManager.Create(MagicName.Heal4));
+        max.LearnSpell(MagicManager.Create(MagicName.Bolt3));
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Friendly = true;

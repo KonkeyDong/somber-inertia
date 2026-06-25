@@ -223,6 +223,18 @@ public class Grid
         return effectRangeSet;
     }
 
+    public List<Block> GetBlocksFromRangeSet(HashSet<(int x, int y)> rangeSet)
+    {
+        var blocks = new List<Block>();
+
+        foreach (var (x, y) in rangeSet)
+        {
+            blocks.Add(Blocks[x, y]);
+        }
+
+        return blocks;
+    }
+
     // Note: attack range could be spell range, or item range.
     public List<Unit> BuildListOfUnitsInAttackRange(Unit unit)
     {
