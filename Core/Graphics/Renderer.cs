@@ -112,6 +112,15 @@ public class Renderer
         Raylib.DrawRectangleLinesEx(highlightRect, scale, Color.White);
     }
 
+    // New overload for AoE
+    public void DrawHighlightRectangle(float scale, List<Vector2> positions)
+    {
+        foreach (var pos in positions)
+        {
+            DrawHighlightRectangle(scale, pos);
+        }
+    }
+
     public void DrawUnit(float scale, Grid grid, Unit unit, bool frameFlipperFlag)
     {
         var position = new Vector2();
