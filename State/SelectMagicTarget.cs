@@ -89,11 +89,8 @@ public class SelectMagicTargets : IGameState
     private void SetMagicContext()
     {
         var selectedUnit = _listOfUnits[_currentIndex];
-
-        // Recalculate the spell effect range based on the current target
         _game.Grid.CalculateSpellEffectRange(selectedUnit, _game.MagicUI.GetSelectedMagic());
 
-        // Update both the magic context and the visual AoE
         var unitsInRange = _game.Grid.BuildListOfUnitsInSpellEffectRange(selectedUnit);
         _magicContext = new MagicContext(_currentUnit, unitsInRange, _game.Grid);
 
