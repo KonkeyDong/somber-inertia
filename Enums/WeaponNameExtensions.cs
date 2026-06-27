@@ -55,7 +55,7 @@ public static class WeaponNameExtensions
             WeaponName.DevilLance => "Devil Lance",
             WeaponName.Valkyrie => "Valkyrie",
 
-            _ => weaponName.ToString()   // fallback
+            _ => weaponName.ToString() // fallback
         };
     }
 }

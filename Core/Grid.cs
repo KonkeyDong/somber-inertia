@@ -282,7 +282,7 @@ public class Grid
     {
         var directions = new (int dx, int dy)[]
         {
-            (-1, 0), (1, 0), (0, -1), (0, 1)   // Up, Down, Left, Right
+            (-1, 0), (1, 0), (0, -1), (0, 1) // Up, Down, Left, Right
         };
 
         foreach (var (dx, dy) in directions)
@@ -363,10 +363,8 @@ public class Grid
             return;
         }
 
-        // === IMPORTANT: Start visual movement FIRST ===
+        // Must come before PlaceUnit()
         unit.StartMovingTo(Blocks[newX, newY]);
-
-        // === Then update logical grid position ===
         PlaceUnit(unit, newX, newY);
     }
 
@@ -388,7 +386,7 @@ public class Grid
                 var countBefore = block.OccupantCount();
                 Logger.Debug($"  → Removing {deadUnit.Name} from block {block.PrintGridCoordinates()} (stack size before = {countBefore})");
 
-                block.PopOccupant(); // ← only call once
+                block.PopOccupant();
                 deadUnit.Block = null; // clear reference
 
                 Logger.Debug($"  → Stack size after pop = {block.OccupantCount()}");

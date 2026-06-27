@@ -84,18 +84,15 @@ public class AnimateUnitDeaths : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-
-        // Draw all living units normally
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        // Draw dying units
         foreach (var unit in _deadUnits)
         {
             if (!_directionPhaseComplete)
             {
                 // Phase 1: Cycle through directions
                 var dir = _directionCycle[_directionIndex];
-                var sprite = unit.GetFacingDirectionTexture(dir);   // you may need to add this method
+                var sprite = unit.GetFacingDirectionTexture(dir);
                 _game.Renderer.Draw(scale, sprite, unit.WorldPosition);
             }
             else

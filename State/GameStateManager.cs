@@ -77,13 +77,13 @@ public static class GameStateManager
         // Window Resize with Ctrl + +/- 
         if (Raylib.IsKeyDown(KeyboardKey.LeftControl) || Raylib.IsKeyDown(KeyboardKey.RightControl))
         {
-            if (Raylib.IsKeyPressed(KeyboardKey.Equal))      // Ctrl + "+"
+            if (Raylib.IsKeyPressed(KeyboardKey.Equal)) // Ctrl + "+"
             {
                 CurrentScale += 1.0f;
                 ResizeWindow();
             }
 
-            if (Raylib.IsKeyPressed(KeyboardKey.Minus))      // Ctrl + "-"
+            if (Raylib.IsKeyPressed(KeyboardKey.Minus)) // Ctrl + "-"
             {
                 CurrentScale = Math.Max(0.5f, CurrentScale - 1.0f);
                 ResizeWindow();

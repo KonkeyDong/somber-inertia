@@ -99,7 +99,6 @@ public class SelectMagicTargets : IGameState
 
     private void CancelMenu()
     {
-        Logger.Debug("SelectMagic(): Cancelled - returning to BattleActionMenu.");
         GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
