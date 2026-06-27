@@ -97,11 +97,7 @@ public static class MagicNameExtensions
 
         return capitalize ? result.ToUpper() : result;
     }
-
-    /// <summary>
-    /// Converts a MagicName into its logical spell family (bucket).
-    /// Example: Blaze1, Blaze2, Blaze3, Blaze4 → MagicFamily.Blaze
-    /// </summary>
+    
     public static MagicFamily ToFamily(this MagicName magicName)
     {
         return magicName.GetBaseName() switch

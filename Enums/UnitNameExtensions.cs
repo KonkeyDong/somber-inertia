@@ -2,9 +2,6 @@ namespace SomberInertia.Enums;
 
 public static class UnitNameExtensions
 {
-    /// <summary>
-    /// Returns a human-readable display name for UI and logs.
-    /// </summary>
     public static string GetDisplayName(this UnitName unitName)
     {
         return unitName switch
