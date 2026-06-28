@@ -1,4 +1,5 @@
 using SomberInertia.Enums;
+using SomberInertia.Core.Combat.Spells;
 
 namespace SomberInertia.Core.Combat.Weapon;
 
@@ -8,11 +9,11 @@ public class Weapon
     public int Attack { get; set; }
     public WeaponType WeaponType { get; set; }
     public Range DistanceRange { get; set; }
-    public string Spell { get; set; } // not used... yet!
+    public Magic? Spell { get; set; }
     public Job AllowedJobs { get; set; }
     public bool Cursed { get; set; }
 
-    public Weapon(string name, int attack, WeaponType weaponType, Range distanceRange, string spell, Job allowedJobs, bool cursed = false)
+    public Weapon(string name, int attack, WeaponType weaponType, Range distanceRange, Magic? spell, Job allowedJobs, bool cursed = false)
     {
         if (attack < 0)
         {

@@ -1,6 +1,6 @@
 using SomberInertia.Enums;
 
-namespace SomberInertia.Core.Combat.Magic;
+namespace SomberInertia.Core.Combat.Spells;
 
 public class Magic
 {

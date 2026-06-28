@@ -2,7 +2,7 @@ using SomberInertia.Core.Combat;
 using SomberInertia.Enums;
 using System.Collections.Generic;
 
-namespace SomberInertia.Core.Combat.Magic;
+namespace SomberInertia.Core.Combat.Spells;
 
 public static class MagicManager
 {
@@ -21,7 +21,7 @@ public static class MagicManager
         RegisterMiscMagic();
     }
 
-        public static Magic Create(MagicName magicName)
+    public static Magic Create(MagicName magicName)
     {
         if (_MagicLookup.TryGetValue(magicName, out var spell))
         {
@@ -30,6 +30,17 @@ public static class MagicManager
         }
 
         throw new InvalidOperationException($"Unknown spell [{magicName}].");
+    }
+
+    // Used for attaching spells to weapons to be used as items.
+    // Spells casted through items are always free, but can break
+    // with repeated use.
+    public static Magic CreateWithNoMPCost(MagicName magicName)
+    {
+        var spell = Create(magicName);
+        spell.MPCost = 0;
+
+        return spell;
     }
 
     private static void RegisterFireMagic()
@@ -293,7 +304,6 @@ public static class MagicManager
     public static void RegisterMiscMagic()
     {
         var magicType = MagicType.Misc;
-        var offensive = false;
 
         Logger.Warning("Egress effect is DamageEffect. Change to different effect.");
         _MagicLookup[MagicName.Egress1] = new Magic(
@@ -303,7 +313,7 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 0),
             targetRange: new Range(0, 0),
-            offensive: offensive,
+            offensive: false,
             effect: new DamageEffect(0)
         );
 
@@ -315,7 +325,30 @@ public static class MagicManager
             magicType: magicType,
             distanceRange: new Range(0, 0),
             targetRange: new Range(0, 0),
-            offensive: offensive,
+            offensive: false,
+            effect: new DamageEffect(0)
+        );
+
+        Logger.Warning("Desoul might need to be registered to a different magic type from Misc.");
+        _MagicLookup[MagicName.Desoul1] = new Magic(
+            name: MagicName.Desoul1,
+            level: 1,
+            MPCost: 8,
+            magicType: magicType,
+            distanceRange: new Range(1, 2),
+            targetRange: new Range(0, 0),
+            offensive: true,
+            effect: new DamageEffect(0)
+        );
+
+        _MagicLookup[MagicName.Desoul2] = new Magic(
+            name: MagicName.Desoul1,
+            level: 2,
+            MPCost: 15,
+            magicType: magicType,
+            distanceRange: new Range(1, 2),
+            targetRange: new Range(0, 1),
+            offensive: true,
             effect: new DamageEffect(0)
         );
     }
