@@ -36,4 +36,5 @@ public class CountdownTimer : ITimers
 
     public bool GetIsActive() => _isActive;
     public void Reset() => _frameCounter = _maxNumberOfFrames;
+    public void Start() => _isActive = true;
 }

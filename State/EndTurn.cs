@@ -14,8 +14,6 @@ public class EndTurn : IGameState
 
     public void Enter()
     {
-        Logger.Debug("EndTurn::Enter()");
-
         var current = _game.GetCurrentUnit();
         current.ResetFacingDirection();
         Logger.Info($"{current.Name}'s turn ends.");
@@ -24,7 +22,13 @@ public class EndTurn : IGameState
         _game.FrameFlipper.Reset();
         _game.ResetListOfUnitsInRange();
         _game.MagicUI.Reset();
-        _game.MoveFirstUnitToEndOfList();
+
+        if (!_game.FirstUnitDiedFromPoison)
+        {
+            _game.MoveFirstUnitToEndOfList();
+        }
+
+        _game.ResetFirstUnitDiedFromPoison();
 
         GameStateManager.ChangeStateType(GameStateType.CalculateUnitMovementRange);
     }
