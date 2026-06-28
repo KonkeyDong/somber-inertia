@@ -145,6 +145,11 @@ public class Game
 
         Grid.RemoveDeadUnitsFromGrid(deadUnits);
 
+        foreach (var unit in deadUnits)
+        {
+            unit.RemoveAllStatus();
+        }
+
         Logger.Info($"Number of dead units REMOVED: [{count}].");
 
         return deadUnits;

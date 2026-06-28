@@ -1,6 +1,6 @@
 using SomberInertia.Core.Units;
 
-namespace SomberInertia.Core.Combat;
+namespace SomberInertia.Core.Combat.StatusEffect;
 
 public class SleepEffect : StatusEffect
 {
@@ -8,7 +8,7 @@ public class SleepEffect : StatusEffect
 
     public SleepEffect()
     {
-        Duration = _random.Next(3); // 1 - 3 turns (turn 0 shows the awak message and skips turn)
+        Duration = _random.Next(GameConfig.StatusEffects.SLEEP_DURATION); // 1 - 3 turns (turn 0 shows the awak message and skips turn)
     }
 
     public override void Process(Unit unit)

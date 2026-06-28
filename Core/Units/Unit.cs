@@ -1,7 +1,9 @@
 using SomberInertia.Enums;
 using SomberInertia.Timers;
 using SomberInertia.Graphics;
-using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Magic;
+using SomberInertia.Core.Combat.StatusEffect;
+using SomberInertia.Core.Combat.Weapon;
 
 using System.Numerics;
 using Raylib_cs;
@@ -152,6 +154,11 @@ public abstract class Unit
             StatusEffects.Remove(effect);
             Logger.Info($"Removed [{typeof(T).Name}] from [{GetDisplayName()}].");
         }
+    }
+
+    public void RemoveAllStatus()
+    {
+        StatusEffects.Clear();
     }
 
     public int GetStatusDuration<T>() where T : StatusEffect

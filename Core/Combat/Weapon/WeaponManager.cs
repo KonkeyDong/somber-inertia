@@ -1,6 +1,6 @@
 using SomberInertia.Enums;
 
-namespace SomberInertia.Core.Combat;
+namespace SomberInertia.Core.Combat.Weapon;
 
 public static class WeaponManager
 {

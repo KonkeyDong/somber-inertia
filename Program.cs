@@ -5,6 +5,9 @@ using SomberInertia.Graphics;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Magic;
+using SomberInertia.Core.Combat.StatusEffect;
+using SomberInertia.Core.Combat.Weapon;
 
 namespace SomberInertia;
 
@@ -27,6 +30,7 @@ class Program
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 10;
+        max.HP.Current = 2;
         max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
         max.LearnSpell(MagicManager.Create(MagicName.Egress1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
@@ -60,6 +64,8 @@ class Program
         game.AddUnit(goblin1, 3, 1);
         game.AddUnit(goblin2, 4, 2);
         game.AddUnit(goblin3, 4, 3);
+
+        max.ApplyStatus<PoisonEffect>(new PoisonEffect());
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
         CommandIcons.Load();

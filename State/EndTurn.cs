@@ -3,6 +3,7 @@ using SomberInertia.Enums;
 
 namespace SomberInertia.State;
 
+// This state is a way to reset the state of all of the game, grid, and unit objects.
 public class EndTurn : IGameState
 {
     private readonly Game _game;
@@ -23,6 +24,13 @@ public class EndTurn : IGameState
         _game.ResetListOfUnitsInRange();
         _game.MagicUI.Reset();
 
+        // If a unit begins their turn dying from poison, the AnimateUnitDeath
+        // state will remove that unit from the Game.Units list and then switch
+        // the state to EndTurn. Since the unit was removed from the list, the
+        // current unit selected is actually the unit after the unit that just
+        // died from poison. Therefore, we skip moving that unit to the end of
+        // the list to avoid skipping them. Their turn will begin after as
+        // after this state exits.
         if (!_game.FirstUnitDiedFromPoison)
         {
             _game.MoveFirstUnitToEndOfList();
