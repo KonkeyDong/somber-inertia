@@ -5,7 +5,7 @@ using SomberInertia.Graphics;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
-using SomberInertia.Core.Combat.Magic;
+using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
 using SomberInertia.Core.Combat.Weapon;
 
@@ -24,8 +24,8 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        WeaponManager.Initialize();
         MagicManager.Initialize();
+        WeaponManager.Initialize();
         var game = new Game(new Grid(11, 10));
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);

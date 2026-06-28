@@ -1,7 +1,7 @@
 using SomberInertia.Enums;
 using SomberInertia.Timers;
 using SomberInertia.Graphics;
-using SomberInertia.Core.Combat.Magic;
+using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
 using SomberInertia.Core.Combat.Weapon;
 

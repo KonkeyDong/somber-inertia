@@ -1,4 +1,4 @@
-namespace SomberInertia.Core.Combat.Magic;
+namespace SomberInertia.Core.Combat.Spells;
 
 public interface IMagicEffect
 {

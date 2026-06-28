@@ -3,7 +3,7 @@ using SomberInertia.Enums;
 using SomberInertia.Timers;
 using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
-using SomberInertia.Core.Combat.Magic;
+using SomberInertia.Core.Combat.Spells;
 
 using System;
 using System.Collections.Generic;
