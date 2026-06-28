@@ -2,7 +2,7 @@ using System.Numerics;
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 using SomberInertia.State;
-using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Magic;
 
 namespace SomberInertia.Graphics.UI;
 

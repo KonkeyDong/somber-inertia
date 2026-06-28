@@ -2,7 +2,7 @@ using SomberInertia.Core.Combat;
 using SomberInertia.Enums;
 using System.Collections.Generic;
 
-namespace SomberInertia.Core.Combat;
+namespace SomberInertia.Core.Combat.Magic;
 
 public static class MagicManager
 {

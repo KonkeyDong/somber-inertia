@@ -2,7 +2,7 @@ using SomberInertia.Core;
 using SomberInertia.Enums;
 using SomberInertia.Core.Units;
 using SomberInertia.Timers;
-using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.StatusEffect;
 using System.Numerics;
 
 using Raylib_cs;

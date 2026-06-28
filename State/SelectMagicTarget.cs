@@ -1,6 +1,7 @@
 using SomberInertia.Enums;
 using SomberInertia.Core;
 using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Magic;
 using SomberInertia.Core.Units;
 using SomberInertia.Graphics;
 using System.Numerics;

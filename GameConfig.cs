@@ -28,4 +28,10 @@ public static class GameConfig
         public static readonly Color OffWhite = new Color(248, 235, 244, 255);
         public static readonly Color DarkRed = new Color(180, 40, 40, 255);
     }
+
+    public static class StatusEffects
+    {
+        public const int POISON_DAMAGE_DENOMINATOR = 8; // max HP / POISON_DAMAGE_DENOMINATOR
+        public const int SLEEP_DURATION = 3; // _random.Next(GameConstants.SLEEP_DURATION); // 1 to 3 (technically 0 to 2) turns (turn 0 shows the awak message and skips turn)
+    }
 }

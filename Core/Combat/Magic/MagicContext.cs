@@ -2,7 +2,7 @@ using SomberInertia.Core.Units;
 using System.Text;
 using System.Numerics;
 
-namespace SomberInertia.Core.Combat;
+namespace SomberInertia.Core.Combat.Magic;
 
 public class MagicContext
 {

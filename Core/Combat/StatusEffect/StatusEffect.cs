@@ -1,6 +1,6 @@
 using SomberInertia.Core.Units;
 
-namespace SomberInertia.Core.Combat;
+namespace SomberInertia.Core.Combat.StatusEffect;
 
 public abstract class StatusEffect
 {
