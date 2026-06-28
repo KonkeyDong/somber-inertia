@@ -18,6 +18,7 @@ public class Game
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
     public FrameFlipper FrameFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay);
     public MagicUI MagicUI = new MagicUI();
+    public bool FirstUnitDiedFromPoison { get; private set; }
 
     private Vector2 _highlightCurrentPosition;
     private Vector2 _highlightTargetPosition;
@@ -42,7 +43,8 @@ public class Game
     {
         if (Units.Count < 2)
         {
-            Logger.Error("Game::GetNextUnit(): list of units is less than two. Aborting...");
+            Logger.Warning("Game::GetNextUnit(): list of units is less than two.");
+            return Units[0];
         }
 
         return Units[1];
@@ -62,12 +64,25 @@ public class Game
     {
         if (Units.Count <= 1)
         {
-            Logger.Error("Game::MoveFirstUnitToEndOfList(): Units list is empty.");
+            Logger.Warning("Game::MoveFirstUnitToEndOfList(): Units list is empty.");
+            return;
         }
 
         var first = Units[0];
         Units.RemoveAt(0);
         Units.Add(first);
+    }
+
+    public void SetFirstUnitDiedFromPoison()
+    {
+        Logger.Info("About to set poison flag to true.");
+        FirstUnitDiedFromPoison = true;
+    }
+
+    public void ResetFirstUnitDiedFromPoison()
+    {
+        Logger.Info("About to set poison flag to false.");
+        FirstUnitDiedFromPoison = false;
     }
 
     public void AddUnit(Unit unit, int x, int y)
