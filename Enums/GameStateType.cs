@@ -31,5 +31,8 @@ public enum GameStateType
     NoMagicAvailable,
     NoAttackTargetAvailable,
     NoMagicTargetAvailable,
-    SelectMagicTargets
+    SelectMagicTargets,
+    EnterBattleScreen,
+    BattleResolution,
+    ExitBattleScreen
 }

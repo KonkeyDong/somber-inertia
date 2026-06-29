@@ -65,12 +65,13 @@ class Program
         game.AddUnit(goblin2, 4, 2);
         game.AddUnit(goblin3, 4, 3);
 
-        max.ApplyStatus<PoisonEffect>(new PoisonEffect());
+        // max.ApplyStatus<PoisonEffect>(new PoisonEffect());
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
         CommandIcons.Load();
         MagicIcons.Load();
         DeathSprites.Load();
+        BattleBackgrounds.Load();
 
         while (!Raylib.WindowShouldClose())
         {
