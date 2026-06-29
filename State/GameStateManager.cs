@@ -49,6 +49,8 @@ public static class GameStateManager
             GameStateType.NoAttackTargetAvailable => new NoAttackTargetAvailable(Game),
             GameStateType.NoMagicTargetAvailable => new NoMagicTargetAvailable(Game),
             GameStateType.SelectMagicTargets => new SelectMagicTargets(Game),
+            GameStateType.EnterBattleScreen => new EnterBattleScreen(Game),
+            GameStateType.BattleResolution => new BattleResolution(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };

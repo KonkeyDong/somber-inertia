@@ -6,6 +6,7 @@ using SomberInertia.Core.Combat.StatusEffect;
 using SomberInertia.Core.Combat.Weapon;
 
 using System.Numerics;
+using System.Text;
 using Raylib_cs;
 
 namespace SomberInertia.Core.Units;
@@ -22,6 +23,8 @@ public abstract class Unit
             Current = max;
             Max = max;
         }
+
+        public override string ToString() => $"{Current} / {Max}";
     }
 
     public Texture2D Texture { get; protected set; }
@@ -203,6 +206,20 @@ public abstract class Unit
 
     public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
     public string GetDisplayName() => Name.GetDisplayName();
+    public string CombatToString()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"   {GetDisplayName()}:");
+        sb.AppendLine($"   HP            = [{HP.ToString()}]");
+        sb.AppendLine($"   MP            = [{MP.ToString()}]");
+        sb.AppendLine($"   Eq. Weapon    = [{Weapon.Name}]");
+        sb.AppendLine($"   Offense       = [{Weapon.Attack + Attack}]");
+        sb.AppendLine($"   Defense       = [{Defense}]");
+        sb.AppendLine($"   Speed         = [{Speed}]");
+        sb.AppendLine($"   Movement Type = [{MovementType.ToString()}]");
+
+        return sb.ToString();
+    }
 
     public void LearnSpell(Magic spell)
     {

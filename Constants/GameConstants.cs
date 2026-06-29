@@ -16,6 +16,7 @@ public static class GameConstants
     // files and folders
     public const string OVERWORLD_FOLDER_NAME = "Overworld";
     public const string FRAME_DATA_FILE_NAME = "FrameData.json";
+    public const string BATTLE_BACKGROUND_FRAME_DATA_FILE_NAME = "BattleBackgroundData.json";
 
     // can only have 4 items or 4 spell families
     public const int MAX_BUCKET_SIZE = 4;
