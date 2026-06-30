@@ -8,6 +8,7 @@ namespace SomberInertia.State;
 public class EnterBattleScreen : IGameState
 {
     private Game _game;
+    private Vector2 _battleScreenPosition = new Vector2(0, 64 * 3);
 
     public EnterBattleScreen(Game game)
     {
@@ -39,6 +40,6 @@ public class EnterBattleScreen : IGameState
         Raylib.ClearBackground(Color.Black);
 
         var background = BattleBackgrounds.Frames[0];
-        _game.Renderer.Draw(scale, background, new Vector2(0, 200));
+        _game.Renderer.Draw(scale, background, _battleScreenPosition);
     }
 }
