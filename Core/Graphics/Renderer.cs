@@ -3,7 +3,7 @@ using SomberInertia.Graphics;
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 using SomberInertia.Core.Combat;
-using SomberInertia.Core.Combat.Magic;
+using SomberInertia.Core.Combat.Spells;
 using System.Numerics;
 
 using Raylib_cs;
