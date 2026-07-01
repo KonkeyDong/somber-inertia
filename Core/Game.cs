@@ -4,6 +4,7 @@ using SomberInertia;
 using SomberInertia.Timers;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
+using SomberInertia.Core.Combat;
 using SomberInertia.Core.Graphics;
 using SomberInertia.Graphics.UI;
 
@@ -18,6 +19,8 @@ public class Game
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
     public FrameFlipper FrameFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay);
     public MagicUI MagicUI = new MagicUI();
+    public AttackContext AttackContext { get; set; } = null!;
+
     public bool FirstUnitDiedFromPoison { get; private set; }
 
     private Vector2 _highlightCurrentPosition;
