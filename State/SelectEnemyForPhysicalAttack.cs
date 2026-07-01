@@ -64,7 +64,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
-            // CombatSystem.Attack(_currentUnit, _game.UnfriendlyUnitsInRange[_currentIndex]);
+            _game.AttackContext = new AttackContext(_currentUnit, _game.UnfriendlyUnitsInRange[_currentIndex]);
             GameStateManager.ChangeStateType(GameStateType.EnterBattleScreen);
         }
 
