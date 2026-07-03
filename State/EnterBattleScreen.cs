@@ -15,6 +15,9 @@ public class EnterBattleScreen : IGameState
     // rough positions
     private Vector2 _battleScreenPosition = new Vector2(0, 64 * 3);
     private Vector2 _unfriendlyPosition = new Vector2(160, (64 * 3) + 50);
+    // private Vector2 _friendlyPosition = new Vector2();
+    private Vector2 _foregroundPosition = new Vector2(378, 450);
+    private Sprite sprite;
 
     public EnterBattleScreen(Game game)
     {
@@ -24,6 +27,14 @@ public class EnterBattleScreen : IGameState
         Logger.Warning("Need to separate attacker and defender sprites into monster and force positions.");
         var defenderSprites = BattleSpriteManager.Get(_game.AttackContext.Defender);
         // var attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
+
+        sprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
+            {
+                x = 0,
+                y = 0,
+                w = 96,
+                h = 32
+            });
 
         Logger.Warning("Need to add Max's sprites.");
         if (_game.AttackContext.Defender.Friendly)
@@ -64,5 +75,6 @@ public class EnterBattleScreen : IGameState
         _game.Renderer.Draw(scale, background, _battleScreenPosition);
 
         _game.Renderer.Draw(scale, _monsterSprites[0], _unfriendlyPosition);
+        _game.Renderer.Draw(scale, sprite, _foregroundPosition);
     }
 }
