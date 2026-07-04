@@ -1,6 +1,7 @@
 using SomberInertia.Core;
 using SomberInertia.Core.Combat;
 using SomberInertia.Graphics;
+using SomberInertia.Timers;
 using System.Numerics;
 using Raylib_cs;
 
@@ -12,14 +13,8 @@ public class EnterBattleScreen : IGameState
     private BattleSpriteSet _forceMemberSpriteSet = new();
     private BattleSpriteSet _monsterSpriteSet = new();
 
-    // rough positions
-    private Vector2 _battleScreenPosition = new Vector2(0, 64 * 3);
-    private Vector2 _unfriendlyPosition = new Vector2(160, (64 * 3) + 50);
-    private Vector2 _friendlyPosition = new Vector2(478, 300);
-    private Vector2 _foregroundPosition = new Vector2(378, 450);
     private Sprite sprite;
-
-    private FrameFlipper Flipper = new FrameFlipper(GameConfig.Animations.IdleDelay);
+    private DelayIterator _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
 
     public EnterBattleScreen(Game game)
     {
@@ -66,7 +61,7 @@ public class EnterBattleScreen : IGameState
 
     public void Update()
     {
-        Flipper.Tick();
+        _delayIterator.Tick();
     }
 
     public void Draw(float scale)
@@ -74,12 +69,15 @@ public class EnterBattleScreen : IGameState
         Raylib.ClearBackground(Color.Black);
 
         var background = BattleBackgrounds.Frames[0];
-        _game.Renderer.Draw(scale, background, _battleScreenPosition);
 
-        var frameIndex = Flipper.IsOn ? 1 : 0;
+        var battleScreenPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+        var foregroundPosition   = GameConstants.BASE_FOREGROUND_POSITION * scale;
+        var unfriendlyPosition   = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
+        var friendlyPosition     = GameConstants.BASE_FRIENDLY_POSITION   * scale;
 
-        _game.Renderer.Draw(scale, _monsterSpriteSet.GetIdleFrame(frameIndex), _unfriendlyPosition);
-        _game.Renderer.Draw(scale, sprite, _foregroundPosition);
-        _game.Renderer.Draw(scale, _forceMemberSpriteSet.GetIdleFrame(frameIndex), _friendlyPosition);
+        _game.Renderer.Draw(scale, background, battleScreenPosition);
+        _game.Renderer.Draw(scale, _monsterSpriteSet.GetIdleFrame(_delayIterator.CurrentIndex), unfriendlyPosition);
+        _game.Renderer.Draw(scale, sprite, foregroundPosition);
+        _game.Renderer.Draw(scale, _forceMemberSpriteSet.GetIdleFrame(_delayIterator.CurrentIndex), friendlyPosition);
     }
 }
