@@ -1,4 +1,4 @@
-using SomberInertia.Timers;
+namespace SomberInertia.Timers;
 
 public class FrameFlipper : ITimers
 {

@@ -25,19 +25,16 @@ public class BattleSpriteSet
         return Idle[frameIndex % Idle.Count];
     }
 
-    public Sprite GetAttackFrame(int frameIndex)
+    public Sprite GetAttackFrame(int frameIndex, out bool isComplete)
     {
         if (Attack == null || Attack.Count == 0)
         {
             Logger.Error("No attack frames detected.");
         }
 
-        if (Attack.Count == 1)
-        {
-            return Attack[0];
-        }
-
-        return Attack[frameIndex % Attack.Count];
+        isComplete = frameIndex >= Attack.Count - 1;
+        
+        return Attack[Math.Min(frameIndex, Attack.Count - 1)];
     }
 }
 

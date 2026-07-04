@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace SomberInertia;
 
 public static class GameConstants
@@ -6,6 +8,12 @@ public static class GameConstants
     public const int BASE_WINDOW_WIDTH = 256; // pixels
     public const int BASE_WINDOW_HEIGHT = 224; // pixels
     public const float BASE_WINDOW_SCALE = 3.0f;
+
+    // Battle Sprite Base Positions
+    public static readonly Vector2 BASE_BACKGROUND_POSITION = new Vector2(0, 64);
+    public static readonly Vector2 BASE_FOREGROUND_POSITION = new Vector2(127, 150);
+    public static readonly Vector2 BASE_UNFRIENDLY_POSITION = new Vector2(50, 80);   // Enemy (left side)
+    public static readonly Vector2 BASE_FRIENDLY_POSITION   = new Vector2(165, 100); // Player (right side)
 
     // in pixels
     public const int TILE_SIZE = 24;
