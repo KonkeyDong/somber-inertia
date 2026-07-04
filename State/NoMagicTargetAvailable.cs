@@ -57,6 +57,8 @@ public class NoMagicTargetAvailable : IGameState
         _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        _game.Renderer.DrawBattleMenuMessage(scale, "No target", _game.MagicUI.GetMagicInformationBoxCoordinates());
+        var position = GameConstants.BASE_NO_TARGET_MESSAGE_BOX_POSITION * (int)scale;
+
+        _game.Renderer.DrawBattleMenuMessage(scale, "No target", position);
     }
 }
