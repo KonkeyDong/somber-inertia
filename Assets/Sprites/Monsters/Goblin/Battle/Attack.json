@@ -1,6 +1,6 @@
 { "frames": [
    {
-    "filename": "Sprite-0014 0.",
+    "filename": "Sprite-0006 0.",
     "frame": { "x": 0, "y": 0, "w": 50, "h": 72 },
     "rotated": false,
     "trimmed": false,
@@ -9,17 +9,8 @@
     "duration": 100
    },
    {
-    "filename": "Sprite-0014 1.",
+    "filename": "Sprite-0006 1.",
     "frame": { "x": 50, "y": 0, "w": 50, "h": 72 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 72 },
-    "sourceSize": { "w": 50, "h": 72 },
-    "duration": 100
-   },
-   {
-    "filename": "Sprite-0014 2.",
-    "frame": { "x": 100, "y": 0, "w": 50, "h": 72 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 72 },
@@ -30,16 +21,9 @@
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.3.17.2-arm64",
-  "image": "battle.png",
+  "image": "Attack.png",
   "format": "RGBA8888",
-  "size": { "w": 150, "h": 72 },
-  "scale": "1",
-  "frameTags": [
-  ],
-  "layers": [
-   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
-  ],
-  "slices": [
-  ]
+  "size": { "w": 100, "h": 72 },
+  "scale": "1"
  }
 }

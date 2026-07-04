@@ -14,6 +14,7 @@ public static class GameConfig
         public const float MovementDuration = 0.20f; // 0.25 = quarter second (15 frames)
         public const int FrameFlipperDelay = 30;
         public const int BlinkDelay = 7;
+        public const int IdleDelay = 10;
         public const int SwitchStateCountdownTimer = 180;
     }
 

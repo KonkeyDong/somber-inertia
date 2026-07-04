@@ -3,13 +3,51 @@ using SomberInertia.Enums;
 
 namespace SomberInertia.Graphics;
 
+public class BattleSpriteSet
+{
+    public List<Sprite> Idle = new();
+    public List<Sprite> Attack = new();
+
+    public Sprite GetIdleFrame(int frameIndex)
+    {
+        if (Idle == null || Idle.Count == 0)
+        {
+            Logger.Error("No idle frames detected.");
+        }
+
+        // If there's only 1 frame, always return it (ignore index)
+        if (Idle.Count == 1)
+        {
+            return Idle[0];
+        }
+
+        // Otherwise use modulo to loop normally
+        return Idle[frameIndex % Idle.Count];
+    }
+
+    public Sprite GetAttackFrame(int frameIndex)
+    {
+        if (Attack == null || Attack.Count == 0)
+        {
+            Logger.Error("No attack frames detected.");
+        }
+
+        if (Attack.Count == 1)
+        {
+            return Attack[0];
+        }
+
+        return Attack[frameIndex % Attack.Count];
+    }
+}
+
 public class BattleSpriteManager
 {
     // Key will be made of unit name and equipped weapon since Force Members can equip
     // different weapons.
-    private static readonly Dictionary<string, List<Sprite>> _spriteMap = new();
+    private static readonly Dictionary<string, BattleSpriteSet> _spriteMap = new();
 
-    public static List<Sprite> Get(Unit unit)
+    public static BattleSpriteSet Get(Unit unit)
     {
         var key = BuildDictionaryKey(unit);
         if (_spriteMap.TryGetValue(key, out var sprites))
@@ -17,22 +55,43 @@ public class BattleSpriteManager
             return sprites;
         }
 
-        var spriteList = ExtractBattleSpriteData(unit);
-        _spriteMap[key] = spriteList;
+        var spriteSet = LoadBattleSpriteSet(unit);
+        _spriteMap[key] = spriteSet;
 
-        Logger.Info($"Battle sprite extracted for {unit.GetDisplayName()}: [{spriteList.Count}].");
-        return spriteList;
+        // Logger.Info($"Battle sprite extracted for {unit.GetDisplayName()}: [{spriteSet.Count}].");
+        return spriteSet;
     }
 
-    private static List<Sprite> ExtractBattleSpriteData(Unit unit)
+    private static BattleSpriteSet LoadBattleSpriteSet(Unit unit)
     {
         var baseDirPath = BuildAssetDirPath(unit);
-        Logger.Info($"base dir path: [{baseDirPath}].");
+        Logger.Info("baseDirPath: " + baseDirPath);
 
-        var jsonPath = Path.Combine(baseDirPath, "Battle.json");
-        var pngPath = Path.Combine(baseDirPath, "Battle.png");
+        var spriteSet = new BattleSpriteSet();
 
+        // Load Idle
+        var idleJson = Path.Combine(baseDirPath, "Idle.json");
+        var idlePng = Path.Combine(baseDirPath, "Idle.png");
+        if (File.Exists(idleJson) && File.Exists(idlePng))
+        {
+            spriteSet.Idle = LoadSpritesFromJson(idlePng, idleJson);
+        }
+
+        // Load Attack
+        var attackJson = Path.Combine(baseDirPath, "Attack.json");
+        var attackPng = Path.Combine(baseDirPath, "Attack.png");
+        if (File.Exists(attackJson) && File.Exists(attackPng))
+        {
+            spriteSet.Attack = LoadSpritesFromJson(attackPng, attackJson);
+        }
+
+        return spriteSet;
+    }
+
+    private static List<Sprite> LoadSpritesFromJson(string pngPath, string jsonPath)
+    {
         var sprites = new List<Sprite>();
+
         foreach (var frame in SpriteManager.ExtractFrameData(jsonPath))
         {
             sprites.Add(new Sprite(pngPath, frame));
@@ -43,7 +102,7 @@ public class BattleSpriteManager
 
     private static string BuildDictionaryKey(Unit unit)
     {
-        return $"{unit.Name.GetBaseName()}-{unit.Weapon.Name}";
+        return $"{unit.Name.GetBaseName()}{unit.Weapon.Name}";
     }
 
     private static string BuildAssetDirPath(Unit unit)
@@ -51,7 +110,7 @@ public class BattleSpriteManager
         if (unit.Friendly)
         {
             var promoted = unit.Promoted ? "Promoted" : "Unpromoted";
-            return Path.Combine("Assets", "Sprites", "Characters", unit.Name.GetBaseName(), promoted, "Battle");
+            return Path.Combine("Assets", "Sprites", "Characters", unit.Name.GetBaseName(), promoted, "Battle", unit.Weapon.Name.GetBaseName());
         }
 
         // enemies
