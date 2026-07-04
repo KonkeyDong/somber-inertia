@@ -20,17 +20,17 @@ public class Renderer
     public void Draw(float scale, Sprite sprite, Vector2 position)
     {
         var source = new Rectangle(
-            x: sprite.FrameRect.x,
-            y: sprite.FrameRect.y,
-            width: sprite.FrameRect.w,
-            height: sprite.FrameRect.h
+            x: sprite.FrameRect.X,
+            y: sprite.FrameRect.Y,
+            width: sprite.FrameRect.W,
+            height: sprite.FrameRect.H
         );
 
         var dest = new Rectangle(
             x: position.X,
             y: position.Y,
-            width: sprite.FrameRect.w * scale,
-            height: sprite.FrameRect.h * scale
+            width: sprite.FrameRect.W * scale,
+            height: sprite.FrameRect.H * scale
         );
 
         Raylib.DrawTexturePro(

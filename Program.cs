@@ -31,7 +31,7 @@ class Program
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 10;
         max.HP.Current = 2;
-        max.EquipWeapon(WeaponManager.Create(WeaponName.WoodenArrow));
+        max.EquipWeapon(WeaponManager.Create(WeaponName.ShortSword));
         max.LearnSpell(MagicManager.Create(MagicName.Egress1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze2));

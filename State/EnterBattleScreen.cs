@@ -9,47 +9,49 @@ namespace SomberInertia.State;
 public class EnterBattleScreen : IGameState
 {
     private Game _game;
-    private List<Sprite> _forceMemberSprites = new();
-    private List<Sprite> _monsterSprites = new();
+    private BattleSpriteSet _forceMemberSpriteSet = new();
+    private BattleSpriteSet _monsterSpriteSet = new();
 
     // rough positions
     private Vector2 _battleScreenPosition = new Vector2(0, 64 * 3);
     private Vector2 _unfriendlyPosition = new Vector2(160, (64 * 3) + 50);
-    // private Vector2 _friendlyPosition = new Vector2();
+    private Vector2 _friendlyPosition = new Vector2(478, 300);
     private Vector2 _foregroundPosition = new Vector2(378, 450);
     private Sprite sprite;
+
+    private FrameFlipper Flipper = new FrameFlipper(GameConfig.Animations.IdleDelay);
 
     public EnterBattleScreen(Game game)
     {
         _game = game;
 
-        // _attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
-        Logger.Warning("Need to separate attacker and defender sprites into monster and force positions.");
-        var defenderSprites = BattleSpriteManager.Get(_game.AttackContext.Defender);
-        // var attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
-
         sprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
             {
-                x = 0,
-                y = 0,
-                w = 96,
-                h = 32
+                X = 0,
+                Y = 0,
+                W = 96,
+                H = 32
             });
-
-        Logger.Warning("Need to add Max's sprites.");
-        if (_game.AttackContext.Defender.Friendly)
-        {
-            _forceMemberSprites = defenderSprites;
-        }
-        else
-        {
-            _monsterSprites = defenderSprites;
-        }
     }
 
     public void Enter()
     {
-        
+        Logger.Warning("Need to separate attacker and defender sprites into monster and force positions.");
+        var defenderSprites = BattleSpriteManager.Get(_game.AttackContext.Defender);
+        var attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
+
+
+        Logger.Warning("Need to add Max's sprites.");
+        if (_game.AttackContext.Defender.Friendly)
+        {
+            _forceMemberSpriteSet = defenderSprites;
+            _monsterSpriteSet = attackerSprites;
+        }
+        else
+        {
+            _monsterSpriteSet = defenderSprites;
+            _forceMemberSpriteSet = attackerSprites;
+        }
     }
 
     public void Exit()
@@ -64,7 +66,7 @@ public class EnterBattleScreen : IGameState
 
     public void Update()
     {
-
+        Flipper.Tick();
     }
 
     public void Draw(float scale)
@@ -74,7 +76,10 @@ public class EnterBattleScreen : IGameState
         var background = BattleBackgrounds.Frames[0];
         _game.Renderer.Draw(scale, background, _battleScreenPosition);
 
-        _game.Renderer.Draw(scale, _monsterSprites[0], _unfriendlyPosition);
+        var frameIndex = Flipper.IsOn ? 1 : 0;
+
+        _game.Renderer.Draw(scale, _monsterSpriteSet.GetIdleFrame(frameIndex), _unfriendlyPosition);
         _game.Renderer.Draw(scale, sprite, _foregroundPosition);
+        _game.Renderer.Draw(scale, _forceMemberSpriteSet.GetIdleFrame(frameIndex), _friendlyPosition);
     }
 }

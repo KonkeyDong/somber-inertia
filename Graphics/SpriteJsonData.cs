@@ -16,8 +16,11 @@ public class AsepriteFrameEntry
 
 public class FrameRect
 {
-    public int x { get; set; }
-    public int y { get; set; }
-    public int w { get; set; }
-    public int h { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
+    public int W { get; set; }
+    public int H { get; set; }
+    
+    public int OffsetX { get; set; } = 0;
+    public int OffsetY { get; set; } = 0;
 }

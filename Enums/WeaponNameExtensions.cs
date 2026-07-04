@@ -58,4 +58,6 @@ public static class WeaponNameExtensions
             _ => weaponName.ToString() // fallback
         };
     }
+
+    public static string GetBaseName(this WeaponName weaponName) => weaponName.ToString();
 }

@@ -5,7 +5,7 @@ namespace SomberInertia.Core.Combat.Weapon;
 
 public class Weapon
 {
-    public string Name { get; set; }
+    public WeaponName Name { get; set; }
     public int Attack { get; set; }
     public WeaponType WeaponType { get; set; }
     public Range DistanceRange { get; set; }
@@ -13,7 +13,7 @@ public class Weapon
     public Job AllowedJobs { get; set; }
     public bool Cursed { get; set; }
 
-    public Weapon(string name, int attack, WeaponType weaponType, Range distanceRange, Magic? spell, Job allowedJobs, bool cursed = false)
+    public Weapon(WeaponName name, int attack, WeaponType weaponType, Range distanceRange, Magic? spell, Job allowedJobs, bool cursed = false)
     {
         if (attack < 0)
         {
