@@ -57,6 +57,8 @@ public class NoMagicAvailable : IGameState
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        _game.Renderer.DrawBattleMenuMessage(scale, "No magic", new Vector2(100, 100));
+        var position = GameConstants.BASE_NO_TARGET_MESSAGE_BOX_POSITION * (int)scale;
+
+        _game.Renderer.DrawBattleMenuMessage(scale, "No magic", position);
     }
 }
