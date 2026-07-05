@@ -9,34 +9,47 @@ namespace SomberInertia.State;
 
 public class EnterBattleScreen : IGameState
 {
-    private Game _game;
+    private readonly Game _game;
     private BattleSpriteSet _forceMemberSpriteSet = new();
     private BattleSpriteSet _monsterSpriteSet = new();
 
-    private Sprite sprite;
-    private DelayIterator _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
+    private readonly Sprite _foregroundSprite;
+
+    private DelayIterator _delayIterator;
+
+    // Animation progress
+    private float _progress = 0f;
+
+    private const float _duration = 60;
+
+    // Base positions (in 256x224 resolution)
+    private readonly Vector2 _baseBackgroundPosition = GameConstants.BASE_BACKGROUND_POSITION;
+    private readonly Vector2 _baseUnfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION;
+    private readonly Vector2 _baseFriendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION;
+    private readonly Vector2 _baseForegroundPosition = GameConstants.BASE_FOREGROUND_POSITION;
+
+    // Animation start positions
+    private Vector2 _startUnfriendlyPosition;
+    private Vector2 _startFriendlyPosition;
+    private Vector2 _startForegroundPosition;
 
     public EnterBattleScreen(Game game)
     {
         _game = game;
+        _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
 
-        sprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
-            {
-                X = 0,
-                Y = 0,
-                W = 96,
-                H = 32
-            });
+        _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
+        {
+            X = 0, Y = 0, W = 96, H = 32
+        });
     }
 
     public void Enter()
     {
-        Logger.Warning("Need to separate attacker and defender sprites into monster and force positions.");
+        // Assign correct sprite sets
         var defenderSprites = BattleSpriteManager.Get(_game.AttackContext.Defender);
         var attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
 
-
-        Logger.Warning("Need to add Max's sprites.");
         if (_game.AttackContext.Defender.Friendly)
         {
             _forceMemberSpriteSet = defenderSprites;
@@ -47,6 +60,20 @@ public class EnterBattleScreen : IGameState
             _monsterSpriteSet = defenderSprites;
             _forceMemberSpriteSet = attackerSprites;
         }
+
+        var scale = GameStateManager.CurrentScale;
+
+        // Target (final) positions
+        var targetUnfriendly = _baseUnfriendlyPosition * scale;
+        var targetFriendly   = _baseFriendlyPosition * scale;
+        var targetForeground = _baseForegroundPosition * scale;
+
+        // Start positions (off-screen)
+        _startUnfriendlyPosition = new Vector2(targetUnfriendly.X - 140, targetUnfriendly.Y);
+        _startFriendlyPosition   = new Vector2(targetFriendly.X + 140, targetFriendly.Y);
+        _startForegroundPosition = new Vector2(targetForeground.X + 100, targetForeground.Y);
+
+        _progress = 0f;
     }
 
     public void Exit()
@@ -62,22 +89,35 @@ public class EnterBattleScreen : IGameState
     public void Update()
     {
         _delayIterator.Tick();
+
+        if (_progress < 1f)
+        {
+            _progress += 1f / _duration;
+            _progress = Math.Min(1f, _progress);
+        }
     }
 
     public void Draw(float scale)
     {
         Raylib.ClearBackground(Color.Black);
 
+        var eased = _game.Renderer.EaseInOut(_progress);
+
+        var backgroundPosition = _baseBackgroundPosition * scale;
+        var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, _baseUnfriendlyPosition * scale, eased);
+        var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _baseFriendlyPosition * scale, eased);
+        var foregroundPosition = Vector2.Lerp(_startForegroundPosition, _baseForegroundPosition * scale, eased);
+
+        // Draw sprites with fade
+        var alpha = (byte)(255 * _progress);
+        var frameIndex = _delayIterator.CurrentIndex;
+
+        // Draw background
         var background = BattleBackgrounds.Frames[0];
+        _game.Renderer.Draw(scale, background, backgroundPosition, alpha);
 
-        var battleScreenPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
-        var foregroundPosition   = GameConstants.BASE_FOREGROUND_POSITION * scale;
-        var unfriendlyPosition   = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
-        var friendlyPosition     = GameConstants.BASE_FRIENDLY_POSITION   * scale;
-
-        _game.Renderer.Draw(scale, background, battleScreenPosition);
-        _game.Renderer.Draw(scale, _monsterSpriteSet.GetIdleFrame(_delayIterator.CurrentIndex), unfriendlyPosition);
-        _game.Renderer.Draw(scale, sprite, foregroundPosition);
-        _game.Renderer.Draw(scale, _forceMemberSpriteSet.GetIdleFrame(_delayIterator.CurrentIndex), friendlyPosition);
+        _game.Renderer.Draw(scale, _monsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, alpha);
+        _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, alpha);
+        _game.Renderer.Draw(scale, _forceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, alpha);
     }
 }

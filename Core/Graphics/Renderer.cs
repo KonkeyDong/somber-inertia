@@ -19,6 +19,11 @@ public class Renderer
 
     public void Draw(float scale, Sprite sprite, Vector2 position)
     {
+        Draw(scale, sprite, position, 255);
+    }
+
+    public void Draw(float scale, Sprite sprite, Vector2 position, int alpha)
+    {
         var source = new Rectangle(
             x: sprite.FrameRect.X,
             y: sprite.FrameRect.Y,
@@ -33,13 +38,15 @@ public class Renderer
             height: sprite.FrameRect.H * scale
         );
 
+        var tint = new Color(255, 255, 255, alpha);
+
         Raylib.DrawTexturePro(
             sprite.Texture,
             source,
             dest,
             GameConfig.Textures.BaseOrigin,
             GameConfig.Textures.BaseRotation,
-            GameConfig.Textures.ClearColor
+            tint
         );
     }
 
@@ -294,5 +301,10 @@ public class Renderer
 
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line3Left, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line3Right, new Vector2(text3RightX, text3Y), fontSize, 1, textColor);
+    }
+
+    public float EaseInOut(float t)
+    {
+        return t < 0.5f ? 2 * t * t : 1 - (float)Math.Pow(-2 * t + 2, 2) / 2;
     }
 }
