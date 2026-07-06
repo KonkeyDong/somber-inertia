@@ -19,10 +19,8 @@ public class EnterBattleScreen : IGameState
 
     // Animation progress
     private float _progress = 0f;
-
     private const float _duration = 60;
 
-    // Base positions (in 256x224 resolution)
     private readonly Vector2 _baseBackgroundPosition = GameConstants.BASE_BACKGROUND_POSITION;
     private readonly Vector2 _baseUnfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION;
     private readonly Vector2 _baseFriendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION;
@@ -46,7 +44,6 @@ public class EnterBattleScreen : IGameState
 
     public void Enter()
     {
-        // Assign correct sprite sets
         var defenderSprites = BattleSpriteManager.Get(_game.AttackContext.Defender);
         var attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
 
@@ -108,11 +105,9 @@ public class EnterBattleScreen : IGameState
         var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _baseFriendlyPosition * scale, eased);
         var foregroundPosition = Vector2.Lerp(_startForegroundPosition, _baseForegroundPosition * scale, eased);
 
-        // Draw sprites with fade
         var alpha = (byte)(255 * _progress);
         var frameIndex = _delayIterator.CurrentIndex;
 
-        // Draw background
         var background = BattleBackgrounds.Frames[0];
         _game.Renderer.Draw(scale, background, backgroundPosition, alpha);
 
