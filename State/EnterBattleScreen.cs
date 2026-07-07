@@ -2,6 +2,7 @@ using SomberInertia.Core;
 using SomberInertia.Core.Combat;
 using SomberInertia.Graphics;
 using SomberInertia.Timers;
+using SomberInertia.Enums;
 using System.Numerics;
 using Raylib_cs;
 
@@ -10,9 +11,6 @@ namespace SomberInertia.State;
 public class EnterBattleScreen : IGameState
 {
     private readonly Game _game;
-    private BattleSpriteSet _forceMemberSpriteSet = new();
-    private BattleSpriteSet _monsterSpriteSet = new();
-
     private readonly Sprite _foregroundSprite;
 
     private DelayIterator _delayIterator;
@@ -44,20 +42,6 @@ public class EnterBattleScreen : IGameState
 
     public void Enter()
     {
-        var defenderSprites = BattleSpriteManager.Get(_game.AttackContext.Defender);
-        var attackerSprites = BattleSpriteManager.Get(_game.AttackContext.Attacker);
-
-        if (_game.AttackContext.Defender.Friendly)
-        {
-            _forceMemberSpriteSet = defenderSprites;
-            _monsterSpriteSet = attackerSprites;
-        }
-        else
-        {
-            _monsterSpriteSet = defenderSprites;
-            _forceMemberSpriteSet = attackerSprites;
-        }
-
         var scale = GameStateManager.CurrentScale;
 
         // Target (final) positions
@@ -92,6 +76,10 @@ public class EnterBattleScreen : IGameState
             _progress += 1f / _duration;
             _progress = Math.Min(1f, _progress);
         }
+        else
+        {
+            GameStateManager.ChangeStateType(GameStateType.BattleResolution);
+        }
     }
 
     public void Draw(float scale)
@@ -111,8 +99,8 @@ public class EnterBattleScreen : IGameState
         var background = BattleBackgrounds.Frames[0];
         _game.Renderer.Draw(scale, background, backgroundPosition, alpha);
 
-        _game.Renderer.Draw(scale, _monsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, alpha);
+        _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, alpha);
         _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, alpha);
-        _game.Renderer.Draw(scale, _forceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, alpha);
+        _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, alpha);
     }
 }

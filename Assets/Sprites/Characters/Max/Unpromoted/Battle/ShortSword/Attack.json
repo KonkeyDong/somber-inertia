@@ -1,0 +1,17 @@
+{ "frames": [
+   {
+    "frame": { "x": 0, "y": 0, "w": 93, "h": 84, "offsetX": -45, "offsetY": -10 }
+   },
+   {
+    "frame": { "x": 93, "y": 0, "w": 93, "h": 84, "offsetX": -50, "offsetY": -10 }
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.17.2-arm64",
+  "image": "Battle.png",
+  "format": "RGBA8888",
+  "size": { "w": 186, "h": 84 },
+  "scale": "1"
+ }
+}

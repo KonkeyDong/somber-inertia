@@ -32,8 +32,8 @@ public class Renderer
         );
 
         var dest = new Rectangle(
-            x: position.X,
-            y: position.Y,
+            x: position.X + (int)(sprite.FrameRect.OffsetX * scale),
+            y: position.Y + (int)(sprite.FrameRect.OffsetY * scale),
             width: sprite.FrameRect.W * scale,
             height: sprite.FrameRect.H * scale
         );
