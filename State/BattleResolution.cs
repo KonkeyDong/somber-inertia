@@ -15,11 +15,6 @@ public class BattleResolution : IGameState
     private DelayIterator _delayIterator;
     private int _finalAttackFrameAttackDelay = GameConfig.Animations.IdleDelay;
 
-    private readonly Vector2 _baseBackgroundPosition = GameConstants.BASE_BACKGROUND_POSITION;
-    private readonly Vector2 _baseUnfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION;
-    private readonly Vector2 _baseFriendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION;
-    private readonly Vector2 _baseForegroundPosition = GameConstants.BASE_FOREGROUND_POSITION;
-
     private bool _isAttackAnimationComplete = false;
 
     public BattleResolution(Game game)
@@ -65,10 +60,10 @@ public class BattleResolution : IGameState
 
     public void Draw(float scale)
     {
-        var backgroundPosition = _baseBackgroundPosition * scale;
-        var unfriendlyPosition = _baseUnfriendlyPosition * scale;
-        var friendlyPosition   = _baseFriendlyPosition * scale;
-        var foregroundPosition = _baseForegroundPosition * scale;
+        var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+        var foregroundPosition = GameConstants.BASE_FOREGROUND_POSITION * scale;
+        var unfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
+        var friendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION * scale;
 
         var frameIndex = _delayIterator.CurrentIndex;
 
