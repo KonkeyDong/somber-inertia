@@ -15,3 +15,8 @@ dotnet add package Raylib-cs
 ```bash
 dotnet run
 ```
+
+## Controls
+
+* Arrow keys to move/select.
+* `Z`, `C` to select; `X` to cancel.
