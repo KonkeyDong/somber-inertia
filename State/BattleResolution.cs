@@ -1,5 +1,6 @@
 using SomberInertia.Core;
 using SomberInertia.Timers;
+using SomberInertia.Enums;
 using SomberInertia.Graphics;
 
 using System.Numerics;
@@ -55,6 +56,11 @@ public class BattleResolution : IGameState
         {
             _finalAttackFrameAttackDelay--;
         }
+
+        if (_finalAttackFrameAttackDelay < -60)
+        {
+            GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
+        }
     }
 
     public void Draw(float scale)
@@ -69,18 +75,25 @@ public class BattleResolution : IGameState
         Raylib.ClearBackground(Color.Black);
         var background = BattleBackgrounds.Frames[0];
         _game.Renderer.Draw(scale, background, backgroundPosition);
+        _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition);
 
         if (_isAttackAnimationComplete && _finalAttackFrameAttackDelay < 0)
         {
             _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
-            _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition);
             _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
         }
         else
         {
-            _game.Renderer.Draw(scale, _game.AttackContext.AttackerSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
-            _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition);
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetAttackFrame(frameIndex, out _isAttackAnimationComplete), friendlyPosition);
+            if (_game.AttackContext.Attacker.Friendly)
+            {
+                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
+                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetAttackFrame(frameIndex, out _isAttackAnimationComplete), friendlyPosition);
+            }
+            else
+            {
+                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetAttackFrame(frameIndex, out _isAttackAnimationComplete), unfriendlyPosition);
+                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
+            }
         }
     }
 }
