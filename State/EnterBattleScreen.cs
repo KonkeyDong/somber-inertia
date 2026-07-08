@@ -19,11 +19,6 @@ public class EnterBattleScreen : IGameState
     private float _progress = 0f;
     private const float _duration = 60;
 
-    private readonly Vector2 _baseBackgroundPosition = GameConstants.BASE_BACKGROUND_POSITION;
-    private readonly Vector2 _baseUnfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION;
-    private readonly Vector2 _baseFriendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION;
-    private readonly Vector2 _baseForegroundPosition = GameConstants.BASE_FOREGROUND_POSITION;
-
     // Animation start positions
     private Vector2 _startUnfriendlyPosition;
     private Vector2 _startFriendlyPosition;
@@ -45,9 +40,9 @@ public class EnterBattleScreen : IGameState
         var scale = GameStateManager.CurrentScale;
 
         // Target (final) positions
-        var targetUnfriendly = _baseUnfriendlyPosition * scale;
-        var targetFriendly   = _baseFriendlyPosition * scale;
-        var targetForeground = _baseForegroundPosition * scale;
+        var targetUnfriendly = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
+        var targetFriendly   = GameConstants.BASE_FRIENDLY_POSITION * scale;
+        var targetForeground = GameConstants.BASE_FOREGROUND_POSITION * scale;
 
         // Start positions (off-screen)
         _startUnfriendlyPosition = new Vector2(targetUnfriendly.X - 140, targetUnfriendly.Y);
@@ -88,10 +83,10 @@ public class EnterBattleScreen : IGameState
 
         var eased = _game.Renderer.EaseInOut(_progress);
 
-        var backgroundPosition = _baseBackgroundPosition * scale;
-        var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, _baseUnfriendlyPosition * scale, eased);
-        var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _baseFriendlyPosition * scale, eased);
-        var foregroundPosition = Vector2.Lerp(_startForegroundPosition, _baseForegroundPosition * scale, eased);
+        var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+        var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.BASE_FOREGROUND_POSITION * scale, eased);
+        var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
+        var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   GameConstants.BASE_FRIENDLY_POSITION * scale, eased);
 
         var alpha = (byte)(255 * _progress);
         var frameIndex = _delayIterator.CurrentIndex;
