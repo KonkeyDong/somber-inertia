@@ -30,8 +30,7 @@ public class AnimateUnitDeaths : IGameState
         _game = game;
     }
 
-    // This state only plays the death animation. It does not remove units
-    // from the game. Unit removal and cleanup is handled in the EndTurn state.
+    // NOTE: units are removed from their lists in this method.
     public void Enter()
     {
         _deadUnits = _game.RemoveAllDeadUnits();
