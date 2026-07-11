@@ -25,6 +25,7 @@ public class AttackContext
         CombatSystem.CalculateAttackOutcome(this);
 
         AssignBattleSprites();
+        BuildBattleScene();
     }
 
     private void AssignBattleSprites()
@@ -41,6 +42,36 @@ public class AttackContext
         {
             MonsterSpriteSet = defenderSprites;
             ForceMemberSpriteSet = attackerSprites;
+        }
+    }
+
+    private void BuildBattleScene()
+    {
+        if (Defender.Friendly)
+        {
+            var count = MonsterSpriteSet.Attack.Count - 1;
+
+            for (var i = 0; i < MonsterSpriteSet.Attack.Count; i++)
+            {
+                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetAttackFrame(i), 10);
+                
+                var invertFlag = Hit && i == count;
+
+                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetIdleFrame(i), 10, invertFlag);
+            }
+        }
+        else
+        {
+            var count = ForceMemberSpriteSet.Attack.Count - 1;
+            
+            for (var i = 0; i < ForceMemberSpriteSet.Attack.Count; i++)
+            {
+                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetAttackFrame(i), 10);
+                
+                var invertFlag = Hit && i == count;
+
+                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetIdleFrame(i), 10, invertFlag);
+            }
         }
     }
 

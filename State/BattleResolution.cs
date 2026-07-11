@@ -12,15 +12,15 @@ public class BattleResolution : IGameState
 {
     private Game _game;
     private readonly Sprite _foregroundSprite;
-    private DelayIterator _delayIterator;
-    private int _finalAttackFrameAttackDelay = GameConfig.Animations.IdleDelay;
-
-    private bool _isAttackAnimationComplete = false;
+    private int _battleSequenceFrame;
+    private readonly int _battleSequenceFrameLimit;
 
     public BattleResolution(Game game)
     {
         _game = game;
-        _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
+
+        _battleSequenceFrame = 0;
+        _battleSequenceFrameLimit = _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count;
 
         _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
         {
@@ -45,14 +45,9 @@ public class BattleResolution : IGameState
 
     public void Update()
     {
-        _delayIterator.Tick();
+        _battleSequenceFrame++;
 
-        if (_isAttackAnimationComplete)
-        {
-            _finalAttackFrameAttackDelay--;
-        }
-
-        if (_finalAttackFrameAttackDelay < -60)
+        if (_battleSequenceFrame > _battleSequenceFrameLimit + 60)
         {
             GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
         }
@@ -65,30 +60,20 @@ public class BattleResolution : IGameState
         var unfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
         var friendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION * scale;
 
-        var frameIndex = _delayIterator.CurrentIndex;
-
         Raylib.ClearBackground(Color.Black);
         var background = BattleBackgrounds.Frames[0];
         _game.Renderer.Draw(scale, background, backgroundPosition);
         _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition);
 
-        if (_isAttackAnimationComplete && _finalAttackFrameAttackDelay < 0)
+        if (_battleSequenceFrame > _battleSequenceFrameLimit)
         {
-            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
+            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(_battleSequenceFrame), unfriendlyPosition);
+            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(_battleSequenceFrame), friendlyPosition);
         }
         else
         {
-            if (_game.AttackContext.Attacker.Friendly)
-            {
-                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
-                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetAttackFrame(frameIndex, out _isAttackAnimationComplete), friendlyPosition);
-            }
-            else
-            {
-                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetAttackFrame(frameIndex, out _isAttackAnimationComplete), unfriendlyPosition);
-                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
-            }
+            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), unfriendlyPosition);
+            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), friendlyPosition);
         }
     }
 }

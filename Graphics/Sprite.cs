@@ -16,4 +16,28 @@ public class Sprite
         Texture = SpriteManager.Load(path);
         FrameRect = frameRect;
     }
+
+    // Constructor for creating inverted sprite
+    private Sprite(Texture2D texture, FrameRect frameRect)
+    {
+        Texture = texture;
+        FrameRect = frameRect;
+    }
+
+    public Sprite Invert()
+    {
+        // Create a copy of the image
+        var image = Raylib.LoadImageFromTexture(Texture);
+        
+        // Invert the copy
+        Raylib.ImageColorInvert(ref image);
+        
+        // Convert back to texture
+        var invertedTexture = Raylib.LoadTextureFromImage(image);
+        
+        // Clean up
+        Raylib.UnloadImage(image);
+
+        return new Sprite(invertedTexture, FrameRect);
+    }
 }

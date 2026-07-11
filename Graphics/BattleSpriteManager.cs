@@ -1,12 +1,15 @@
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 
+using Raylib_cs;
+
 namespace SomberInertia.Graphics;
 
 public class BattleSpriteSet
 {
     public List<Sprite> Idle = new();
     public List<Sprite> Attack = new();
+    public List<Sprite> BattleSequence = new();
 
     public Sprite GetIdleFrame(int frameIndex)
     {
@@ -25,16 +28,42 @@ public class BattleSpriteSet
         return Idle[frameIndex % Idle.Count];
     }
 
-    public Sprite GetAttackFrame(int frameIndex, out bool isComplete)
+    public Sprite GetAttackFrame(int frameIndex)
     {
         if (Attack == null || Attack.Count == 0)
         {
             Logger.Error("No attack frames detected.");
         }
 
-        isComplete = frameIndex >= Attack.Count - 1;
-        
-        return Attack[Math.Min(frameIndex, Attack.Count - 1)];
+        return Attack[frameIndex % Attack.Count];
+    }
+
+    public Sprite GetBattleSequenceFrame(int frameIndex)
+    {
+        if (BattleSequence == null || BattleSequence.Count == 0)
+        {
+            Logger.Error("No battle sequence frames detected.");
+        }
+
+        return BattleSequence[frameIndex % BattleSequence.Count];
+    }
+
+    public void BuildBattleSequence(Sprite sprite, int numberOfCopies, bool invert = false)
+    {
+        if (numberOfCopies <= 0)
+        {
+            Logger.Error("Int numberOfCopies cannot be less than or equal to zero.");
+        }
+
+        var finalSprite = invert ? sprite.Invert() : sprite;
+
+        Logger.Info("  About to build battle frames");
+        for (var i = 0; i < numberOfCopies; i++)
+        {
+            BattleSequence.Add(finalSprite);
+        }
+
+        Logger.Info("BattleSequnce count: " + BattleSequence.Count);
     }
 }
 
