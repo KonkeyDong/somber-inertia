@@ -6,8 +6,8 @@ namespace SomberInertia.Core.Combat;
 
 public class AttackContext
 {
-    public Unit Attacker { get; }
-    public Unit Defender { get; }
+    public Unit Attacker { get; private set; }
+    public Unit Defender { get; private set; }
 
     public bool Hit { get; set; }
     public bool Crit { get; set; }
@@ -43,6 +43,9 @@ public class AttackContext
             MonsterSpriteSet = defenderSprites;
             ForceMemberSpriteSet = attackerSprites;
         }
+
+        Logger.Debug(ForceMemberSpriteSet.ToString());
+        Logger.Debug(MonsterSpriteSet.ToString());
     }
 
     private void BuildBattleScene()
@@ -73,6 +76,19 @@ public class AttackContext
                 MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetIdleFrame(i), 10, invertFlag);
             }
         }
+    }
+
+    public void Reset()
+    {
+        Attacker = null!;
+        Defender = null!;
+
+        Hit = false;
+        Crit = false;
+        Damage = 0;
+
+        ForceMemberSpriteSet.Reset();
+        MonsterSpriteSet.Reset();
     }
 
     public override string ToString()

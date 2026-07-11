@@ -1,5 +1,6 @@
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
+using System.Text;
 
 using Raylib_cs;
 
@@ -10,6 +11,24 @@ public class BattleSpriteSet
     public List<Sprite> Idle = new();
     public List<Sprite> Attack = new();
     public List<Sprite> BattleSequence = new();
+
+    public void Reset()
+    {
+        Idle.Clear();
+        Attack.Clear();
+        BattleSequence.Clear();
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("BattleSpriteSet:");
+        sb.AppendLine("   Idle count          : " + Idle.Count);
+        sb.AppendLine("   Attack count        : " + Attack.Count);
+        sb.AppendLine("   BattleSequence count: " + BattleSequence.Count);
+
+        return sb.ToString();
+    }
 
     public Sprite GetIdleFrame(int frameIndex)
     {
@@ -55,15 +74,25 @@ public class BattleSpriteSet
             Logger.Error("Int numberOfCopies cannot be less than or equal to zero.");
         }
 
-        var finalSprite = invert ? sprite.Invert() : sprite;
 
-        Logger.Info("  About to build battle frames");
+        Logger.Debug("  About to build battle frames");
         for (var i = 0; i < numberOfCopies; i++)
         {
+            Sprite finalSprite;
+
+            if (invert)
+            {
+                finalSprite = sprite.Invert().Jitter();
+            }
+            else
+            {
+                finalSprite = sprite;
+            }
+
             BattleSequence.Add(finalSprite);
         }
 
-        Logger.Info("BattleSequnce count: " + BattleSequence.Count);
+        Logger.Debug("BattleSequnce count: " + BattleSequence.Count);
     }
 }
 
@@ -76,15 +105,15 @@ public class BattleSpriteManager
     public static BattleSpriteSet Get(Unit unit)
     {
         var key = BuildDictionaryKey(unit);
-        if (_spriteMap.TryGetValue(key, out var sprites))
-        {
-            return sprites;
-        }
+        Logger.Warning("BattleSpriteManager::Get() need to fix dictionary lookup.");
+        // if (_spriteMap.TryGetValue(key, out var sprites))
+        // {
+        //     return sprites;
+        // }
 
         var spriteSet = LoadBattleSpriteSet(unit);
         _spriteMap[key] = spriteSet;
 
-        // Logger.Info($"Battle sprite extracted for {unit.GetDisplayName()}: [{spriteSet.Count}].");
         return spriteSet;
     }
 

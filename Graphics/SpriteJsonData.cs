@@ -23,4 +23,17 @@ public class FrameRect
     
     public int OffsetX { get; set; } = 0;
     public int OffsetY { get; set; } = 0;
+
+    public FrameRect Copy()
+    {
+        return new FrameRect
+        {
+            X = this.X,
+            Y = this.Y,
+            W = this.W,
+            H = this.H,
+            OffsetX = this.OffsetX,
+            OffsetY = this.OffsetY
+        };
+    }
 }
