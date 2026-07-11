@@ -11,6 +11,8 @@ public class Sprite
     public Texture2D Texture { get; private set; }
     public FrameRect FrameRect { get; private set; }
 
+    private static readonly Random _random = new Random();
+
     public Sprite(string path, FrameRect frameRect)
     {
         Texture = SpriteManager.Load(path);
@@ -39,5 +41,16 @@ public class Sprite
         Raylib.UnloadImage(image);
 
         return new Sprite(invertedTexture, FrameRect);
+    }
+
+    public Sprite Jitter()
+    {
+        Logger.Warning("Jitter(): make jitter offset amount a constant.");
+        var jittered = new Sprite(Texture, FrameRect.Copy());
+
+        jittered.FrameRect.OffsetX += (_random.Next(0, 2) * 6 - 3);
+        jittered.FrameRect.OffsetY += (_random.Next(0, 2) * 6 - 3);
+
+        return jittered;
     }
 }
