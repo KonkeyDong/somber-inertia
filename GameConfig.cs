@@ -15,6 +15,8 @@ public static class GameConfig
         public const int FrameFlipperDelay = 30;
         public const int BlinkDelay = 7;
         public const int IdleDelay = 10;
+        public const int AttackDelay = 10; // frames
+        public const int JitterOffset = 3; // pixels
         public const int SwitchStateCountdownTimer = 180;
     }
 

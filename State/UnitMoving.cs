@@ -38,7 +38,6 @@ public class UnitMoving : IGameState
             return;
         }
 
-        // Arrow keys
         if (Raylib.IsKeyPressed(KeyboardKey.Up)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Up); }
         if (Raylib.IsKeyPressed(KeyboardKey.Down)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Down); }
         if (Raylib.IsKeyPressed(KeyboardKey.Left)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Left); }
