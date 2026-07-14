@@ -44,7 +44,7 @@ class Program
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Friendly = true;
-        anri.Attack = 3;
+        anri.Attack = 15;
         anri.EquipWeapon(WeaponManager.Create(WeaponName.WoodenStaff));
 
         var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);

@@ -50,9 +50,11 @@ public class Renderer
         );
     }
 
-    public void DrawBackground(float scale, Grid grid)
+    public void DrawBackground(float scale, Grid grid, int alpha = 255)
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
+
+        var tint = new Color(255, 255, 255, alpha);
 
         var position = new Vector2();
         for (var x = 0; x < grid.Width; x++)
@@ -67,7 +69,7 @@ public class Renderer
                     position,
                     GameConfig.Textures.BaseRotation,
                     scale,
-                    GameConfig.Textures.ClearColor
+                    tint
                 );
 
                 if (debugFlag)
@@ -129,7 +131,7 @@ public class Renderer
         }
     }
 
-    public void DrawUnit(float scale, Grid grid, Unit unit, bool frameFlipperFlag)
+    public void DrawUnit(float scale, Grid grid, Unit unit, bool frameFlipperFlag, int alpha = 255)
     {
         var position = new Vector2();
 
@@ -142,17 +144,17 @@ public class Renderer
         position = unit.WorldPosition;
         var sprite = unit.GetFacingDirectionTexture(frameFlipperFlag);
 
-        Draw(scale, sprite, position);
+        Draw(scale, sprite, position, alpha);
     }
 
-    public void DrawUnits(float scale, Grid grid, List<Unit> units, bool frameFlipperFlag)
+    public void DrawUnits(float scale, Grid grid, List<Unit> units, bool frameFlipperFlag, int alpha = 255)
     {
         // We loop in reverse to get the drawing order correct.
         // This allows current controlled unit to always be on top
         // of a block containing an occupant.
         for (var i = units.Count - 1; i >= 0; i--)
         {
-            DrawUnit(scale, grid, units[i], frameFlipperFlag);
+            DrawUnit(scale, grid, units[i], frameFlipperFlag, alpha);
         }
     }
 

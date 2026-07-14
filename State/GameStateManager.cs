@@ -51,6 +51,7 @@ public static class GameStateManager
             GameStateType.SelectMagicTargets => new SelectMagicTargets(Game),
             GameStateType.EnterBattleScreen => new EnterBattleScreen(Game),
             GameStateType.BattleResolution => new BattleResolution(Game),
+            GameStateType.ExitBattleScreen => new ExitBattleScreen(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };
