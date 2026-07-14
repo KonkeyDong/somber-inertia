@@ -32,7 +32,7 @@ public enum GameStateType
     NoAttackTargetAvailable,
     NoMagicTargetAvailable,
     SelectMagicTargets,
-    EnterBattleScreen,
     BattleResolution,
+    EnterBattleScreen,
     ExitBattleScreen
 }

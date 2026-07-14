@@ -47,9 +47,14 @@ public class BattleResolution : IGameState
     {
         _battleSequenceFrame++;
 
+        if (_battleSequenceFrame == _battleSequenceFrameLimit && _game.AttackContext.Hit)
+        {
+            _game.AttackContext.Defender.TakeDamage(_game.AttackContext.Damage);
+        }
+
         if (_battleSequenceFrame > _battleSequenceFrameLimit + 60)
         {
-            GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
+            GameStateManager.ChangeStateType(GameStateType.ExitBattleScreen);
         }
     }
 
