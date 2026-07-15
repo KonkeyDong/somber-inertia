@@ -12,14 +12,12 @@ public class EnterBattleScreen : IGameState
 {
     private readonly Game _game;
     private readonly Sprite _foregroundSprite;
+    private readonly DelayIterator _delayIterator;
 
-    private DelayIterator _delayIterator;
-
-    // Animation progress
     private float _progress = 0f;
-    private const float _duration = 60;
+    private const float _duration = 60; // total frames for the transition
 
-    // Animation start positions
+    // Animation start positions for sprites
     private Vector2 _startUnfriendlyPosition;
     private Vector2 _startFriendlyPosition;
     private Vector2 _startForegroundPosition;
@@ -39,7 +37,7 @@ public class EnterBattleScreen : IGameState
     {
         var scale = GameStateManager.CurrentScale;
 
-        // Target (final) positions
+        // Final (target) positions
         var targetUnfriendly = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
         var targetFriendly   = GameConstants.BASE_FRIENDLY_POSITION * scale;
         var targetForeground = GameConstants.BASE_FOREGROUND_POSITION * scale;
@@ -82,20 +80,34 @@ public class EnterBattleScreen : IGameState
         Raylib.ClearBackground(Color.Black);
 
         var eased = _game.Renderer.EaseInOut(_progress);
-
-        var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
-        var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.BASE_FOREGROUND_POSITION * scale, eased);
-        var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
-        var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   GameConstants.BASE_FRIENDLY_POSITION * scale, eased);
-
-        var alpha = (byte)(255 * _progress);
         var frameIndex = _delayIterator.CurrentIndex;
 
-        var background = BattleBackgrounds.Frames[0];
-        _game.Renderer.Draw(scale, background, backgroundPosition, alpha);
+        // Phase 1: Fade out world map (0.0 -> 0.5)
+        if (_progress < 0.5f)
+        {
+            var mapAlpha = (byte)(255 * (1f - eased * 2));
 
-        _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, alpha);
-        _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, alpha);
-        _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, alpha);
+            _game.Renderer.DrawBackground(scale, _game.Grid, mapAlpha);
+            _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn, mapAlpha);
+        }
+        // Phase 2: Fade in battle screen + slide sprites (0.5 -> 1.0)
+        else
+        {
+            var battleAlpha = (byte)(255 * ((eased - 0.5f) * 2));
+
+            var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+            var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.BASE_FOREGROUND_POSITION * scale, eased);
+            var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
+            var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   GameConstants.BASE_FRIENDLY_POSITION * scale, eased);
+
+            // Draw battle background
+            var background = BattleBackgrounds.Frames[0];
+            _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
+
+            // Draw sprites with slide + fade
+            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, battleAlpha);
+            _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, battleAlpha);
+            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, battleAlpha);
+        }
     }
 }
