@@ -14,6 +14,7 @@ public class BattleResolution : IGameState
     private readonly Sprite _foregroundSprite;
     private int _battleSequenceFrame;
     private readonly int _battleSequenceFrameLimit;
+    private readonly DelayIterator _delayIterator;
 
     public BattleResolution(Game game)
     {
@@ -21,6 +22,7 @@ public class BattleResolution : IGameState
 
         _battleSequenceFrame = 0;
         _battleSequenceFrameLimit = _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count;
+        _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
 
         _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
         {
@@ -45,6 +47,7 @@ public class BattleResolution : IGameState
 
     public void Update()
     {
+        _delayIterator.Tick();
         _battleSequenceFrame++;
 
         if (_battleSequenceFrame == _battleSequenceFrameLimit && _game.AttackContext.Hit)
@@ -72,8 +75,9 @@ public class BattleResolution : IGameState
 
         if (_battleSequenceFrame > _battleSequenceFrameLimit)
         {
-            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(_battleSequenceFrame), unfriendlyPosition);
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(_battleSequenceFrame), friendlyPosition);
+            var frameIndex = _delayIterator.CurrentIndex;
+            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
+            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
         }
         else
         {
