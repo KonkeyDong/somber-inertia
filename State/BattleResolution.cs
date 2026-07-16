@@ -67,11 +67,15 @@ public class BattleResolution : IGameState
         var foregroundPosition = GameConstants.BASE_FOREGROUND_POSITION * scale;
         var unfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
         var friendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION * scale;
+        var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
+        var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
 
         Raylib.ClearBackground(Color.Black);
         var background = BattleBackgrounds.Frames[0];
         _game.Renderer.Draw(scale, background, backgroundPosition);
         _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition);
+        _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition);
+            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition);
 
         if (_battleSequenceFrame > _battleSequenceFrameLimit)
         {

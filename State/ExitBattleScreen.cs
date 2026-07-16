@@ -65,6 +65,8 @@ public class ExitBattleScreen : IGameState
         var eased = _game.Renderer.EaseInOut(_progress);
 
         var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+        var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
+        var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
 
         // Phase 1: Fade battle screen to black (0.0 -> 0.5)
         if (_progress < 0.5f)
@@ -74,6 +76,9 @@ public class ExitBattleScreen : IGameState
             // Draw current battle screen with fading alpha
             var background = BattleBackgrounds.Frames[0];
             _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
+
+            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
+            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
 
             var frameIndex = _delayIterator.CurrentIndex;
 

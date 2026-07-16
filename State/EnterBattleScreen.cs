@@ -96,6 +96,9 @@ public class EnterBattleScreen : IGameState
             var battleAlpha = (byte)(255 * ((eased - 0.5f) * 2));
 
             var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+            var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
+            var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
+
             var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.BASE_FOREGROUND_POSITION * scale, eased);
             var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
             var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   GameConstants.BASE_FRIENDLY_POSITION * scale, eased);
@@ -103,6 +106,8 @@ public class EnterBattleScreen : IGameState
             // Draw battle background
             var background = BattleBackgrounds.Frames[0];
             _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
+            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
+            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
 
             // Draw sprites with slide + fade
             _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, battleAlpha);
