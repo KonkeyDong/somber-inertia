@@ -305,6 +305,79 @@ public class Renderer
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line3Right, new Vector2(text3RightX, text3Y), fontSize, 1, textColor);
     }
 
+    public void DrawUnitInfoBox(float scale, Unit unit, Vector2 position, int alpha = 255)
+    {
+        var name = unit.GetDisplayName();
+        var hpText = $"HP: {unit.HP.ToString()}";      // assumes you have a ToString() that does "current / max"
+        var mpText = $"MP: {unit.MP.ToString()}";      // same for MP
+
+        var fontSize = (int)(8 * scale);
+        var textColor = Color.White;
+
+        // Prepare lines
+        var line1 = name;
+        var line2 = hpText;
+        var line3 = mpText;
+
+        // Measure text
+        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
+        var size2 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line2, fontSize, 1);
+        var size3 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line3, fontSize, 1);
+
+        var padding = 12;
+        var lineSpacing = 4;
+        var leftMargin = 8;
+
+        // Calculate box dimensions
+        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X + 20));
+        var contentHeight = size1.Y + size2.Y + size3.Y + (lineSpacing * 2);
+
+        var boxWidth = (int)contentWidth + padding * 2;
+        var boxHeight = (int)contentHeight + padding * 2;
+
+        var boxX = (int)position.X - padding;
+        var boxY = (int)position.Y - padding;
+
+        // === Border layers ===
+        var darkOrange = GameConfig.Textures.DarkOrange;
+        var lightOrange = GameConfig.Textures.LightOrange;
+        var offWhite = GameConfig.Textures.OffWhite;
+        var blue = GameConfig.Textures.Blue;
+
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
+        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
+
+        var innerX = boxX + 3;
+        var innerY = boxY + 3;
+        var innerW = boxWidth - 6;
+        var innerH = boxHeight - 6;
+
+        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
+
+        var fillX = innerX + 3;
+        var fillY = innerY + 3;
+        var fillW = innerW - 6;
+        var fillH = innerH - 6;
+
+        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
+
+        // === Text positioning ===
+        var textStartY = fillY + 6;
+        var textLeftX = fillX + leftMargin;
+
+        // Line 1 - Name (left justified)
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
+
+        // Line 2 - HP (left justified)
+        var text2Y = textStartY + size1.Y + lineSpacing;
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
+
+        // Line 3 - MP left + current MP right
+        var text3Y = text2Y + size2.Y + lineSpacing;
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
+    }
+
     public float EaseInOut(float t)
     {
         return t < 0.5f ? 2 * t * t : 1 - (float)Math.Pow(-2 * t + 2, 2) / 2;

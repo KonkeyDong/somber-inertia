@@ -24,7 +24,15 @@ public abstract class Unit
             Max = max;
         }
 
-        public override string ToString() => $"{Current} / {Max}";
+        public override string ToString() 
+        {
+            if (Max == 0)
+            {
+                return "0 / 0";
+            }
+
+            return $"{Current} / {Max}";
+        }
     }
 
     public Texture2D Texture { get; protected set; }
@@ -327,7 +335,7 @@ public abstract class Unit
 
     public void UpdateMovement(float deltaTime)
     {
-        if (!_isAnimating) 
+        if (!_isAnimating)
         {
             return;
         }

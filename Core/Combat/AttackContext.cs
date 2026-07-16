@@ -28,6 +28,16 @@ public class AttackContext
         BuildBattleScene();
     }
 
+    public Unit GetMonster()
+    {
+        return Defender.Friendly ? Attacker : Defender;
+    }
+
+    public Unit GetForceMember()
+    {
+        return Defender.Friendly ? Defender : Attacker;
+    }
+
     private void AssignBattleSprites()
     {
         Logger.Debug("AssignBattleSprites()");

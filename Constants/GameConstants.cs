@@ -15,6 +15,9 @@ public static class GameConstants
     public static readonly Vector2 BASE_UNFRIENDLY_POSITION = new Vector2(50, 80);   // Enemy (left side)
     public static readonly Vector2 BASE_FRIENDLY_POSITION   = new Vector2(165, 100); // Player (right side)
 
+    public static readonly Vector2 BASE_UNFRIENDLY_STATS_POSITION = new Vector2(15, 180);
+    public static readonly Vector2 BASE_FRIENDLY_STATS_POSITION   = new Vector2(200, 15);
+
     public static readonly Vector2 BASE_NO_TARGET_MESSAGE_BOX_POSITION = new Vector2(100, 100);
 
     // in pixels
