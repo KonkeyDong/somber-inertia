@@ -29,8 +29,7 @@ class Program
         var game = new Game(new Grid(11, 10));
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
-        max.Attack = 10;
-        max.HP.Current = 2;
+        max.Attack = 15;
         max.EquipWeapon(WeaponManager.Create(WeaponName.ShortSword));
         max.LearnSpell(MagicManager.Create(MagicName.Egress1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
@@ -43,9 +42,8 @@ class Program
         max.LearnSpell(MagicManager.Create(MagicName.Bolt3));
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
-        anri.Friendly = true;
         anri.Attack = 15;
-        anri.EquipWeapon(WeaponManager.Create(WeaponName.WoodenStaff));
+        anri.EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
         var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
         goblin1.Friendly = false;

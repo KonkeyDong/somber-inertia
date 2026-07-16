@@ -39,7 +39,7 @@ public class EnterBattleScreen : IGameState
 
         // Final (target) positions
         var targetUnfriendly = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
-        var targetFriendly   = GameConstants.BASE_FRIENDLY_POSITION * scale;
+        var targetFriendly   = _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale;
         var targetForeground = GameConstants.BASE_FOREGROUND_POSITION * scale;
 
         // Start positions (off-screen)
@@ -101,7 +101,7 @@ public class EnterBattleScreen : IGameState
 
             var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.BASE_FOREGROUND_POSITION * scale, eased);
             var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
-            var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   GameConstants.BASE_FRIENDLY_POSITION * scale, eased);
+            var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, eased);
 
             // Draw battle background
             var background = BattleBackgrounds.Frames[0];

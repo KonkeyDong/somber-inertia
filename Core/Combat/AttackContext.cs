@@ -48,11 +48,15 @@ public class AttackContext
         {
             ForceMemberSpriteSet = defenderSprites;
             MonsterSpriteSet = attackerSprites;
+
+            ForceMemberSpriteSet.SetBasePosition(Defender);
         }
         else
         {
             MonsterSpriteSet = defenderSprites;
             ForceMemberSpriteSet = attackerSprites;
+
+            ForceMemberSpriteSet.SetBasePosition(Attacker);
         }
 
         Logger.Debug(ForceMemberSpriteSet.ToString());

@@ -88,7 +88,7 @@ public class ExitBattleScreen : IGameState
             _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.BASE_FOREGROUND_POSITION * scale, battleAlpha);
 
             _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
-                GameConstants.BASE_FRIENDLY_POSITION * scale, battleAlpha);
+                _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, battleAlpha);
         }
         // Phase 2: Fade in world map (0.5 -> 1.0)
         else

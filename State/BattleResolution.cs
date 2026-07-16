@@ -66,7 +66,7 @@ public class BattleResolution : IGameState
         var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
         var foregroundPosition = GameConstants.BASE_FOREGROUND_POSITION * scale;
         var unfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
-        var friendlyPosition   = GameConstants.BASE_FRIENDLY_POSITION * scale;
+        var friendlyPosition   = _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale;
         var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
         var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
 
