@@ -44,8 +44,8 @@ public class Renderer
             sprite.Texture,
             source,
             dest,
-            GameConfig.Textures.BaseOrigin,
-            GameConfig.Textures.BaseRotation,
+            GameConstants.Textures.BaseOrigin,
+            GameConstants.Textures.BaseRotation,
             tint
         );
     }
@@ -67,7 +67,7 @@ public class Renderer
                 Raylib.DrawTextureEx(
                     grid.Blocks[x, y].Texture,
                     position,
-                    GameConfig.Textures.BaseRotation,
+                    GameConstants.Textures.BaseRotation,
                     scale,
                     tint
                 );
@@ -96,7 +96,7 @@ public class Renderer
             Raylib.DrawTextureEx(
                 grid.Blocks[x, y].Texture,
                 position,
-                GameConfig.Textures.BaseRotation,
+                GameConstants.Textures.BaseRotation,
                 scale,
                 grid.RangeTint.GetCurrentColor()
             );
@@ -178,10 +178,10 @@ public class Renderer
         var boxY = (int)textPos.Y - padding;
 
         // Colors from your config
-        var darkOrange = GameConfig.Textures.DarkOrange;
-        var lightOrange = GameConfig.Textures.LightOrange;
-        var offWhite = GameConfig.Textures.OffWhite;
-        var blue = GameConfig.Textures.Blue;
+        var darkOrange = GameConstants.Textures.DarkOrange;
+        var lightOrange = GameConstants.Textures.LightOrange;
+        var offWhite = GameConstants.Textures.OffWhite;
+        var blue = GameConstants.Textures.Blue;
 
         // === Outer dark orange border ===
         Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
@@ -251,10 +251,10 @@ public class Renderer
         var boxY = (int)position.Y - padding;
 
         // === Border layers ===
-        var darkOrange = GameConfig.Textures.DarkOrange;
-        var lightOrange = GameConfig.Textures.LightOrange;
-        var offWhite = GameConfig.Textures.OffWhite;
-        var blue = GameConfig.Textures.Blue;
+        var darkOrange = GameConstants.Textures.DarkOrange;
+        var lightOrange = GameConstants.Textures.LightOrange;
+        var offWhite = GameConstants.Textures.OffWhite;
+        var blue = GameConstants.Textures.Blue;
 
         Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
         Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
@@ -292,7 +292,7 @@ public class Renderer
             var highlightWidth = (int)(size2.X + (highlightPadding * 2));
             var highlightHeight = (int)(size2.Y + (highlightPadding * 2));
 
-            Raylib.DrawRectangle(highlightX, highlightY, highlightWidth, highlightHeight, GameConfig.Textures.DarkRed);
+            Raylib.DrawRectangle(highlightX, highlightY, highlightWidth, highlightHeight, GameConstants.Textures.DarkRed);
         }
 
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
@@ -339,10 +339,10 @@ public class Renderer
         var boxY = (int)position.Y - padding;
 
         // === Border layers ===
-        var darkOrange = GameConfig.Textures.DarkOrange;
-        var lightOrange = GameConfig.Textures.LightOrange;
-        var offWhite = GameConfig.Textures.OffWhite;
-        var blue = GameConfig.Textures.Blue;
+        var darkOrange = GameConstants.Textures.DarkOrange;
+        var lightOrange = GameConstants.Textures.LightOrange;
+        var offWhite = GameConstants.Textures.OffWhite;
+        var blue = GameConstants.Textures.Blue;
 
         Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
         Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);

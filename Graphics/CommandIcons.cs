@@ -8,7 +8,7 @@ public static class CommandIcons
     private static readonly IconSet<CommandIconType> _icons =
         new IconSet<CommandIconType>(
             "Assets/Sprites/Shared/CommandIcons",
-            GameConfig.Animations.BlinkDelay,
+            GameConstants.Animations.BlinkDelay,
             getBaseName: icon => icon.GetBaseName());
 
     public static void Load() => _icons.Load();

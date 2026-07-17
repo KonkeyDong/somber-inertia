@@ -25,7 +25,7 @@ public class EnterBattleScreen : IGameState
     public EnterBattleScreen(Game game)
     {
         _game = game;
-        _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
+        _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
         {
@@ -40,7 +40,7 @@ public class EnterBattleScreen : IGameState
         // Final (target) positions
         var targetUnfriendly = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
         var targetFriendly   = _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale;
-        var targetForeground = GameConstants.BASE_FOREGROUND_POSITION * scale;
+        var targetForeground = GameConstants.Battle.Positions.BASE_FOREGROUND_POSITION * scale;
 
         // Start positions (off-screen)
         _startUnfriendlyPosition = new Vector2(targetUnfriendly.X - 140, targetUnfriendly.Y);
@@ -95,11 +95,11 @@ public class EnterBattleScreen : IGameState
         {
             var battleAlpha = (byte)(255 * ((eased - 0.5f) * 2));
 
-            var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+            var backgroundPosition = GameConstants.Battle.Positions.BASE_BACKGROUND_POSITION * scale;
             var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
             var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
 
-            var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.BASE_FOREGROUND_POSITION * scale, eased);
+            var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.Battle.Positions.BASE_FOREGROUND_POSITION * scale, eased);
             var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
             var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, eased);
 

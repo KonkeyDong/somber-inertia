@@ -27,7 +27,7 @@ public class CalculateUnitMovementRange : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-        _countdownTimer = new CountdownTimer(GameConfig.Animations.SwitchStateCountdownTimer);
+        _countdownTimer = new CountdownTimer(GameConstants.Animations.SwitchStateCountdownTimer);
 
         _poisonMessage = $"{_currentUnit.GetDisplayName()} suffers poison damage.";
         _sleepMessage = $"{_currentUnit.GetDisplayName()} is sleeping.";

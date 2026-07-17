@@ -19,14 +19,14 @@ public class Grid
 
     public readonly Block[,] Blocks;
 
-    public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.BASE_WINDOW_SCALE);
+    public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.Window.BASE_WINDOW_SCALE);
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> WeaponAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> MagicAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> SpellEffectRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public readonly RangeTint RangeTint = new RangeTint(GameConfig.Animations.RangeTintFrameDelay);
+    public readonly RangeTint RangeTint = new RangeTint(GameConstants.Animations.RangeTintFrameDelay);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()

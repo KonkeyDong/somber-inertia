@@ -16,7 +16,7 @@ public static class BattleForegrounds
 
         var basePath = "Assets/Foregrounds";
         var pngPath = Path.Combine(basePath, "Foregrounds.png");
-        var jsonPath = Path.Combine(basePath, GameConstants.BATTLE_BACKGROUND_FRAME_DATA_FILE_NAME);
+        var jsonPath = Path.Combine(basePath, GameConstants.Files.BATTLE_BACKGROUND_FRAME_DATA_FILE_NAME);
 
         foreach (var frame in SpriteManager.ExtractFrameData(jsonPath))
         {

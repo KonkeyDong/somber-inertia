@@ -25,7 +25,7 @@ public class SelectMagicTargets : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-        _blinker = new FrameFlipper(GameConfig.Animations.BlinkDelay);
+        _blinker = new FrameFlipper(GameConstants.Animations.BlinkDelay);
 
         var offensive = _game.MagicUI.GetSelectedMagic().Offensive;
         _listOfUnits = offensive ? _game.UnfriendlyUnitsInRange : _game.FriendlyUnitsInRange;
