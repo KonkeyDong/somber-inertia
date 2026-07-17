@@ -15,22 +15,12 @@ public static class GameConstants
         public const float BASE_WINDOW_SCALE = 3.0f;
     }
     
-    public const int MAX_MOVEMENT_COST = 255;
-    
-
-    // Battle Sprite Base Positions
-    
     public static readonly Vector2 BASE_UNFRIENDLY_POSITION = new Vector2(50, 80);   // Enemy (left side)
     public static readonly Vector2 BASE_FRIENDLY_POSITION   = new Vector2(165, 100); // Player (right side)
-
-    public static readonly Vector2 BASE_UNFRIENDLY_STATS_POSITION = new Vector2(15, 180);
-    public static readonly Vector2 BASE_FRIENDLY_STATS_POSITION   = new Vector2(200, 15);
 
     // in pixels
     public const int TILE_SIZE = 24;
     public const int WORLD_MAP_SPRITE_SIZE = 24;
-
-    public const float HIGHLIGHT_TRANSITION_SPEED = 1000f; // lower number represents slower speed
 
     public static class Files
     {
@@ -49,6 +39,7 @@ public static class GameConstants
     public static class Animations
     {
         public const float HighlightTransitionSpeed = 1000f; // lower number represents slower speed
+
         public const int RangeTintFrameDelay = 6;
         public const int CountdownTimerDelay = 60;
         public const float MovementDuration = 0.20f; // 0.25 = quarter second (15 frames)
@@ -82,8 +73,10 @@ public static class GameConstants
     {
         public static class Positions
         {
-            public static readonly Vector2 BASE_NO_TARGET_MESSAGE_BOX_POSITION = new Vector2(100, 100);
+            public static readonly Vector2 NoTargetMessageBox = new Vector2(100, 100);
         }
+
+        public const int MAX_MOVEMENT_COST = 255;
     }
 
     public static class Battle
@@ -92,6 +85,9 @@ public static class GameConstants
         {
             public static readonly Vector2 BASE_BACKGROUND_POSITION = new Vector2(0, 64);
             public static readonly Vector2 BASE_FOREGROUND_POSITION = new Vector2(127, 150);
+
+            public static readonly Vector2 UnfriendlyStats = new Vector2(15, 180);
+            public static readonly Vector2 FriendlyStats   = new Vector2(200, 15);
         }
 
         private static readonly Dictionary<string, Vector2> SpritePositions = new()

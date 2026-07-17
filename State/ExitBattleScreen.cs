@@ -65,8 +65,8 @@ public class ExitBattleScreen : IGameState
         var eased = _game.Renderer.EaseInOut(_progress);
 
         var backgroundPosition = GameConstants.Battle.Positions.BASE_BACKGROUND_POSITION * scale;
-        var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
-        var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
+        var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats * scale;
+        var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats * scale;
 
         // Phase 1: Fade battle screen to black (0.0 -> 0.5)
         if (_progress < 0.5f)

@@ -126,7 +126,7 @@ public class Grid
 
                 var occupant = neighbor.PeekOccupant();
                 var enterCost = occupant != null && unit.Friendly != occupant.Friendly
-                    ? GameConstants.MAX_MOVEMENT_COST
+                    ? GameConstants.WorldMap.MAX_MOVEMENT_COST
                     : CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
 
                 var totalCost = currentCost + enterCost;
