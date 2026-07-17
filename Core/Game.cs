@@ -192,7 +192,7 @@ public class Game
         if (distance > 0.1f)
         {
             var direction = Vector2.Normalize(_highlightTargetPosition - _highlightCurrentPosition);
-            var moveDistance = GameConstants.HIGHLIGHT_TRANSITION_SPEED * Raylib.GetFrameTime();
+            var moveDistance = GameConstants.Animations.HighlightTransitionSpeed * Raylib.GetFrameTime();
 
             if (moveDistance > distance)
             {

@@ -96,8 +96,8 @@ public class EnterBattleScreen : IGameState
             var battleAlpha = (byte)(255 * ((eased - 0.5f) * 2));
 
             var backgroundPosition = GameConstants.Battle.Positions.BASE_BACKGROUND_POSITION * scale;
-            var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
-            var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
+            var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats * scale;
+            var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats * scale;
 
             var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.Battle.Positions.BASE_FOREGROUND_POSITION * scale, eased);
             var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, GameConstants.BASE_UNFRIENDLY_POSITION * scale, eased);
