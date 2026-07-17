@@ -71,11 +71,11 @@ public class AttackContext
 
             for (var i = 0; i < MonsterSpriteSet.Attack.Count; i++)
             {
-                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetAttackFrame(i), GameConfig.Animations.AttackDelay);
+                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetAttackFrame(i), GameConstants.Animations.AttackDelay);
                 
                 var invertFlag = Hit && i == count;
 
-                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetIdleFrame(i), GameConfig.Animations.AttackDelay, invertFlag);
+                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetIdleFrame(i), GameConstants.Animations.AttackDelay, invertFlag);
             }
         }
         else
@@ -84,11 +84,11 @@ public class AttackContext
             
             for (var i = 0; i < ForceMemberSpriteSet.Attack.Count; i++)
             {
-                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetAttackFrame(i), GameConfig.Animations.AttackDelay);
+                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetAttackFrame(i), GameConstants.Animations.AttackDelay);
                 
                 var invertFlag = Hit && i == count;
 
-                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetIdleFrame(i), GameConfig.Animations.AttackDelay, invertFlag);
+                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetIdleFrame(i), GameConstants.Animations.AttackDelay, invertFlag);
             }
         }
     }

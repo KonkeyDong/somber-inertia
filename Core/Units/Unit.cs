@@ -74,8 +74,8 @@ public abstract class Unit
     private Vector2 _startWorldPosition; // ← important for correct lerp
     private float _movementTimer;
 
-    private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConfig.Animations.FrameFlipperDelay / 7);
-    public const float MovementDuration = GameConfig.Animations.MovementDuration;
+    private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay / 7);
+    public const float MovementDuration = GameConstants.Animations.MovementDuration;
 
     private bool _isAnimating;
     public bool IsAnimating => _isAnimating;
@@ -408,8 +408,8 @@ public abstract class Unit
 
         var totalFramesLoaded = 0;
 
-        var basePath = Path.Combine(AssetRoot, GameConstants.OVERWORLD_FOLDER_NAME);
-        var jsonPath = Path.Combine(basePath, GameConstants.FRAME_DATA_FILE_NAME);
+        var basePath = Path.Combine(AssetRoot, GameConstants.Folders.OVERWORLD_FOLDER_NAME);
+        var jsonPath = Path.Combine(basePath, GameConstants.Files.FRAME_DATA_FILE_NAME);
         var frames = SpriteManager.ExtractFrameData(jsonPath);
 
         foreach (var direction in Enum.GetValues<Direction>())

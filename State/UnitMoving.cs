@@ -18,7 +18,7 @@ public class UnitMoving : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-        _countdownTimer = new CountdownTimer(GameConfig.Animations.CountdownTimerDelay);
+        _countdownTimer = new CountdownTimer(GameConstants.Animations.CountdownTimerDelay);
     }
 
     public void Enter()

@@ -12,7 +12,7 @@ public class NoMagicAvailable : IGameState
 {
     private readonly Game _game;
     private Unit _currentUnit;
-    private int _countdownTimer = GameConfig.Animations.SwitchStateCountdownTimer;
+    private int _countdownTimer = GameConstants.Animations.SwitchStateCountdownTimer;
 
     public NoMagicAvailable(Game game)
     {
@@ -57,7 +57,7 @@ public class NoMagicAvailable : IGameState
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        var position = GameConstants.BASE_NO_TARGET_MESSAGE_BOX_POSITION * (int)scale;
+        var position = GameConstants.WorldMap.Positions.BASE_NO_TARGET_MESSAGE_BOX_POSITION * (int)scale;
 
         _game.Renderer.DrawBattleMenuMessage(scale, "No magic", position);
     }

@@ -11,7 +11,7 @@ public class NoAttackTargetAvailable : IGameState
 {
     private Game _game { get; set; }
     private Unit _currentUnit { get; set; }
-    private int _countdownTimer = GameConfig.Animations.SwitchStateCountdownTimer;
+    private int _countdownTimer = GameConstants.Animations.SwitchStateCountdownTimer;
 
     public NoAttackTargetAvailable(Game game)
     {
@@ -57,7 +57,7 @@ public class NoAttackTargetAvailable : IGameState
         _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        var position = GameConstants.BASE_NO_TARGET_MESSAGE_BOX_POSITION * (int)scale;
+        var position = GameConstants.WorldMap.Positions.BASE_NO_TARGET_MESSAGE_BOX_POSITION * (int)scale;
 
         _game.Renderer.DrawBattleMenuMessage(scale, "No target", position);
     }

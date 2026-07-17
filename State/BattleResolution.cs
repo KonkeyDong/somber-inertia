@@ -22,7 +22,7 @@ public class BattleResolution : IGameState
 
         _battleSequenceFrame = 0;
         _battleSequenceFrameLimit = _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count;
-        _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
+        _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
         {
@@ -63,8 +63,8 @@ public class BattleResolution : IGameState
 
     public void Draw(float scale)
     {
-        var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
-        var foregroundPosition = GameConstants.BASE_FOREGROUND_POSITION * scale;
+        var backgroundPosition = GameConstants.Battle.Positions.BASE_BACKGROUND_POSITION * scale;
+        var foregroundPosition = GameConstants.Battle.Positions.BASE_FOREGROUND_POSITION * scale;
         var unfriendlyPosition = GameConstants.BASE_UNFRIENDLY_POSITION * scale;
         var friendlyPosition   = _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale;
         var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;

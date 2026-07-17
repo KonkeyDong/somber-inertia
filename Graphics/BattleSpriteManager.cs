@@ -14,35 +14,9 @@ public class BattleSpriteSet
     public List<Sprite> BattleSequence = new();
     public Vector2 BasePosition = new();
 
-    private static readonly Dictionary<string, Vector2> _basePositions = new()
-    {
-        { $"{UnitName.Max.GetBaseName()}_{WeaponName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
-        { $"{UnitName.Anri.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
-        // { "Anri_Staff", new Vector2(300, 90) },
-        // Add more as needed
-    };
-
     public void SetBasePosition(Unit unit)
     {
-        Logger.Warning("Will need to add other characters/monsters base positions and adjust in battle states.");
-        var key = BuildKey(unit);
-
-        if (_basePositions.TryGetValue(key, out var position))
-        {
-            BasePosition = position;
-        }
-        else
-        {
-            Logger.Warning($"No base position defined for {key}. Using default.");
-            BasePosition = new Vector2(100, 100); // fallback
-        }
-    }
-
-    private string BuildKey(Unit unit)
-    {
-        var weaponName = unit.Weapon.Name.GetBaseName() ?? "None";
-
-        return $"{unit.Name.GetBaseName()}_{weaponName}";
+        BasePosition = GameConstants.Battle.GetSpritePosition(unit);
     }
 
     public void Reset()

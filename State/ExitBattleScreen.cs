@@ -19,7 +19,7 @@ public class ExitBattleScreen : IGameState
     public ExitBattleScreen(Game game)
     {
         _game = game;
-        _delayIterator = new DelayIterator(GameConfig.Animations.IdleDelay);
+        _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
         {
@@ -64,7 +64,7 @@ public class ExitBattleScreen : IGameState
 
         var eased = _game.Renderer.EaseInOut(_progress);
 
-        var backgroundPosition = GameConstants.BASE_BACKGROUND_POSITION * scale;
+        var backgroundPosition = GameConstants.Battle.Positions.BASE_BACKGROUND_POSITION * scale;
         var unfriendlyStatsPosition = GameConstants.BASE_UNFRIENDLY_STATS_POSITION * scale;
         var friendlyStatsPosition = GameConstants.BASE_FRIENDLY_STATS_POSITION * scale;
 
@@ -85,7 +85,7 @@ public class ExitBattleScreen : IGameState
             _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
                 GameConstants.BASE_UNFRIENDLY_POSITION * scale, battleAlpha);
 
-            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.BASE_FOREGROUND_POSITION * scale, battleAlpha);
+            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.BASE_FOREGROUND_POSITION * scale, battleAlpha);
 
             _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
                 _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, battleAlpha);

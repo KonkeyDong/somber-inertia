@@ -17,9 +17,9 @@ class Program
     {
         Logger.MinimumLevel = LogLevel.Info;
 
-        var scale = GameConstants.BASE_WINDOW_SCALE;
-        var width = (int)(GameConstants.BASE_WINDOW_WIDTH * scale);
-        var height = (int)(GameConstants.BASE_WINDOW_HEIGHT * scale);
+        var scale = GameConstants.Window.BASE_WINDOW_SCALE;
+        var width = (int)(GameConstants.Window.BASE_WINDOW_WIDTH * scale);
+        var height = (int)(GameConstants.Window.BASE_WINDOW_HEIGHT * scale);
 
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);

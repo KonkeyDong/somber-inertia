@@ -19,7 +19,7 @@ public class SelectMagicLevel : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-        _blinker = new FrameFlipper(GameConfig.Animations.BlinkDelay);
+        _blinker = new FrameFlipper(GameConstants.Animations.BlinkDelay);
     }
 
     public void Enter()

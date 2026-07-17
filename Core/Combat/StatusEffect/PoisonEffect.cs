@@ -17,7 +17,7 @@ public class PoisonEffect : StatusEffect
     public override void Process(Unit unit)
     {
         // NOTE: Poison's duration is permanent until removed manually.
-        var damage = (int)(unit.HP.Max / GameConfig.StatusEffects.POISON_DAMAGE_DENOMINATOR);
+        var damage = (int)(unit.HP.Max / GameConstants.StatusEffects.POISON_DAMAGE_DENOMINATOR);
         var maxDamage = Math.Max(2, damage);
 
         Logger.Info($"Poison damage dealt to unit [{unit.GetDisplayName()}] is [{maxDamage}].");
