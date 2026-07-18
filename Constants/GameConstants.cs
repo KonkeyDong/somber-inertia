@@ -83,8 +83,8 @@ public static class GameConstants
     {
         public static class Positions
         {
-            public static readonly Vector2 BASE_BACKGROUND_POSITION = new Vector2(0, 64);
-            public static readonly Vector2 BASE_FOREGROUND_POSITION = new Vector2(127, 150);
+            public static readonly Vector2 Background = new Vector2(0, 64);
+            public static readonly Vector2 Foreground = new Vector2(127, 150);
 
             public static readonly Vector2 UnfriendlyStats = new Vector2(15, 180);
             public static readonly Vector2 FriendlyStats   = new Vector2(200, 15);

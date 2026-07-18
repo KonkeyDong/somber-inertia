@@ -64,7 +64,7 @@ public class ExitBattleScreen : IGameState
 
         var eased = _game.Renderer.EaseInOut(_progress);
 
-        var backgroundPosition = GameConstants.Battle.Positions.BASE_BACKGROUND_POSITION * scale;
+        var backgroundPosition = GameConstants.Battle.Positions.Background * scale;
         var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats * scale;
         var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats * scale;
 
@@ -85,7 +85,7 @@ public class ExitBattleScreen : IGameState
             _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
                 GameConstants.BASE_UNFRIENDLY_POSITION * scale, battleAlpha);
 
-            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.BASE_FOREGROUND_POSITION * scale, battleAlpha);
+            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground * scale, battleAlpha);
 
             _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
                 _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, battleAlpha);
