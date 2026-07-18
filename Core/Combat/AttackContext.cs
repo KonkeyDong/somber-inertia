@@ -77,6 +77,18 @@ public class AttackContext
 
                 ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetIdleFrame(i), GameConstants.Animations.AttackDelay, invertFlag);
             }
+
+            if (Hit && (Defender.HP.Current - Damage <= 0)) // killed
+            {
+                MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetAttackFrame(MonsterSpriteSet.Attack.Count - 1), 3 * 6);
+
+                for (var i = 1; i <= 6; i++)
+                {
+                    var sprite = ForceMemberSpriteSet.GetIdleFrame(0).Dissolve(i);
+
+                    ForceMemberSpriteSet.BuildBattleSequence(sprite, 3);
+                }
+            }
         }
         else
         {
@@ -89,6 +101,18 @@ public class AttackContext
                 var invertFlag = Hit && i == count;
 
                 MonsterSpriteSet.BuildBattleSequence(MonsterSpriteSet.GetIdleFrame(i), GameConstants.Animations.AttackDelay, invertFlag);
+            }
+
+            if (Hit && (Defender.HP.Current - Damage <= 0)) // killed
+            {
+                ForceMemberSpriteSet.BuildBattleSequence(ForceMemberSpriteSet.GetAttackFrame(ForceMemberSpriteSet.Attack.Count - 1), 3 * 6);
+
+                for (var i = 1; i <= 6; i++)
+                {
+                    var sprite = MonsterSpriteSet.GetIdleFrame(0).Dissolve(i);
+
+                    MonsterSpriteSet.BuildBattleSequence(sprite, 3);
+                }
             }
         }
     }

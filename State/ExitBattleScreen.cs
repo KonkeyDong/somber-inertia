@@ -82,13 +82,19 @@ public class ExitBattleScreen : IGameState
 
             var frameIndex = _delayIterator.CurrentIndex;
 
-            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
-                GameConstants.BASE_UNFRIENDLY_POSITION * scale, battleAlpha);
-
+            if (!_game.AttackContext.GetMonster().IsDead())
+            {
+                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
+                    GameConstants.BASE_UNFRIENDLY_POSITION * scale, battleAlpha);
+            }
+            
             _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground * scale, battleAlpha);
 
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
-                _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, battleAlpha);
+            if (!_game.AttackContext.GetForceMember().IsDead())
+            {
+                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
+                    _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, battleAlpha);
+            }
         }
         // Phase 2: Fade in world map (0.5 -> 1.0)
         else
