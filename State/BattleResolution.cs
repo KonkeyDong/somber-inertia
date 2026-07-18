@@ -80,8 +80,16 @@ public class BattleResolution : IGameState
         if (_battleSequenceFrame > _battleSequenceFrameLimit)
         {
             var frameIndex = _delayIterator.CurrentIndex;
-            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
+
+            if (!_game.AttackContext.GetMonster().IsDead())
+            {
+                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
+            }
+
+            if (!_game.AttackContext.GetForceMember().IsDead())
+            {
+                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
+            }
         }
         else
         {
