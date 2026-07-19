@@ -85,7 +85,7 @@ public class ExitBattleScreen : IGameState
             if (!_game.AttackContext.GetMonster().IsDead())
             {
                 _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
-                    GameConstants.BASE_UNFRIENDLY_POSITION * scale, battleAlpha);
+                    _game.AttackContext.MonsterSpriteSet.BasePosition * scale, battleAlpha);
             }
             
             _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground * scale, battleAlpha);
