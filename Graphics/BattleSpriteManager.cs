@@ -37,6 +37,16 @@ public class BattleSpriteSet
         return sb.ToString();
     }
 
+    public int GetIndexOfLastAttackFrame()
+    {
+        if (Attack == null || Attack.Count == 0)
+        {
+            Logger.Error("Cannot get last index of empty attack List<Sprite>.");
+        }
+
+        return Attack.Count - 1;
+    }
+
     public Sprite GetIdleFrame(int frameIndex)
     {
         if (Idle == null || Idle.Count == 0)

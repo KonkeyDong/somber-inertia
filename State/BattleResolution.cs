@@ -50,7 +50,9 @@ public class BattleResolution : IGameState
         _delayIterator.Tick();
         _battleSequenceFrame++;
 
-        if (_battleSequenceFrame == _battleSequenceFrameLimit && _game.AttackContext.Hit)
+        // since both the attacker and defender should have the same list of sprites, it shouldn't matter
+        // which sprite set we look at to retrieve the last index of the set. YOLO!
+        if (_battleSequenceFrame == (_game.AttackContext.MonsterSpriteSet.GetIndexOfLastAttackFrame() * 10) && _game.AttackContext.Hit)
         {
             _game.AttackContext.Defender.TakeDamage(_game.AttackContext.Damage);
         }
@@ -77,7 +79,7 @@ public class BattleResolution : IGameState
         _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition);
             _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition);
 
-        if (_battleSequenceFrame > _battleSequenceFrameLimit)
+        if (_battleSequenceFrame >= _battleSequenceFrameLimit)
         {
             var frameIndex = _delayIterator.CurrentIndex;
 
