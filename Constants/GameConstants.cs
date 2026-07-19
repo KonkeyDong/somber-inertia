@@ -98,7 +98,8 @@ public static class GameConstants
 
             // Monsters
             { $"{UnitName.Goblin.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 50)},
-            { $"{UnitName.DarkDwarf.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(40, 50)}
+            { $"{UnitName.DarkDwarf.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
+            { $"{UnitName.RuneKnight.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
 
         public static Vector2 GetSpritePosition(Unit unit)

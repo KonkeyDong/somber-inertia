@@ -49,17 +49,17 @@ class Program
         var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
         goblin1.Defense = 5;
 
-        var goblin2 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
-        goblin2.Defense = 5;
+        var runeKnight = new Monster(UnitName.RuneKnight, MovementType.Warrior, 5);
+        runeKnight.HP.Current = 1;
 
         var dwarf = new Monster(UnitName.DarkDwarf, MovementType.Warrior, 5);
-        goblin2.Defense = 5;
+        dwarf.HP.Current = 1;
 
         game.AddUnit(max, 0, 0);
         game.AddUnit(anri, 1, 1);
         game.AddUnit(dwarf, 3, 1);
-        game.AddUnit(goblin1, 4, 3);
-        game.AddUnit(goblin2, 4, 2);
+        game.AddUnit(runeKnight, 4, 1);
+        game.AddUnit(goblin1, 3, 2);
 
         // max.ApplyStatus<PoisonEffect>(new PoisonEffect());
 
