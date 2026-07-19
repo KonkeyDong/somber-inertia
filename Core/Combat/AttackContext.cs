@@ -49,6 +49,7 @@ public class AttackContext
             ForceMemberSpriteSet = defenderSprites;
             MonsterSpriteSet = attackerSprites;
 
+            MonsterSpriteSet.SetBasePosition(Attacker);
             ForceMemberSpriteSet.SetBasePosition(Defender);
         }
         else
@@ -56,6 +57,7 @@ public class AttackContext
             MonsterSpriteSet = defenderSprites;
             ForceMemberSpriteSet = attackerSprites;
 
+            MonsterSpriteSet.SetBasePosition(Defender);
             ForceMemberSpriteSet.SetBasePosition(Attacker);
         }
 

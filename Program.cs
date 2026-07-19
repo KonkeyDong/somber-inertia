@@ -47,22 +47,19 @@ class Program
         anri.EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
 
         var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
-        goblin1.Friendly = false;
         goblin1.Defense = 5;
 
         var goblin2 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
-        goblin2.Friendly = false;
         goblin2.Defense = 5;
 
-        var goblin3 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
-        goblin2.Friendly = false;
+        var dwarf = new Monster(UnitName.DarkDwarf, MovementType.Warrior, 5);
         goblin2.Defense = 5;
 
         game.AddUnit(max, 0, 0);
         game.AddUnit(anri, 1, 1);
-        game.AddUnit(goblin1, 3, 1);
+        game.AddUnit(dwarf, 3, 1);
+        game.AddUnit(goblin1, 4, 3);
         game.AddUnit(goblin2, 4, 2);
-        game.AddUnit(goblin3, 4, 3);
 
         // max.ApplyStatus<PoisonEffect>(new PoisonEffect());
 

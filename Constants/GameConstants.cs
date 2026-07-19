@@ -15,8 +15,8 @@ public static class GameConstants
         public const float BASE_WINDOW_SCALE = 3.0f;
     }
     
-    public static readonly Vector2 BASE_UNFRIENDLY_POSITION = new Vector2(50, 80);   // Enemy (left side)
-    public static readonly Vector2 BASE_FRIENDLY_POSITION   = new Vector2(165, 100); // Player (right side)
+    // public static readonly Vector2 BASE_UNFRIENDLY_POSITION = new Vector2(50, 80);   // Enemy (left side)
+    // public static readonly Vector2 BASE_FRIENDLY_POSITION   = new Vector2(165, 100); // Player (right side)
 
     // in pixels
     public const int TILE_SIZE = 24;
@@ -92,10 +92,13 @@ public static class GameConstants
 
         private static readonly Dictionary<string, Vector2> SpritePositions = new()
         {
+            // Force Members
             { $"{UnitName.Max.GetBaseName()}_{WeaponName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
             { $"{UnitName.Anri.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
-            // { "Anri_Staff", new Vector2(300, 90) },
-            // Add more as needed
+
+            // Monsters
+            { $"{UnitName.Goblin.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 50)},
+            { $"{UnitName.DarkDwarf.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(40, 50)}
         };
 
         public static Vector2 GetSpritePosition(Unit unit)
@@ -109,8 +112,8 @@ public static class GameConstants
             }
             else
             {
-                Logger.Warning($"No base position defined for {key}. Using default.");
-                return new Vector2(100, 100); // fallback
+                Logger.Error($"No base position defined for {key}. Aborting...");
+                return new Vector2(100, 100);
             }
         }
 
