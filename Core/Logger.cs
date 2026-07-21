@@ -24,6 +24,8 @@ public static class Logger
 
     private static readonly object _lock = new();
 
+    public static bool InDebugMode() => MinimumLevel == LogLevel.Debug;
+
     public static void Log(LogLevel level, string message)
     {
         if (level < MinimumLevel)

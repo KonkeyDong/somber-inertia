@@ -48,11 +48,27 @@ public class Renderer
             GameConstants.Textures.BaseRotation,
             tint
         );
+
+        if (Logger.InDebugMode())
+        {
+            Raylib.DrawRectangleLinesEx(dest, GameConstants.Debug.Spacing, GameConstants.Debug.Color);
+
+            var debugText = $"X: {(int)dest.X}, Y: {(int)dest.Y}";
+
+            Raylib.DrawTextEx(
+                Raylib.GetFontDefault(),
+                debugText,
+                new Vector2(dest.X, dest.Y - 15), // slightly above the sprite
+                GameConstants.Debug.FontSize,
+                GameConstants.Debug.Spacing,
+                GameConstants.Debug.Color
+            );
+        }
     }
 
     public void DrawBackground(float scale, Grid grid, int alpha = 255)
     {
-        var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
+        var debugFlag = Logger.InDebugMode();
 
         var tint = new Color(255, 255, 255, alpha);
 

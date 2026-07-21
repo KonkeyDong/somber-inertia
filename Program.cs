@@ -1,4 +1,5 @@
 ﻿using Raylib_cs;
+using System.CommandLine;
 using SomberInertia.Core;
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
@@ -13,13 +14,35 @@ namespace SomberInertia;
 
 class Program
 {
-    static void Main()
+    static async Task<int> Main(string[] args)
     {
-        Logger.MinimumLevel = LogLevel.Info;
+        var loggerOption = new Option<LogLevel>(
+            name: "--logger",
+            description: "Set the logger level (debug, info, warning, error)",
+            getDefaultValue: () => LogLevel.Info);
 
-        var scale = GameConstants.Window.BASE_WINDOW_SCALE;
-        var width = (int)(GameConstants.Window.BASE_WINDOW_WIDTH * scale);
-        var height = (int)(GameConstants.Window.BASE_WINDOW_HEIGHT * scale);
+        loggerOption.AddAlias("-l");
+        loggerOption.AddAlias("-d");
+
+        var rootCommand = new RootCommand("Somber Inertia");
+        rootCommand.AddOption(loggerOption);
+
+        rootCommand.SetHandler((LogLevel logLevel) =>
+        {
+            Logger.MinimumLevel = logLevel;
+            Logger.Info($"Logger level set to: {Logger.MinimumLevel}");
+
+            RunGame();
+        }, loggerOption);
+
+        return await rootCommand.InvokeAsync(args);
+    }
+
+    static void RunGame()
+    {
+        var scale = GameConstants.Window.Scale;
+        var width = (int)(GameConstants.Window.Width * scale);
+        var height = (int)(GameConstants.Window.Height * scale);
 
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);

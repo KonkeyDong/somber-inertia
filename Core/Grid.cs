@@ -19,7 +19,7 @@ public class Grid
 
     public readonly Block[,] Blocks;
 
-    public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.Window.BASE_WINDOW_SCALE);
+    public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.Window.Scale);
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
