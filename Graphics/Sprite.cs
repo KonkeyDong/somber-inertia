@@ -63,7 +63,7 @@ public class Sprite
 
         var spriteWidth = FrameRect.W;
         var spriteHeight = FrameRect.H;
-        var groupSize = 6; // your desired group size
+        var groupSize = GameConstants.Animations.Dissolve.GroupSize;
 
         var totalPixels = spriteWidth * spriteHeight;
         // var pixelsToClear = (int)(totalPixels / clearAmount); // or adjust as needed

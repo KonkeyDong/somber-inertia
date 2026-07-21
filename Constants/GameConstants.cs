@@ -8,15 +8,19 @@ namespace SomberInertia;
 
 public static class GameConstants
 {
+    public static class Debug
+    {
+        public static readonly Color Color = Color.Yellow;
+        public const int FontSize = 16;
+        public const int Spacing = 1;
+    }
+
     public static class Window
     {
-        public const int BASE_WINDOW_WIDTH = 256; // pixels
-        public const int BASE_WINDOW_HEIGHT = 224; // pixels
-        public const float BASE_WINDOW_SCALE = 3.0f;
+        public const int Width = 256; // pixels
+        public const int Height = 224; // pixels
+        public const float Scale = 3.0f;
     }
-    
-    // public static readonly Vector2 BASE_UNFRIENDLY_POSITION = new Vector2(50, 80);   // Enemy (left side)
-    // public static readonly Vector2 BASE_FRIENDLY_POSITION   = new Vector2(165, 100); // Player (right side)
 
     // in pixels
     public const int TILE_SIZE = 24;
@@ -49,6 +53,12 @@ public static class GameConstants
         public const int AttackDelay = 10; // frames
         public const int JitterOffset = 3; // pixels
         public const int SwitchStateCountdownTimer = 180;
+
+        public static class Dissolve
+        {
+            public const int GroupSize = 6;
+            public const int NumberOfFrameCopies = 3;
+        }
     }
 
     public static class Textures
