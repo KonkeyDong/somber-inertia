@@ -49,7 +49,8 @@ public class BattleActionMenu : IGameState
         _centerPosition = new Vector2(
             GameStateManager.CurrentWidth / 2f,
             GameStateManager.CurrentHeight * 0.75f
-        );
+        ) / GameStateManager.CurrentScale;
+
     }
 
     public void HandleInput()
@@ -148,13 +149,17 @@ public class BattleActionMenu : IGameState
         foreach (var (direction, commandType) in _commandByDirection)
         {
             var offset = direction.GetMenuOffset();
-            var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
-
+            var position = _centerPosition + offset * GameConstants.TILE_SIZE;
             var sprite = CommandIcons.GetSprite(commandType);
+            
             _game.Renderer.Draw(scale, sprite, position);
         }
+        
+        var messagePosition = _centerPosition;
+        messagePosition.X += 65;
+        messagePosition.Y += 18;
 
-        _game.Renderer.DrawBattleMenuMessage(scale, _selectedCommand.GetBaseName(), new Vector2(_centerPosition.X + 200, _centerPosition.Y - 50));
+        _game.Renderer.DrawBattleMenuMessage(scale, _selectedCommand.GetBaseName(), messagePosition);
     }
 
     public void OnResize() => UpdateCenterPosition();

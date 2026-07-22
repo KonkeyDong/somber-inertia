@@ -32,8 +32,8 @@ public class Renderer
         );
 
         var dest = new Rectangle(
-            x: position.X + (int)(sprite.FrameRect.OffsetX * scale),
-            y: position.Y + (int)(sprite.FrameRect.OffsetY * scale),
+            x: (int)((position.X + sprite.FrameRect.OffsetX) * scale),
+            y: (int)((position.Y + sprite.FrameRect.OffsetY) * scale),
             width: sprite.FrameRect.W * scale,
             height: sprite.FrameRect.H * scale
         );
@@ -53,7 +53,7 @@ public class Renderer
         {
             Raylib.DrawRectangleLinesEx(dest, GameConstants.Debug.Spacing, GameConstants.Debug.Color);
 
-            var debugText = $"X: {(int)dest.X}, Y: {(int)dest.Y}";
+            var debugText = $"X: {position.X + sprite.FrameRect.OffsetX}, Y: {position.Y + sprite.FrameRect.OffsetY}";
 
             Raylib.DrawTextEx(
                 Raylib.GetFontDefault(),
@@ -69,10 +69,9 @@ public class Renderer
     public void DrawBackground(float scale, Grid grid, int alpha = 255)
     {
         var debugFlag = Logger.InDebugMode();
-
         var tint = new Color(255, 255, 255, alpha);
-
         var position = new Vector2();
+
         for (var x = 0; x < grid.Width; x++)
         {
             for (var y = 0; y < grid.Height; y++)
@@ -90,8 +89,45 @@ public class Renderer
 
                 if (debugFlag)
                 {
-                    Raylib.DrawText(grid.Blocks[x, y].PrintGridCoordinates(), (int)position.X, (int)position.Y + 20, 16, Color.White);
+                    Raylib.DrawText(
+                        grid.Blocks[x, y].PrintGridCoordinates(), 
+                        (int)position.X, 
+                        (int)position.Y + 20, 
+                        16, 
+                        Color.White
+                    );
                 }
+            }
+        }
+
+        // Draw red grid lines when in debug mode
+        if (debugFlag)
+        {
+            var gridColor = new Color(200, 50, 50, 255);
+            var lineThickness = 1.0f * scale;
+
+            // Vertical lines
+            for (var x = 0; x <= grid.Width; x++)
+            {
+                var xPos = x * grid.BlockSize;
+                Raylib.DrawLineEx(
+                    new Vector2((int)(xPos), 0),
+                    new Vector2((int)(xPos), (int)(grid.Height * grid.BlockSize * scale)),
+                    lineThickness,
+                    gridColor
+                );
+            }
+
+            // Horizontal lines
+            for (var y = 0; y <= grid.Height; y++)
+            {
+                var yPos = y * grid.BlockSize;
+                Raylib.DrawLineEx(
+                    new Vector2(0, (int)(yPos)),
+                    new Vector2((int)(grid.Width * grid.BlockSize * scale), (int)(yPos)),
+                    lineThickness,
+                    gridColor
+                );
             }
         }
     }
@@ -129,8 +165,8 @@ public class Renderer
         var tileSize = GameConstants.TILE_SIZE * scale;
 
         var highlightRect = new Rectangle(
-            newPosition.X,
-            newPosition.Y,
+            newPosition.X * (int)scale,
+            newPosition.Y * (int)scale,
             tileSize,
             tileSize
         );
@@ -190,8 +226,8 @@ public class Renderer
 
         var boxWidth = (int)textSize.X + padding * 2;
         var boxHeight = (int)textSize.Y + padding * 2;
-        var boxX = (int)textPos.X - padding;
-        var boxY = (int)textPos.Y - padding;
+        var boxX = (int)(textPos.X * scale) - padding;
+        var boxY = (int)(textPos.Y * scale) - padding;
 
         // Colors from your config
         var darkOrange = GameConstants.Textures.DarkOrange;
@@ -263,8 +299,8 @@ public class Renderer
         var boxWidth = (int)contentWidth + padding * 2;
         var boxHeight = (int)contentHeight + padding * 2;
 
-        var boxX = (int)position.X - padding;
-        var boxY = (int)position.Y - padding;
+        var boxX = (int)(position.X * scale) - padding;
+        var boxY = (int)(position.Y * scale) - padding;
 
         // === Border layers ===
         var darkOrange = GameConstants.Textures.DarkOrange;
@@ -351,8 +387,8 @@ public class Renderer
         var boxWidth = (int)contentWidth + padding * 2;
         var boxHeight = (int)contentHeight + padding * 2;
 
-        var boxX = (int)position.X - padding;
-        var boxY = (int)position.Y - padding;
+        var boxX = (int)(position.X * scale) - padding;
+        var boxY = (int)(position.Y * scale) - padding;
 
         // === Border layers ===
         var darkOrange = GameConstants.Textures.DarkOrange;

@@ -31,9 +31,9 @@ public class MagicUI
         _centerPosition = new Vector2(
             GameStateManager.CurrentWidth / 2f,
             GameStateManager.CurrentHeight * 0.75f
-        );
+        ) / GameStateManager.CurrentScale;
 
-        _magicInformationBoxCoordinates = new Vector2(_centerPosition.X + 200, _centerPosition.Y);
+        _magicInformationBoxCoordinates = new Vector2(_centerPosition.X + 65, _centerPosition.Y);
         _selectedMagic = MagicManager.Create(MagicName.NoSpell);
 
         Reset();
@@ -147,7 +147,7 @@ public class MagicUI
         foreach (var (direction, index) in _spellIndexByDirection)
         {
             var offset = direction.GetMenuOffset();
-            var position = _centerPosition + offset * (GameConstants.TILE_SIZE * scale);
+            var position = _centerPosition + offset * GameConstants.TILE_SIZE;
 
             var bucket = currentUnit.MagicFamilyBuckets[index];
             var family = bucket != null ? (MagicFamily)bucket : MagicFamily.NoSpell;

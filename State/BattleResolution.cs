@@ -65,19 +65,12 @@ public class BattleResolution : IGameState
 
     public void Draw(float scale)
     {
-        var backgroundPosition = GameConstants.Battle.Positions.Background * scale;
-        var foregroundPosition = GameConstants.Battle.Positions.Foreground * scale;
-        var unfriendlyPosition = _game.AttackContext.MonsterSpriteSet.BasePosition * scale;
-        var friendlyPosition   = _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale;
-        var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats * scale;
-        var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats * scale;
-
         Raylib.ClearBackground(Color.Black);
         var background = BattleBackgrounds.Frames[0];
-        _game.Renderer.Draw(scale, background, backgroundPosition);
-        _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition);
-        _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition);
-            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition);
+        _game.Renderer.Draw(scale, background, GameConstants.Battle.Positions.Background);
+        _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground);
+        _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), GameConstants.Battle.Positions.UnfriendlyStats);
+            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), GameConstants.Battle.Positions.FriendlyStats);
 
         if (_battleSequenceFrame >= _battleSequenceFrameLimit)
         {
@@ -85,18 +78,18 @@ public class BattleResolution : IGameState
 
             if (!_game.AttackContext.GetMonster().IsDead())
             {
-                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition);
+                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), _game.AttackContext.MonsterSpriteSet.BasePosition);
             }
 
             if (!_game.AttackContext.GetForceMember().IsDead())
             {
-                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition);
+                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), _game.AttackContext.ForceMemberSpriteSet.BasePosition);
             }
         }
         else
         {
-            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), unfriendlyPosition);
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), friendlyPosition);
+            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), _game.AttackContext.MonsterSpriteSet.BasePosition);
+            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), _game.AttackContext.ForceMemberSpriteSet.BasePosition);
         }
     }
 }

@@ -60,12 +60,8 @@ public class Block
 
     public Vector2 GetPixelCoordinates()
     {
-        var blockSize = GetScaledSize();
-
-        return new Vector2(X * blockSize, Y * blockSize);
+        return new Vector2(X * GameConstants.TILE_SIZE, Y * GameConstants.TILE_SIZE);
     }
-
-    public int GetScaledSize() => GameConstants.TILE_SIZE * (int)GameStateManager.CurrentScale;
 
     public string PrintGridCoordinates() => $"[{X}, {Y}]";
 }
