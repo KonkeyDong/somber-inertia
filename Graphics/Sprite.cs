@@ -11,6 +11,11 @@ public class Sprite
     public Texture2D Texture { get; private set; }
     public FrameRect FrameRect { get; private set; }
 
+    // True only for textures generated at run time (invert/dissolve)
+    // that nothing else references, so they need to be explicitly unloaded
+    // when discarded.
+    public bool OwnsTexture { get; private set; }
+
     private static readonly Random _random = new Random();
 
     public Sprite(string path, FrameRect frameRect)
@@ -20,10 +25,19 @@ public class Sprite
     }
 
     // Constructor for creating inverted sprite
-    private Sprite(Texture2D texture, FrameRect frameRect)
+    private Sprite(Texture2D texture, FrameRect frameRect, bool ownsTexture)
     {
         Texture = texture;
         FrameRect = frameRect;
+        OwnsTexture = ownsTexture;
+    }
+
+    public void Unload()
+    {
+        if (OwnsTexture)
+        {
+            Raylib.UnloadTexture(Texture);
+        }
     }
 
     public Sprite Invert()
@@ -40,13 +54,13 @@ public class Sprite
         // Clean up
         Raylib.UnloadImage(image);
 
-        return new Sprite(invertedTexture, FrameRect);
+        return new Sprite(invertedTexture, FrameRect, ownsTexture: true);
     }
 
     public Sprite Jitter()
     {
         Logger.Warning("Jitter(): make jitter offset amount a constant.");
-        var jittered = new Sprite(Texture, FrameRect.Copy());
+        var jittered = new Sprite(Texture, FrameRect.Copy(), ownsTexture: true);
 
         var jitterOffset = GameConstants.Animations.JitterOffset;
 
@@ -100,6 +114,6 @@ public class Sprite
         Raylib.UnloadImage(image);
 
         // 4. Return a new sprite with the destroyed texture
-        return new Sprite(newTexture, FrameRect);
+        return new Sprite(newTexture, FrameRect, ownsTexture: true);
     }
 }

@@ -15,7 +15,9 @@ public class EndTurn : IGameState
 
     public void Enter()
     {
-        var current = _game.GetCurrentUnit();
+        var current = _game.FirstUnitDiedFromPoison ? _game.UnitThatDiedFromPoison! : _game.GetCurrentUnit();
+
+        // var current = _game.GetCurrentUnit();
         current.ResetFacingDirection();
         Logger.Info($"{current.Name}'s turn ends.");
 

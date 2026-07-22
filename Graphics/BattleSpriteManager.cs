@@ -21,6 +21,8 @@ public class BattleSpriteSet
 
     public void Reset()
     {
+        UnloadDynamicTexture();
+
         Idle.Clear();
         Attack.Clear();
         BattleSequence.Clear();
@@ -93,23 +95,30 @@ public class BattleSpriteSet
 
 
         Logger.Debug("  About to build battle frames");
+        // invert once and jitter per copy: Jitter() only offsets the frame rect,
+        // it doesn't allocate a new texture, so re-invering per copy woul be redundant.
+        var invertedSprite = invert ? sprite.Invert() : null;
+
         for (var i = 0; i < numberOfCopies; i++)
         {
-            Sprite finalSprite;
-
-            if (invert)
-            {
-                finalSprite = sprite.Invert().Jitter();
-            }
-            else
-            {
-                finalSprite = sprite;
-            }
+            var finalSprite = invert ? invertedSprite!.Jitter() : sprite;
 
             BattleSequence.Add(finalSprite);
         }
 
         Logger.Debug("BattleSequnce count: " + BattleSequence.Count);
+    }
+
+    private void UnloadDynamicTexture()
+    {
+        var unloadedTextureIds = new HashSet<uint>();
+        foreach (var sprite in BattleSequence)
+        {
+            if (sprite.OwnsTexture && unloadedTextureIds.Add(sprite.Texture.Id))
+            {
+                sprite.Unload();
+            }
+        }
     }
 }
 
