@@ -38,9 +38,9 @@ public class EnterBattleScreen : IGameState
         var scale = GameStateManager.CurrentScale;
 
         // Final (target) positions
-        var targetUnfriendly = _game.AttackContext.MonsterSpriteSet.BasePosition * scale;
-        var targetFriendly   = _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale;
-        var targetForeground = GameConstants.Battle.Positions.Foreground * scale;
+        var targetUnfriendly = _game.AttackContext.MonsterSpriteSet.BasePosition;
+        var targetFriendly   = _game.AttackContext.ForceMemberSpriteSet.BasePosition;
+        var targetForeground = GameConstants.Battle.Positions.Foreground;
 
         // Start positions (off-screen)
         _startUnfriendlyPosition = new Vector2(targetUnfriendly.X - 140, targetUnfriendly.Y);
@@ -95,13 +95,13 @@ public class EnterBattleScreen : IGameState
         {
             var battleAlpha = (byte)(255 * ((eased - 0.5f) * 2));
 
-            var backgroundPosition = GameConstants.Battle.Positions.Background * scale;
-            var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats * scale;
-            var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats * scale;
+            var backgroundPosition = GameConstants.Battle.Positions.Background;
+            var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats;
+            var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats;
 
-            var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.Battle.Positions.Foreground * scale, eased);
-            var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, _game.AttackContext.MonsterSpriteSet.BasePosition * scale, eased);
-            var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, eased);
+            var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.Battle.Positions.Foreground, eased);
+            var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, _game.AttackContext.MonsterSpriteSet.BasePosition, eased);
+            var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _game.AttackContext.ForceMemberSpriteSet.BasePosition, eased);
 
             // Draw battle background
             var background = BattleBackgrounds.Frames[0];

@@ -64,9 +64,9 @@ public class ExitBattleScreen : IGameState
 
         var eased = _game.Renderer.EaseInOut(_progress);
 
-        var backgroundPosition = GameConstants.Battle.Positions.Background * scale;
-        var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats * scale;
-        var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats * scale;
+        var backgroundPosition = GameConstants.Battle.Positions.Background;
+        var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats;
+        var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats;
 
         // Phase 1: Fade battle screen to black (0.0 -> 0.5)
         if (_progress < 0.5f)
@@ -85,15 +85,15 @@ public class ExitBattleScreen : IGameState
             if (!_game.AttackContext.GetMonster().IsDead())
             {
                 _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
-                    _game.AttackContext.MonsterSpriteSet.BasePosition * scale, battleAlpha);
+                    _game.AttackContext.MonsterSpriteSet.BasePosition, battleAlpha);
             }
             
-            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground * scale, battleAlpha);
+            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground, battleAlpha);
 
             if (!_game.AttackContext.GetForceMember().IsDead())
             {
                 _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
-                    _game.AttackContext.ForceMemberSpriteSet.BasePosition * scale, battleAlpha);
+                    _game.AttackContext.ForceMemberSpriteSet.BasePosition, battleAlpha);
             }
         }
         // Phase 2: Fade in world map (0.5 -> 1.0)

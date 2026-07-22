@@ -42,7 +42,7 @@ public static class GameConstants
 
     public static class Animations
     {
-        public const float HighlightTransitionSpeed = 1000f; // lower number represents slower speed
+        public const float HighlightTransitionSpeed = 200f; // lower number represents slower speed
 
         public const int RangeTintFrameDelay = 6;
         public const int CountdownTimerDelay = 60;
@@ -107,7 +107,7 @@ public static class GameConstants
             { $"{UnitName.Anri.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
 
             // Monsters
-            { $"{UnitName.Goblin.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 50)},
+            { $"{UnitName.Goblin.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
             { $"{UnitName.DarkDwarf.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
