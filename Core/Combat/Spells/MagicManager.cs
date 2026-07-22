@@ -26,7 +26,7 @@ public static class MagicManager
         if (_MagicLookup.TryGetValue(magicName, out var spell))
         {
             // Return a brand new copy
-            return spell;
+            return spell.Clone();
         }
 
         throw new InvalidOperationException($"Unknown spell [{magicName}].");
@@ -342,7 +342,7 @@ public static class MagicManager
         );
 
         _MagicLookup[MagicName.Desoul2] = new Magic(
-            name: MagicName.Desoul1,
+            name: MagicName.Desoul2,
             level: 2,
             MPCost: 15,
             magicType: magicType,

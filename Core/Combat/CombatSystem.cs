@@ -67,7 +67,7 @@ public static class CombatSystem
 
         // defender.TakeDamage(Math.Max(variantDamage, 1));
 
-        context.Damage = variantDamage;
+        context.Damage = Math.Max(variantDamage, 1);
     }
 
     public static void MagicAttack(Unit attacker, Unit defender, int baseDamage, MagicType magicType)

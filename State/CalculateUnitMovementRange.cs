@@ -76,7 +76,7 @@ public class CalculateUnitMovementRange : IGameState
 
                 if (_currentUnit.IsDead())
                 {
-                    _game.SetFirstUnitDiedFromPoison();
+                    _game.SetFirstUnitDiedFromPoison(_currentUnit);
                     GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
                     return;
                 }

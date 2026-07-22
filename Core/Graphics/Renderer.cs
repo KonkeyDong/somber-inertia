@@ -112,7 +112,7 @@ public class Renderer
                 var xPos = x * grid.BlockSize;
                 Raylib.DrawLineEx(
                     new Vector2((int)(xPos), 0),
-                    new Vector2((int)(xPos), (int)(grid.Height * grid.BlockSize * scale)),
+                    new Vector2((int)(xPos), (int)(grid.Height * grid.BlockSize)),
                     lineThickness,
                     gridColor
                 );
@@ -124,7 +124,7 @@ public class Renderer
                 var yPos = y * grid.BlockSize;
                 Raylib.DrawLineEx(
                     new Vector2(0, (int)(yPos)),
-                    new Vector2((int)(grid.Width * grid.BlockSize * scale), (int)(yPos)),
+                    new Vector2((int)(grid.Width * grid.BlockSize), (int)(yPos)),
                     lineThickness,
                     gridColor
                 );

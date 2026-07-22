@@ -106,6 +106,7 @@ public class SelectMagicTargets : IGameState
 
     public void Update()
     {
+        _game.FrameFlipper.Tick();
         _game.Grid.RangeTint.Tick();
         _game.UpdateHighlightPosition();
     }

@@ -104,7 +104,7 @@ public static class WeaponManager
         _weaponsLookup[WeaponName.SteelLance] = new Weapon(WeaponName.SteelLance, 18, weaponType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord);
         _weaponsLookup[WeaponName.ChromeLance] = new Weapon(WeaponName.ChromeLance, 22, weaponType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord);
         _weaponsLookup[WeaponName.Halberd] = new Weapon(WeaponName.Halberd, 25, weaponType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Bolt1), Job.Paladin | Job.SkyBaron | Job.SkyLord);
-        _weaponsLookup[WeaponName.DevilLance] = new Weapon(WeaponName.Halberd, 35, weaponType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, true);
+        _weaponsLookup[WeaponName.DevilLance] = new Weapon(WeaponName.DevilLance, 35, weaponType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, true);
         _weaponsLookup[WeaponName.Valkyrie] = new Weapon(WeaponName.Valkyrie, 35, weaponType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord);
     }
 }

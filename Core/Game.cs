@@ -22,6 +22,7 @@ public class Game
     public AttackContext AttackContext { get; set; } = null!;
 
     public bool FirstUnitDiedFromPoison { get; private set; }
+    public Unit? UnitThatDiedFromPoison { get; private set; }
 
     private Vector2 _highlightCurrentPosition;
     private Vector2 _highlightTargetPosition;
@@ -44,6 +45,11 @@ public class Game
 
     public Unit GetNextUnit()
     {
+        if (Units.Count == 0)
+        {
+            Logger.Error("List of units is empty. Aborting...");
+        }
+
         if (Units.Count < 2)
         {
             Logger.Warning("Game::GetNextUnit(): list of units is less than two.");
@@ -76,16 +82,18 @@ public class Game
         Units.Add(first);
     }
 
-    public void SetFirstUnitDiedFromPoison()
+    public void SetFirstUnitDiedFromPoison(Unit unit)
     {
         Logger.Info("About to set poison flag to true.");
         FirstUnitDiedFromPoison = true;
+        UnitThatDiedFromPoison = unit;
     }
 
     public void ResetFirstUnitDiedFromPoison()
     {
         Logger.Info("About to set poison flag to false.");
         FirstUnitDiedFromPoison = false;
+        UnitThatDiedFromPoison = null;
     }
 
     public void AddUnit(Unit unit, int x, int y)
