@@ -39,6 +39,7 @@ public static class GameStateManager
             GameStateType.CalculateWeaponAttackRange => new CalculateWeaponAttackRange(Game),
             GameStateType.PrepareMagicTargets => new PrepareMagicTargets(Game),
             GameStateType.BattleActionMenu => new BattleActionMenu(Game),
+            GameStateType.BattleItemMenu => new BattleItemMenu(Game),
             GameStateType.EndTurn => new EndTurn(Game),
             GameStateType.SelectEnemyForPhysicalAttack => new SelectEnemyForPhysicalAttack(Game),
             GameStateType.TransitionSelectorToNextUnit => new TransitionSelectorToNextUnit(Game),

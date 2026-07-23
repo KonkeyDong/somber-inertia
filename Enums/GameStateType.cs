@@ -22,6 +22,7 @@ public enum GameStateType
     CalculateWeaponAttackRange,
     PrepareMagicTargets,
     BattleActionMenu,
+    BattleItemMenu,
     SelectingAction,
     SelectEnemyForPhysicalAttack,
     TransitionSelectorToNextUnit,
@@ -34,5 +35,5 @@ public enum GameStateType
     SelectMagicTargets,
     BattleResolution,
     EnterBattleScreen,
-    ExitBattleScreen
+    ExitBattleScreen,
 }

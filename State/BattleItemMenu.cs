@@ -8,7 +8,7 @@ using SomberInertia.Core.Units;
 
 namespace SomberInertia.State;
 
-public class BattleActionMenu : IGameState
+public class BattleItemMenu : IGameState
 {
     private readonly Game _game;
     private Unit _currentUnit;
@@ -16,16 +16,16 @@ public class BattleActionMenu : IGameState
     // Command layout: type + relative offset from center (in tile units)
     private static readonly Dictionary<Direction, CommandIconType> _commandByDirection = new()
     {
-        { Direction.Up,    CommandIconType.Attack },
-        { Direction.Left,  CommandIconType.Magic  },
-        { Direction.Right, CommandIconType.Item   },
-        { Direction.Down,  CommandIconType.Stay   }
+        { Direction.Up,    CommandIconType.Use   },
+        { Direction.Left,  CommandIconType.Give  },
+        { Direction.Right, CommandIconType.Equip },
+        { Direction.Down,  CommandIconType.Drop  }
     };
-    private CommandIconType _selectedCommand = CommandIconType.Attack;
+    private CommandIconType _selectedCommand = CommandIconType.Use;
 
     private Vector2 _centerPosition;
 
-    public BattleActionMenu(Game game)
+    public BattleItemMenu(Game game)
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
@@ -34,7 +34,7 @@ public class BattleActionMenu : IGameState
     public void Enter()
     {
         _currentUnit = _game.GetCurrentUnit();
-        _selectedCommand = CommandIconType.Attack;
+        _selectedCommand = CommandIconType.Use;
         CommandIcons.SetSelectedIcon(_selectedCommand);
 
         UpdateCenterPosition();
@@ -57,22 +57,22 @@ public class BattleActionMenu : IGameState
     {
         if (Raylib.IsKeyPressed(KeyboardKey.Up))
         {
-            SetSelectedCommand(CommandIconType.Attack);
+            SetSelectedCommand(CommandIconType.Use);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Down))
         {
-            SetSelectedCommand(CommandIconType.Stay);
+            SetSelectedCommand(CommandIconType.Drop);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Left))
         {
-            SetSelectedCommand(CommandIconType.Magic);
+            SetSelectedCommand(CommandIconType.Give);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Right))
         {
-            SetSelectedCommand(CommandIconType.Item);
+            SetSelectedCommand(CommandIconType.Equip);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
@@ -101,36 +101,29 @@ public class BattleActionMenu : IGameState
     {
         Logger.Debug($"BattleActionMenu: Confirmed command {_selectedCommand}");
 
-        if (_selectedCommand == CommandIconType.Attack)
+        if (_selectedCommand == CommandIconType.Use)
         {
-            GameStateManager.ChangeStateType(GameStateType.CalculateWeaponAttackRange);
-
+            // GameStateManager.ChangeStateType(GameStateType.CalculateWeaponAttackRange);
+            Logger.Warning("Item::Use not implemented.");
         }
-        else if (_selectedCommand == CommandIconType.Stay)
+        else if (_selectedCommand == CommandIconType.Drop)
         {
-            GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
+            // GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
+            Logger.Warning("Item::Drop not implemented.");
         }
-        else if (_selectedCommand == CommandIconType.Magic)
+        else if (_selectedCommand == CommandIconType.Give)
         {
-            if (_currentUnit.HasSpells)
-            {
-                GameStateManager.ChangeStateType(GameStateType.SelectMagic);
-            }
-            else
-            {
-                GameStateManager.ChangeStateType(GameStateType.NoMagicAvailable);
-            }
+            Logger.Warning("Item::Give not implemented.");
         }
         else
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+            Logger.Warning("Item::Equip not implemented.");
         }
     }
 
     private void CancelMenu()
     {
-        Logger.Debug("BattleActionMenu: Cancelled - returning to UnitMoving");
-        GameStateManager.ChangeStateType(GameStateType.UnitMoving);
+        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
     public void Update()
