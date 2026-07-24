@@ -103,13 +103,13 @@ public static class GameConstants
         private static readonly Dictionary<string, Vector2> SpritePositions = new()
         {
             // Force Members
-            { $"{UnitName.Max.GetBaseName()}_{WeaponName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
-            { $"{UnitName.Anri.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
+            { $"{UnitName.Max.GetBaseName()}_{ItemName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
+            { $"{UnitName.Anri.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
 
             // Monsters
-            { $"{UnitName.Goblin.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
-            { $"{UnitName.DarkDwarf.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
-            { $"{UnitName.RuneKnight.GetBaseName()}_{WeaponName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
+            { $"{UnitName.Goblin.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
+            { $"{UnitName.DarkDwarf.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
+            { $"{UnitName.RuneKnight.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
 
         public static Vector2 GetSpritePosition(Unit unit)
@@ -130,9 +130,9 @@ public static class GameConstants
 
         public static string BuildKey(Unit unit)
         {
-            var weaponName = unit.Weapon.Name.GetBaseName() ?? "None";
+            var ItemName = unit.Weapon.Name.GetBaseName() ?? "None";
 
-            return $"{unit.Name.GetBaseName()}_{weaponName}";
+            return $"{unit.Name.GetBaseName()}_{ItemName}";
         }
     }
 }
