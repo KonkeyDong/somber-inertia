@@ -8,7 +8,7 @@ using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
-using SomberInertia.Core.Combat.Weapon;
+using SomberInertia.Core.Combat.Item.Weapon;
 
 namespace SomberInertia;
 
@@ -54,7 +54,7 @@ class Program
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 15;
         max.HP.Current = 1;
-        max.EquipWeapon(WeaponManager.Create(WeaponName.ShortSword));
+        max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
         max.LearnSpell(MagicManager.Create(MagicName.Egress1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze2));
@@ -67,7 +67,7 @@ class Program
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Attack = 15;
-        anri.EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
+        anri.EquipWeapon(WeaponManager.Create(ItemName.Unarmed));
 
         var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
         goblin1.Defense = 5;

@@ -3,7 +3,8 @@ using SomberInertia.Timers;
 using SomberInertia.Graphics;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
-using SomberInertia.Core.Combat.Weapon;
+using SomberInertia.Core.Combat.Item;
+using SomberInertia.Core.Combat.Item.Weapon;
 
 using System.Numerics;
 using System.Text;
@@ -104,7 +105,7 @@ public abstract class Unit
         StatusEffects = new();
 
         // default for now
-        EquipWeapon(WeaponManager.Create(WeaponName.Unarmed));
+        EquipWeapon(WeaponManager.Create(ItemName.Unarmed));
 
         LoadWalkAnimations();
 

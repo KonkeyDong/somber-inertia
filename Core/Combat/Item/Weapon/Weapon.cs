@@ -1,19 +1,19 @@
 using SomberInertia.Enums;
 using SomberInertia.Core.Combat.Spells;
 
-namespace SomberInertia.Core.Combat.Weapon;
+namespace SomberInertia.Core.Combat.Item.Weapon;
 
-public class Weapon
+public class Weapon : Item
 {
-    public WeaponName Name { get; set; }
+    public ItemName Name { get; set; }
     public int Attack { get; set; }
-    public WeaponType WeaponType { get; set; }
+    public ItemType ItemType { get; set; }
     public Range DistanceRange { get; set; }
     public Magic? Spell { get; set; }
     public Job AllowedJobs { get; set; }
     public bool Cursed { get; set; }
 
-    public Weapon(WeaponName name, int attack, WeaponType weaponType, Range distanceRange, Magic? spell, Job allowedJobs, bool cursed = false)
+    public Weapon(ItemName name, int attack, ItemType itemType, Range distanceRange, Magic? spell, Job allowedJobs, bool cursed = false)
     {
         if (attack < 0)
         {
@@ -23,7 +23,7 @@ public class Weapon
 
         Name = name;
         Attack = attack;
-        WeaponType = weaponType;
+        ItemType = itemType;
         DistanceRange = distanceRange;
         Spell = spell;
         AllowedJobs = allowedJobs;
