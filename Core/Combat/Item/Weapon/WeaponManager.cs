@@ -12,7 +12,7 @@ public static class WeaponManager
         _weaponsLookup.Clear();
 
         // Unarmed
-        _weaponsLookup[ItemName.Unarmed] = new Weapon(ItemName.Unarmed, 0, ItemType.Unarmed, new Range(1, 1), null, Job.Any);
+        _weaponsLookup[ItemName.Unarmed] = new Weapon(ItemName.Unarmed, 0, ItemType.Unarmed, new Range(1, 1), null, Job.Any, 0);
 
         BuildSwords();
         BuildAxes();
@@ -26,8 +26,7 @@ public static class WeaponManager
     {
         if (_weaponsLookup.TryGetValue(itemName, out var weapon))
         {
-            // Return a brand new copy
-            return weapon;
+            return (Weapon)weapon.Clone();
         }
 
         throw new InvalidOperationException($"WeaponManager::Create(): Unknown weapon [{itemName}].");
@@ -38,16 +37,16 @@ public static class WeaponManager
         var itemType = ItemType.Sword;
         var weaponRange = new Range(1, 1);
 
-        _weaponsLookup[ItemName.ShortSword] = new Weapon(ItemName.ShortSword, 5, itemType, weaponRange, null, Job.Swordsman | Job.Warrior | Job.Birdman);
-        _weaponsLookup[ItemName.MiddleSword] = new Weapon(ItemName.MiddleSword, 8, itemType, weaponRange, null, Job.Swordsman | Job.Warrior | Job.Birdman);
-        _weaponsLookup[ItemName.LongSword] = new Weapon(ItemName.LongSword, 12, itemType, weaponRange, null, Job.Warrior | Job.Swordsman);
-        _weaponsLookup[ItemName.SteelSword] = new Weapon(ItemName.SteelSword, 18, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai);
-        _weaponsLookup[ItemName.BroadSword] = new Weapon(ItemName.BroadSword, 20, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai);
-        _weaponsLookup[ItemName.DoomBlade] = new Weapon(ItemName.DoomBlade, 25, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai);
-        _weaponsLookup[ItemName.Katana] = new Weapon(ItemName.Katana, 30, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai);
-        _weaponsLookup[ItemName.SwordOfLight] = new Weapon(ItemName.SwordOfLight, 36, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Bolt2), Job.Hero | Job.SkyWarrior);
-        _weaponsLookup[ItemName.SwordOfDarkness] = new Weapon(ItemName.SwordOfDarkness, 40, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Desoul1), Job.Hero | Job.SkyWarrior, true);
-        _weaponsLookup[ItemName.ChaosBreaker] = new Weapon(ItemName.ChaosBreaker, 40, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Freeze3), Job.Hero | Job.SkyWarrior);
+        _weaponsLookup[ItemName.ShortSword] = new Weapon(ItemName.ShortSword, 5, itemType, weaponRange, null, Job.Swordsman | Job.Warrior | Job.Birdman, 100);
+        _weaponsLookup[ItemName.MiddleSword] = new Weapon(ItemName.MiddleSword, 8, itemType, weaponRange, null, Job.Swordsman | Job.Warrior | Job.Birdman, 250);
+        _weaponsLookup[ItemName.LongSword] = new Weapon(ItemName.LongSword, 12, itemType, weaponRange, null, Job.Warrior | Job.Swordsman, 750);
+        _weaponsLookup[ItemName.SteelSword] = new Weapon(ItemName.SteelSword, 18, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 2500);
+        _weaponsLookup[ItemName.BroadSword] = new Weapon(ItemName.BroadSword, 20, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 4800);
+        _weaponsLookup[ItemName.DoomBlade] = new Weapon(ItemName.DoomBlade, 25, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 0);
+        _weaponsLookup[ItemName.Katana] = new Weapon(ItemName.Katana, 30, itemType, weaponRange, null, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 0);
+        _weaponsLookup[ItemName.SwordOfLight] = new Weapon(ItemName.SwordOfLight, 36, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Bolt2), Job.Hero | Job.SkyWarrior, 0);
+        _weaponsLookup[ItemName.SwordOfDarkness] = new Weapon(ItemName.SwordOfDarkness, 40, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Desoul1), Job.Hero | Job.SkyWarrior, 0, true);
+        _weaponsLookup[ItemName.ChaosBreaker] = new Weapon(ItemName.ChaosBreaker, 40, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Freeze3), Job.Hero | Job.SkyWarrior, 0);
     }
 
     private static void BuildAxes()
@@ -55,12 +54,12 @@ public static class WeaponManager
         var itemType = ItemType.Axe;
         var weaponRange = new Range(1, 1);
 
-        _weaponsLookup[ItemName.HandAxe] = new Weapon(ItemName.HandAxe, 7, itemType, weaponRange, null, Job.Warrior);
-        _weaponsLookup[ItemName.MiddleAxe] = new Weapon(ItemName.MiddleAxe, 11, itemType, weaponRange, null, Job.Warrior);
-        _weaponsLookup[ItemName.BattleAxe] = new Weapon(ItemName.BattleAxe, 16, itemType, weaponRange, null, Job.Warrior);
-        _weaponsLookup[ItemName.HeatAxe] = new Weapon(ItemName.HeatAxe, 22, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Blaze2), Job.Gladiator);
-        _weaponsLookup[ItemName.GreatAxe] = new Weapon(ItemName.GreatAxe, 26, itemType, weaponRange, null, Job.Gladiator);
-        _weaponsLookup[ItemName.Atlas] = new Weapon(ItemName.Atlas, 33, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Blaze3), Job.Gladiator);
+        _weaponsLookup[ItemName.HandAxe] = new Weapon(ItemName.HandAxe, 7, itemType, weaponRange, null, Job.Warrior, 200);
+        _weaponsLookup[ItemName.MiddleAxe] = new Weapon(ItemName.MiddleAxe, 11, itemType, weaponRange, null, Job.Warrior, 600);
+        _weaponsLookup[ItemName.BattleAxe] = new Weapon(ItemName.BattleAxe, 16, itemType, weaponRange, null, Job.Warrior, 2600);
+        _weaponsLookup[ItemName.HeatAxe] = new Weapon(ItemName.HeatAxe, 22, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Blaze2), Job.Gladiator, 0);
+        _weaponsLookup[ItemName.GreatAxe] = new Weapon(ItemName.GreatAxe, 26, itemType, weaponRange, null, Job.Gladiator, 10000);
+        _weaponsLookup[ItemName.Atlas] = new Weapon(ItemName.Atlas, 33, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Blaze3), Job.Gladiator, 0);
     }
 
     private static void BuildStaves()
@@ -68,22 +67,22 @@ public static class WeaponManager
         var itemType = ItemType.Staff;
         var weaponRange = new Range(1, 1);
 
-        _weaponsLookup[ItemName.WoodenStaff] = new Weapon(ItemName.WoodenStaff, 5, itemType, weaponRange, null, Job.Healer | Job.Mage);
-        _weaponsLookup[ItemName.PowerStaff] = new Weapon(ItemName.PowerStaff, 8, itemType, weaponRange, null, Job.Healer | Job.Mage);
-        _weaponsLookup[ItemName.GuardianStaff] = new Weapon(ItemName.GuardianStaff, 12, itemType, weaponRange, null, Job.Vicar | Job.Wizard);
-        _weaponsLookup[ItemName.HolyStaff] = new Weapon(ItemName.HolyStaff, 18, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Blaze2), Job.Vicar);
-        _weaponsLookup[ItemName.DemonRod] = new Weapon(ItemName.DemonRod, 20, itemType, weaponRange, null /*"DRAINS MP"*/, Job.Wizard);
+        _weaponsLookup[ItemName.WoodenStaff] = new Weapon(ItemName.WoodenStaff, 5, itemType, weaponRange, null, Job.Healer | Job.Mage, 80);
+        _weaponsLookup[ItemName.PowerStaff] = new Weapon(ItemName.PowerStaff, 8, itemType, weaponRange, null, Job.Healer | Job.Mage, 500);
+        _weaponsLookup[ItemName.GuardianStaff] = new Weapon(ItemName.GuardianStaff, 12, itemType, weaponRange, null, Job.Vicar | Job.Wizard, 3200);
+        _weaponsLookup[ItemName.HolyStaff] = new Weapon(ItemName.HolyStaff, 18, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Blaze2), Job.Vicar, 8000);
+        _weaponsLookup[ItemName.DemonRod] = new Weapon(ItemName.DemonRod, 20, itemType, weaponRange, null /*"DRAINS MP"*/, Job.Wizard, 0);
     }
 
     private static void BuildArrows()
     {
         var itemType = ItemType.Arrow;
 
-        _weaponsLookup[ItemName.WoodenArrow] = new Weapon(ItemName.WoodenArrow, 8, itemType, new Range(2, 2), null, Job.Archer | Job.AssaultKnight);
-        _weaponsLookup[ItemName.SteelArrow] = new Weapon(ItemName.SteelArrow, 13, itemType, new Range(2, 2), null, Job.Archer | Job.AssaultKnight);
-        _weaponsLookup[ItemName.ElvenArrow] = new Weapon(ItemName.ElvenArrow, 18, itemType, new Range(2, 3), null, Job.Archer | Job.Sniper | Job.BowMaster | Job.AssaultKnight | Job.StrikeKnight);
-        _weaponsLookup[ItemName.AssaultShell] = new Weapon(ItemName.AssaultShell, 27, itemType, new Range(2, 3), null, Job.StrikeKnight | Job.BowMaster | Job.Sniper);
-        _weaponsLookup[ItemName.BusterShot] = new Weapon(ItemName.BusterShot, 35, itemType, new Range(2, 3), null, Job.StrikeKnight | Job.BowMaster | Job.Sniper);
+        _weaponsLookup[ItemName.WoodenArrow] = new Weapon(ItemName.WoodenArrow, 8, itemType, new Range(2, 2), null, Job.Archer | Job.AssaultKnight, 320);
+        _weaponsLookup[ItemName.SteelArrow] = new Weapon(ItemName.SteelArrow, 13, itemType, new Range(2, 2), null, Job.Archer | Job.AssaultKnight, 1200);
+        _weaponsLookup[ItemName.ElvenArrow] = new Weapon(ItemName.ElvenArrow, 18, itemType, new Range(2, 3), null, Job.Archer | Job.Sniper | Job.BowMaster | Job.AssaultKnight | Job.StrikeKnight, 3200);
+        _weaponsLookup[ItemName.AssaultShell] = new Weapon(ItemName.AssaultShell, 27, itemType, new Range(2, 3), null, Job.StrikeKnight | Job.BowMaster | Job.Sniper, 4500);
+        _weaponsLookup[ItemName.BusterShot] = new Weapon(ItemName.BusterShot, 35, itemType, new Range(2, 3), null, Job.StrikeKnight | Job.BowMaster | Job.Sniper, 12400);
     }
 
     private static void BuildSpears()
@@ -91,8 +90,8 @@ public static class WeaponManager
         var itemType = ItemType.Spear;
         var weaponRange = new Range(1, 2);
 
-        _weaponsLookup[ItemName.Spear] = new Weapon(ItemName.Spear, 8, itemType, weaponRange, null, Job.Knight | Job.SkyKnight);
-        _weaponsLookup[ItemName.PowerSpear] = new Weapon(ItemName.PowerSpear, 8, itemType, weaponRange, null, Job.Knight | Job.SkyKnight);
+        _weaponsLookup[ItemName.Spear] = new Weapon(ItemName.Spear, 8, itemType, weaponRange, null, Job.Knight | Job.SkyKnight, 150);
+        _weaponsLookup[ItemName.PowerSpear] = new Weapon(ItemName.PowerSpear, 8, itemType, weaponRange, null, Job.Knight | Job.SkyKnight, 900);
     }
 
     private static void BuildLances()
@@ -100,11 +99,11 @@ public static class WeaponManager
         var itemType = ItemType.Lance;
         var weaponRange = new Range(1, 1);
 
-        _weaponsLookup[ItemName.BronzeLance] = new Weapon(ItemName.BronzeLance, 9, itemType, weaponRange, null, Job.Knight | Job.SkyKnight);
-        _weaponsLookup[ItemName.SteelLance] = new Weapon(ItemName.SteelLance, 18, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord);
-        _weaponsLookup[ItemName.ChromeLance] = new Weapon(ItemName.ChromeLance, 22, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord);
-        _weaponsLookup[ItemName.Halberd] = new Weapon(ItemName.Halberd, 25, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Bolt1), Job.Paladin | Job.SkyBaron | Job.SkyLord);
-        _weaponsLookup[ItemName.DevilLance] = new Weapon(ItemName.DevilLance, 35, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, true);
-        _weaponsLookup[ItemName.Valkyrie] = new Weapon(ItemName.Valkyrie, 35, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord);
+        _weaponsLookup[ItemName.BronzeLance] = new Weapon(ItemName.BronzeLance, 9, itemType, weaponRange, null, Job.Knight | Job.SkyKnight, 300);
+        _weaponsLookup[ItemName.SteelLance] = new Weapon(ItemName.SteelLance, 18, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, 3000);
+        _weaponsLookup[ItemName.ChromeLance] = new Weapon(ItemName.ChromeLance, 22, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, 4500);
+        _weaponsLookup[ItemName.Halberd] = new Weapon(ItemName.Halberd, 25, itemType, weaponRange, MagicManager.CreateWithNoMPCost(MagicName.Bolt1), Job.Paladin | Job.SkyBaron | Job.SkyLord, 0);
+        _weaponsLookup[ItemName.DevilLance] = new Weapon(ItemName.DevilLance, 35, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, 0, true);
+        _weaponsLookup[ItemName.Valkyrie] = new Weapon(ItemName.Valkyrie, 35, itemType, weaponRange, null, Job.Paladin | Job.SkyBaron | Job.SkyLord, 0);
     }
 }

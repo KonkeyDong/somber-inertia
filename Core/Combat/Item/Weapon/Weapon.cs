@@ -1,32 +1,60 @@
-using SomberInertia.Enums;
+using SomberInertia.Core.Combat.Item;
 using SomberInertia.Core.Combat.Spells;
+using SomberInertia.Enums;
 
 namespace SomberInertia.Core.Combat.Item.Weapon;
 
 public class Weapon : Item
 {
-    public ItemName Name { get; set; }
-    public int Attack { get; set; }
-    public ItemType ItemType { get; set; }
-    public Range DistanceRange { get; set; }
-    public Magic? Spell { get; set; }
-    public Job AllowedJobs { get; set; }
-    public bool Cursed { get; set; }
+    public int Attack { get; private set; }
+    public Magic? Spell { get; private set; }
 
-    public Weapon(ItemName name, int attack, ItemType itemType, Range distanceRange, Magic? spell, Job allowedJobs, bool cursed = false)
+    public Weapon(
+        ItemName name,
+        int attack,
+        ItemType itemType,
+        Range distanceRange,
+        Magic? spell,
+        Job allowedJobs,
+        int price,
+        bool cursed = false)
+        : base(name, itemType, distanceRange, allowedJobs, price, cursed)
     {
         if (attack < 0)
         {
-            Logger.Warning("Weapon(): attack cannot be less than 0; defaulting to 0.");
-            attack = 0;
+            Logger.Error("Weapon(): attack cannot be less than 0; Aborting.");
         }
 
-        Name = name;
         Attack = attack;
-        ItemType = itemType;
-        DistanceRange = distanceRange;
         Spell = spell;
-        AllowedJobs = allowedJobs;
-        Cursed = cursed;
+    }
+
+    public bool CanBeUsedAsItem(Job job)
+    {
+        if (Spell == null)
+        {
+            return false;
+        }
+
+        if (AllowedJobs == Job.Any)
+        {
+            return true;
+        }
+
+        return (AllowedJobs & job) != 0;
+    }
+
+    public override Item Clone()
+    {
+        return new Weapon(
+            Name,
+            Attack,
+            ItemType,
+            DistanceRange,
+            Spell?.Clone(),   // if Magic has Clone()
+            AllowedJobs,
+            Price,
+            Cursed
+        );
     }
 }
