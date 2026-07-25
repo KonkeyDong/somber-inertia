@@ -2,7 +2,6 @@ namespace SomberInertia.Enums;
 
 public enum ItemType
 {
-    Weapon,
     Unarmed,
     Sword,
     Axe,
@@ -12,8 +11,7 @@ public enum ItemType
     Lance,
 
     Consumable,
-    Key,
+    Story, // story item / key item: advances the story
     Ring,
-    Equippable,
     Clothes,
 }
