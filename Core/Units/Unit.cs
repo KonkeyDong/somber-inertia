@@ -47,6 +47,8 @@ public abstract class Unit
     public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
     public bool HasSpells => KnownSpells.Count > 0;
 
+    public Item?[] Items = new Item?[GameConstants.MAX_BUCKET_SIZE];
+
     public Direction FacingDirection { get; set; } = Direction.Down;
     private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
 
@@ -292,10 +294,46 @@ public abstract class Unit
         return spell;
     }
 
+    // Returns a bool. False = item cannot be added (already holding max number of items).
+    // True = an item was added to the unit successfully.
+    public bool AddItem(Item item)
+    {
+        return FillFirstAvailableBucket(item);
+    }
+
+    private bool FillFirstAvailableBucket(Item item)
+    {
+        for (var i = 0; i < GameConstants.MAX_BUCKET_SIZE; i++)
+        {
+            if (Items[i] == null)
+            {
+                Items[i] = item;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Item GetFirstItemInBucket()
+    {
+        if (Items[0] == null)
+        {
+            return ItemManager.Create(ItemName.NoItem);
+        }
+
+        return Items[0]!;
+    }
+
+    public Item GetItemAtIndex(int index)
+    {
+        return Items[index] ?? ItemManager.Create(ItemName.NoItem);
+    }
 
     // -----------------
     // Animation methods
     // -----------------
+    #region Animations
     public void ResetStartingWorldPosition() 
     {
         if (Block == null)
@@ -427,5 +465,7 @@ public abstract class Unit
         }
 
         Logger.Info($"LoadWalkAnimations completed. Loaded {totalFramesLoaded} frames across 4 directions.");
-    }   
+    }
+
+    #endregion
 }

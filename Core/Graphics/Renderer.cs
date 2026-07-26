@@ -4,6 +4,7 @@ using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 using SomberInertia.Core.Combat;
 using SomberInertia.Core.Combat.Spells;
+using SomberInertia.Core.Combat.Item;
 using System.Numerics;
 
 using Raylib_cs;
@@ -214,6 +215,12 @@ public class Renderer
     {
         var sprite = MagicIcons.GetSprite(family);
         Draw(scale, sprite, position);
+    }
+
+    public void DrawItemIcon(float scale, ItemName name, Vector2 position)
+    {
+        var sprite = ItemIcons.GetSprite(name);
+        Draw(scale, sprite, position);   
     }
 
     public void DrawBattleMenuMessage(float scale, string text, Vector2 textPos)

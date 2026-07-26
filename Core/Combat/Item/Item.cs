@@ -1,6 +1,5 @@
 using SomberInertia.Enums;
 using SomberInertia.Core.Combat.Spells;
-using SomberInertia.Core.Combat.Items; // for IItemEffect later
 
 namespace SomberInertia.Core.Combat.Item;
 

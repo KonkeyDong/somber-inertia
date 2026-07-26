@@ -1,6 +1,5 @@
 using SomberInertia.Enums;
 using SomberInertia.Core.Combat.Item.Weapon;
-using SomberInertia.Core.Combat.Items;
 
 namespace SomberInertia.Core.Combat.Item;
 
@@ -11,6 +10,8 @@ public static class ItemManager
     public static void Initialize()
     {
         _itemsLookup.Clear();
+
+        _itemsLookup[ItemName.NoItem] = new Consumable(ItemName.NoItem, new Range(0, 0), 0, new HealEffect(0));
 
         // Weapons are already handled by WeaponManager
         // We only register non-weapon items here for now
@@ -25,26 +26,18 @@ public static class ItemManager
         // First try the local lookup (consumables, etc.)
         if (_itemsLookup.TryGetValue(itemName, out var item))
         {
-            return item;
+            return item.Clone();
         }
 
-        // Fall back to weapons
-        try
-        {
-            return WeaponManager.Create(itemName);
-        }
-        catch
-        {
-            throw new InvalidOperationException($"ItemManager::Create(): Unknown item [{itemName}].");
-        }
+        Logger.Error($"ItemManager::Create(): Unknown item [{itemName}].");
+        return new Consumable(ItemName.NoItem, new Range(0, 0), 0, new HealEffect(0));
     }
 
     private static void BuildConsumables()
     {
-        // Example – we’ll flesh these out next
-        // _itemsLookup[ItemName.MedicalHerb] = new Consumable(...);
-        // _itemsLookup[ItemName.HealingSeed] = new Consumable(...);
-        // _itemsLookup[ItemName.Antidoe] = new Consumable(...);
-        // _itemsLookup[ItemName.AngelWing] = new Consumable(...);
+        _itemsLookup[ItemName.MedicalHerb] = new Consumable(ItemName.MedicalHerb, new Range(0, 1), 10, new HealEffect(8));
+        _itemsLookup[ItemName.HealingSeed] = new Consumable(ItemName.HealingSeed, new Range(0, 1), 200, new HealEffect(16));
+        _itemsLookup[ItemName.Antidote] = new Consumable(ItemName.Antidote, new Range(0, 1), 20, new RemovePoisonEffect());
+        _itemsLookup[ItemName.AngelWing] = new Consumable(ItemName.AngelWing, new Range(0, 0), 40, new EscapeEffect());
     }
 }

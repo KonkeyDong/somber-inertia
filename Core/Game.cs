@@ -19,6 +19,7 @@ public class Game
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
     public FrameFlipper FrameFlipper = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay);
     public MagicUI MagicUI = new MagicUI();
+    public ItemUI ItemUI = new ItemUI();
     public AttackContext AttackContext { get; set; } = null!;
 
     public bool FirstUnitDiedFromPoison { get; private set; }

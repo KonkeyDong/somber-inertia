@@ -75,7 +75,7 @@ public enum ItemName
 
     #region Key items
 
-    OrgOfLight,
+    OrbOfLight,
     DomingoEgg,
     MoonStone,
     LunarDew,

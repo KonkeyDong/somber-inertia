@@ -13,7 +13,7 @@ public static class ItemIcons
 
     public static void Load() => _icons.Load();
     public static void Tick() => _icons.Tick();
-    public static void SetSelectedSpell(ItemName itemName) => _icons.SetSelected(itemName);
+    public static void SetSelectedItem(ItemName itemName) => _icons.SetSelected(itemName);
     public static Sprite GetSprite(ItemName itemName) => _icons.GetSprite(itemName);
     public static void Reset() => _icons.Reset();
 }
