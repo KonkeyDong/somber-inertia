@@ -18,7 +18,7 @@ public class CalculateUnitMovementRange : IGameState
     private bool _isPoisoned;
     private bool _isSleeping;
 
-    private readonly Vector2 _messageBoxPosition = new Vector2(300, 300);
+    private readonly Vector2 _messageBoxPosition = new Vector2(100, 100);
     private readonly string _poisonMessage;
     private readonly string _sleepMessage;
     private readonly string _awakeMessage;
@@ -38,8 +38,8 @@ public class CalculateUnitMovementRange : IGameState
     {
         Logger.Debug("CalculateUnitMovementRange::Enter() called.");
 
-        _isPoisoned = _currentUnit.HasStatus<PoisonEffect>();
-        _isSleeping = _currentUnit.HasStatus<SleepEffect>();
+        _isPoisoned = _currentUnit.HasStatus(StatusEffectType.Poison);
+        _isSleeping = _currentUnit.HasStatus(StatusEffectType.Sleep);
 
         if (_isPoisoned || _isSleeping)
         {
@@ -113,8 +113,8 @@ public class CalculateUnitMovementRange : IGameState
 
         if (_isSleeping)
         {
-            var message = _currentUnit.GetStatusDuration<SleepEffect>() > 0 
-                ? _sleepMessage 
+            var message = _currentUnit.GetStatusDuration(StatusEffectType.Sleep) > 0
+                ? _sleepMessage
                 : _awakeMessage;
 
             _game.Renderer.DrawBattleMenuMessage(scale, message, _messageBoxPosition);

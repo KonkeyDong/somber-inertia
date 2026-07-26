@@ -92,7 +92,7 @@ public abstract class Unit
     public int Defense { get; set; }
     public int Speed { get; set; }
     public int Movement { get; protected set; }
-    public List<StatusEffect> StatusEffects { get; protected set; }
+    public List<StatusEffectSlot> StatusEffects { get; protected set; } = new();
 
     public bool Friendly { get; set; }
 
@@ -172,35 +172,46 @@ public abstract class Unit
         return HP.Current == 0;
     }
 
-    private T? GetStatus<T>() where T : StatusEffect
+    public void ApplyStatus(StatusEffectType type)
     {
-        return StatusEffects.OfType<T>().FirstOrDefault();
-    }
-
-    public void ApplyStatus<T>(T effect) where T : StatusEffect
-    {
-        if (HasStatus<T>())
+        if (HasStatus(type))
         {
-            Logger.Info($"Unit [{GetDisplayName()}] already has [{typeof(T).Name}]. Ignoring.");
+            Logger.Info($"Unit [{GetDisplayName()}] already has [{type}]. Ignoring.");
             return;
         }
 
-        StatusEffects.Add(effect);
+        StatusEffects.Add(StatusEffectSystem.Create(type));
+        Logger.Info($"Applied [{type}] to [{GetDisplayName()}].");
     }
 
-    public bool HasStatus<T>() where T : StatusEffect
+    public bool HasStatus(StatusEffectType type)
     {
-        return GetStatus<T>() != null;
+        return FindStatusIndex(type) >= 0;
     }
 
-    public void RemoveStatus<T>() where T : StatusEffect
+    public int FindStatusIndex(StatusEffectType type)
     {
-        var effect = GetStatus<T>();
-        if (effect != null)
+        for (var i = 0; i < StatusEffects.Count; i++)
         {
-            StatusEffects.Remove(effect);
-            Logger.Info($"Removed [{typeof(T).Name}] from [{GetDisplayName()}].");
+            if (StatusEffects[i].Type == type)
+            {
+                return i;
+            }
         }
+
+        return -1;
+    }
+
+    public void RemoveStatus(StatusEffectType type)
+    {
+        var index = FindStatusIndex(type);
+        if (index < 0)
+        {
+            return;
+        }
+
+        StatusEffects.RemoveAt(index);
+        Logger.Info($"Removed [{type}] from [{GetDisplayName()}].");
     }
 
     public void RemoveAllStatus()
@@ -208,44 +219,25 @@ public abstract class Unit
         StatusEffects.Clear();
     }
 
-    public int GetStatusDuration<T>() where T : StatusEffect
+    public int GetStatusDuration(StatusEffectType type)
     {
-        var effect = GetStatus<T>();
-        if (effect != null)
+        var index = FindStatusIndex(type);
+        if (index < 0)
         {
-            Logger.Info($"Duration of [{typeof(T).Name}] remaingin: [{effect.Duration}].");
-            return effect.Duration;
+            return -1;
         }
 
-        return -1; // 
+        return StatusEffects[index].Duration;
     }
 
     public void ProcessPoisonStatus()
     {
-        var poison = GetStatus<PoisonEffect>();
-        if (poison == null)
-        {
-            return;
-        }
-
-        poison.Process(this);
+        StatusEffectSystem.ProcessPoison(this);
     }
 
     public void ProcessSleepStatus()
     {
-        var sleep = GetStatus<SleepEffect>();
-        if (sleep == null)
-        {
-            return;
-        }
-
-        sleep.Process(this);
-
-        if (sleep.Duration < 0)
-        {
-            Logger.Info($"Sleep status on unit [{GetDisplayName()}] has exhausted; removing.");
-            RemoveStatus<SleepEffect>();
-        }
+        StatusEffectSystem.ProcessSleep(this);
     }
 
     public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
