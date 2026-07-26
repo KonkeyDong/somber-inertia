@@ -437,6 +437,101 @@ public class Renderer
         Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
     }
 
+    public void DrawItemInfoBox(float scale, ItemData item, bool isEquipped, Vector2 position)
+    {
+        var displayName = item.Name.GetDisplayName();
+        var fontSize = (int)(8 * scale);
+        var textColor = Color.White;
+
+        // Split name across two lines: all words except last on line 1, last word on line 2
+        var words = displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        string line1;
+        string line2;
+
+        if (words.Length <= 1)
+        {
+            line1 = displayName;
+            line2 = "";
+        }
+        else
+        {
+            line1 = string.Join(" ", words.Take(words.Length - 1));
+            line2 = words[words.Length - 1];
+        }
+
+        var line3 = isEquipped ? "EQUIPPED" : "";
+
+        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
+        var size2 = Raylib.MeasureTextEx(
+            Raylib.GetFontDefault(),
+            string.IsNullOrEmpty(line2) ? "A" : line2, // keep height stable if empty
+            fontSize,
+            1
+        );
+        var size3 = Raylib.MeasureTextEx(
+            Raylib.GetFontDefault(),
+            string.IsNullOrEmpty(line3) ? "EQUIPPED" : line3,
+            fontSize,
+            1
+        );
+
+        var padding = 12;
+        var lineSpacing = 4;
+        var leftMargin = 8;
+
+        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X));
+        var contentHeight = size1.Y + size2.Y + size3.Y + (lineSpacing * 2);
+
+        var boxWidth = (int)contentWidth + padding * 2;
+        var boxHeight = (int)contentHeight + padding * 2;
+
+        var boxX = (int)(position.X * scale) - padding;
+        var boxY = (int)(position.Y * scale) - padding;
+
+        var darkOrange = GameConstants.Textures.DarkOrange;
+        var lightOrange = GameConstants.Textures.LightOrange;
+        var offWhite = GameConstants.Textures.OffWhite;
+        var blue = GameConstants.Textures.Blue;
+
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
+        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
+
+        var innerX = boxX + 3;
+        var innerY = boxY + 3;
+        var innerW = boxWidth - 6;
+        var innerH = boxHeight - 6;
+
+        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
+
+        var fillX = innerX + 3;
+        var fillY = innerY + 3;
+        var fillW = innerW - 6;
+        var fillH = innerH - 6;
+
+        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
+
+        var textStartY = fillY + 6;
+        var textLeftX = fillX + leftMargin;
+
+        // Line 1 - name part 1
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
+
+        // Line 2 - name part 2
+        var text2Y = textStartY + size1.Y + lineSpacing;
+        if (!string.IsNullOrEmpty(line2))
+        {
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
+        }
+
+        // Line 3 - EQUIPPED
+        var text3Y = text2Y + size2.Y + lineSpacing;
+        if (isEquipped)
+        {
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
+        }
+    }
+
     public float EaseInOut(float t)
     {
         return t < 0.5f ? 2 * t * t : 1 - (float)Math.Pow(-2 * t + 2, 2) / 2;

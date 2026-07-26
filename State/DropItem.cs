@@ -58,8 +58,13 @@ public class DropItem : IGameState
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
-            // GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
-            Logger.Warning("Drop mechanics still not implemented.");
+            // _currentUnit.RemoveItemAtIndex(_game.ItemUI.GetSelectedItemIndex());
+            _game.Prompt.Action = PromptAction.DropItem;
+            _game.Prompt.ItemSlotIndex = _game.ItemUI.GetSelectedIndex();
+            _game.Prompt.ReturnStateOnNo = GameStateType.DropItem;
+            _game.Prompt.ReturnStateOnYes = GameStateType.BattleItemMenu;
+
+            GameStateManager.ChangeStateType(GameStateType.PromptYesNo);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.X))
@@ -86,6 +91,6 @@ public class DropItem : IGameState
             _game.Renderer.DrawItemIcon(scale, iconData.ItemName, iconData.Position);
         }
 
-        // _game.Renderer.DrawSpellInfoBox(scale, _game.MagicUI.GetSelectedMagic(), _game.MagicUI.GetMagicInformationBoxCoordinates());
+        _game.Renderer.DrawItemInfoBox(scale, _game.ItemUI.GetSelectedItemData(), _game.ItemUI.IsSelectedItemEquipped(_currentUnit), _game.ItemUI.GetInformationBoxCoordinates());
     }
 }

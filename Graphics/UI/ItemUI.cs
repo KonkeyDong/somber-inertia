@@ -53,6 +53,11 @@ public class ItemUI : RadialSlotUI
         return _selectedItemName;
     }
 
+    public int GetSelectedItemIndex()
+    {
+        return SelectedIndex;
+    }
+
     public ItemSlot GetSelectedSlot(Unit currentUnit)
     {
         if (SelectedIndex < 0 || SelectedIndex >= currentUnit.Items.Length)
@@ -77,5 +82,15 @@ public class ItemUI : RadialSlotUI
 
             yield return new ItemIconData(position, slot.Name);
         }
+    }
+
+    public bool IsSelectedItemEquipped(Unit unit)
+    {
+        if (SelectedIndex < 0)
+        {
+            return false;
+        }
+
+        return SelectedIndex == unit.EquippedWeaponIndex;
     }
 }

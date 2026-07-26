@@ -37,4 +37,5 @@ public enum GameStateType
     EnterBattleScreen,
     ExitBattleScreen,
     DropItem,
+    PromptYesNo,
 }

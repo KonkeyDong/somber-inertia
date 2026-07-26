@@ -164,6 +164,43 @@ public abstract class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
+    public bool RemoveItemAtIndex(int index)
+    {
+        if (index < 0 || index >= Items.Length)
+        {
+            Logger.Error($"RemoveItemAtIndex(): index [{index}] out of range.");
+            return false;
+        }
+
+        if (Items[index].IsEmpty)
+        {
+            Logger.Warning($"RemoveItemAtIndex(): slot [{index}] is already empty.");
+            return false;
+        }
+
+        // If we removed the equipped weapon, unequip
+        if (EquippedWeaponIndex == index)
+        {
+            EquippedWeaponIndex = -1;
+        }
+        else if (EquippedWeaponIndex > index)
+        {
+            // Equipped item shifted left by one
+            EquippedWeaponIndex--;
+        }
+
+        // Shift everything after index one slot left
+        for (var i = index; i < Items.Length - 1; i++)
+        {
+            Items[i] = Items[i + 1];
+        }
+
+        // Last slot becomes empty
+        Items[Items.Length - 1] = ItemSlot.Empty;
+
+        return true;
+    }
+
     public bool IsDead()
     {
         return HP.Current == 0;
