@@ -1,5 +1,4 @@
 using SomberInertia.Enums;
-using SomberInertia.Core.Combat.Item;
 
 namespace SomberInertia.Core.Units;
 
@@ -7,19 +6,12 @@ public class Monster : Unit
 {
     protected override string AssetRoot => $"Assets/Sprites/Monsters/{Name.GetBaseName()}/";
 
-    public Monster(UnitName name, MovementType movementType, int movement)
-        : base(name, movementType, movement)
-        {
-            Name = name;
-            MovementType = movementType;
-            Movement = movement;
+    public Monster(UnitName name)
+        : base(name)
+    {
+        Friendly = false;
+        Promoted = false;
 
-            HP = new Stat(10);
-            MP = new Stat(10);
-
-            Friendly = false;
-            Promoted = false;
-
-            Logger.Info($"Monster created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
-        }
+        Logger.Info($"Monster created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
+    }
 }

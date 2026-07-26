@@ -1,6 +1,4 @@
 using SomberInertia.Enums;
-using SomberInertia.Graphics;
-using SomberInertia.Core.Combat.Item;
 
 namespace SomberInertia.Core.Units;
 
@@ -8,24 +6,20 @@ public class ForceMember : Unit
 {
     public override bool Promoted { get; set; }
     public Job Job { get; set; }
-    public int Exp { get; set; } // experience
+    public int Exp { get; set; }
     public int Level { get; set; }
-    
+
     protected override string AssetRoot =>
         $"Assets/Sprites/Characters/{Name.GetBaseName()}/{(Promoted ? "Promoted" : "Unpromoted")}";
 
-    public ForceMember(UnitName name, MovementType movementType, int movement)
-        : base(name, movementType, movement)
+    public ForceMember(UnitName name)
+        : base(name)
     {
-        Name = name;
-        MovementType = movementType;
-        Movement = movement;
-
-        HP = new Stat(10);
-        MP = new Stat(10);
-
         Friendly = true;
         Promoted = false;
+        Level = 1;
+        Exp = 0;
+        Job = UnitDatabase.Get(name).DefaultJob;
 
         Logger.Info($"Force Member created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
     }

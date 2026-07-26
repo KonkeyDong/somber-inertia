@@ -47,11 +47,12 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
+        UnitDatabase.Initialize();
         MagicDatabase.Initialize();
         ItemDatabase.Initialize();
         var game = new Game(new Grid(11, 10));
 
-        var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
+        var max = new ForceMember(UnitName.Max);
         max.Attack = 15;
         max.HP.Current = 1;
         max.MP.Max = 99;
@@ -72,17 +73,17 @@ class Program
 
         Logger.Info(max.GetEquippedWeaponName().ToString());
 
-        var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
+        var anri = new ForceMember(UnitName.Anri);
         anri.Attack = 15;
         anri.AddItem(ItemName.Unarmed, autoEquipWeapon: true);
 
-        var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
+        var goblin1 = new Monster(UnitName.Goblin);
         goblin1.Defense = 5;
 
-        var runeKnight = new Monster(UnitName.RuneKnight, MovementType.Warrior, 5);
+        var runeKnight = new Monster(UnitName.RuneKnight);
         runeKnight.HP.Current = 1;
 
-        var dwarf = new Monster(UnitName.DarkDwarf, MovementType.Warrior, 5);
+        var dwarf = new Monster(UnitName.DarkDwarf);
         dwarf.HP.Current = 1;
 
         game.AddUnit(max, 0, 0);
@@ -91,7 +92,7 @@ class Program
         game.AddUnit(runeKnight, 4, 1);
         game.AddUnit(goblin1, 3, 2);
 
-        // max.ApplyStatus<PoisonEffect>(new PoisonEffect());
+        // max.ApplyStatus(StatusEffectType.Poison);
 
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
         CommandIcons.Load();
