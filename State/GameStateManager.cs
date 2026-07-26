@@ -54,6 +54,7 @@ public static class GameStateManager
             GameStateType.BattleResolution => new BattleResolution(Game),
             GameStateType.ExitBattleScreen => new ExitBattleScreen(Game),
             GameStateType.DropItem => new DropItem(Game),
+            GameStateType.PromptYesNo => new PromptYesNo(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };

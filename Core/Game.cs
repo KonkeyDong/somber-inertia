@@ -22,6 +22,8 @@ public class Game
     public ItemUI ItemUI = new ItemUI();
     public AttackContext AttackContext { get; set; } = null!;
 
+    public PromptContext Prompt { get; set; } = new PromptContext();
+
     public bool FirstUnitDiedFromPoison { get; private set; }
     public Unit? UnitThatDiedFromPoison { get; private set; }
 
