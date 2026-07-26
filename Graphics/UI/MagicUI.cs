@@ -1,47 +1,28 @@
 using System.Numerics;
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
-using SomberInertia.State;
 using SomberInertia.Core.Combat.Spells;
 
 namespace SomberInertia.Graphics.UI;
 
-public class MagicUI
+public class MagicUI : RadialSlotUI
 {
     public record MagicIconData(Vector2 Position, MagicFamily Family);
 
-    private Vector2 _centerPosition;
-    private Vector2 _magicInformationBoxCoordinates;
-    private int _selectedMagicIconIndex;
     private int _selectedMagicLevel;
     private MagicFamily _selectedMagicFamily;
     private List<MagicName> _selectedMagicList = new();
     private MagicName _selectedMagicName;
 
-    private readonly Dictionary<Direction, int> _spellIndexByDirection = new()
-    {
-        { Direction.Up,    0 },
-        { Direction.Left,  1 },
-        { Direction.Right, 2 },
-        { Direction.Down,  3 }
-    };
-
     public MagicUI()
     {
-        _centerPosition = new Vector2(
-            GameStateManager.CurrentWidth / 2f,
-            GameStateManager.CurrentHeight * 0.75f
-        ) / GameStateManager.CurrentScale;
-
-        _magicInformationBoxCoordinates = new Vector2(_centerPosition.X + 65, _centerPosition.Y);
         _selectedMagicName = MagicName.NoSpell;
-
         Reset();
     }
 
-    public void Reset()
+    public override void Reset()
     {
-        _selectedMagicIconIndex = -1;
+        base.Reset();
         _selectedMagicLevel = 0;
         _selectedMagicFamily = MagicFamily.NoSpell;
         _selectedMagicList = new List<MagicName>();
@@ -50,13 +31,12 @@ public class MagicUI
 
     public void SetSelected(Direction direction, Unit currentUnit)
     {
-        if (!_spellIndexByDirection.TryGetValue(direction, out var index))
+        if (!TryGetIndex(direction, out var index))
         {
-            Logger.Error($"Direction [{direction}] not found in dictionary.");
             return;
         }
 
-        if (_selectedMagicIconIndex == index)
+        if (SelectedIndex == index)
         {
             return;
         }
@@ -65,7 +45,7 @@ public class MagicUI
 
         if (family != null)
         {
-            _selectedMagicIconIndex = index;
+            SelectedIndex = index;
             _selectedMagicFamily = (MagicFamily)family;
             _selectedMagicList = currentUnit.GetMagicListInBucket(_selectedMagicFamily);
             _selectedMagicName = currentUnit.GetHighestMagicLevelInBucket(_selectedMagicFamily);
@@ -77,19 +57,9 @@ public class MagicUI
         }
     }
 
-    public int GetSelectedIndex()
-    {
-        return _selectedMagicIconIndex;
-    }
-
     public MagicFamily GetSelectedFamily()
     {
         return _selectedMagicFamily;
-    }
-
-    public bool HasSelection()
-    {
-        return _selectedMagicIconIndex != -1;
     }
 
     public MagicName GetSelectedMagicName()
@@ -100,11 +70,6 @@ public class MagicUI
     public MagicData GetSelectedMagicData()
     {
         return MagicDatabase.Get(_selectedMagicName);
-    }
-
-    public Vector2 GetMagicInformationBoxCoordinates()
-    {
-        return _magicInformationBoxCoordinates;
     }
 
     public bool IsSelectedMagicOffensive()
@@ -148,10 +113,9 @@ public class MagicUI
 
     public IEnumerable<MagicIconData> GetMagicIconsToDraw(float scale, Unit currentUnit)
     {
-        foreach (var (direction, index) in _spellIndexByDirection)
+        foreach (var (direction, index) in RadialMenuLayout.IndexByDirection)
         {
-            var offset = direction.GetMenuOffset();
-            var position = _centerPosition + offset * GameConstants.TILE_SIZE;
+            var position = RadialMenuLayout.GetIconPosition(CenterPosition, direction);
 
             var bucket = currentUnit.MagicFamilyBuckets[index];
             var family = bucket != null ? (MagicFamily)bucket : MagicFamily.NoSpell;

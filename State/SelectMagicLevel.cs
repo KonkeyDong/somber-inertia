@@ -86,7 +86,7 @@ public class SelectMagicLevel : IGameState
         _game.Renderer.DrawSpellInfoBox(
             scale,
             _game.MagicUI.GetSelectedMagicData(),
-            _game.MagicUI.GetMagicInformationBoxCoordinates(),
+            _game.MagicUI.GetInformationBoxCoordinates(),
             _blinker.IsOn
         );
     }
