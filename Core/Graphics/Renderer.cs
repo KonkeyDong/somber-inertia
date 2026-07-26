@@ -532,6 +532,212 @@ public class Renderer
         }
     }
 
+    public void DrawEquipWeaponInfoBox(float scale, ItemData item, Vector2 position)
+    {
+        var fontSize = (int)(8 * scale);
+        var textColor = Color.White;
+
+        var line1 = "WEAPON";
+        string line2;
+        string line3;
+
+        if (item.Name == ItemName.Unarmed)
+        {
+            line2 = "REMOVE";
+            line3 = "";
+        }
+        else
+        {
+            var displayName = item.Name.GetDisplayName();
+            var words = displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            if (words.Length <= 1)
+            {
+                line2 = displayName;
+                line3 = "";
+            }
+            else
+            {
+                line2 = string.Join(" ", words.Take(words.Length - 1));
+                line3 = words[words.Length - 1];
+            }
+        }
+
+        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
+        var size2 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line2, fontSize, 1);
+        var size3 = Raylib.MeasureTextEx(
+            Raylib.GetFontDefault(),
+            string.IsNullOrEmpty(line3) ? "A" : line3,
+            fontSize,
+            1
+        );
+
+        var padding = 12;
+        var lineSpacing = 4;
+        var leftMargin = 8;
+
+        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X));
+        var contentHeight = size1.Y + size2.Y + size3.Y + (lineSpacing * 2);
+
+        var boxWidth = (int)contentWidth + padding * 2;
+        var boxHeight = (int)contentHeight + padding * 2;
+
+        var boxX = (int)(position.X * scale) - padding;
+        var boxY = (int)(position.Y * scale) - padding;
+
+        var darkOrange = GameConstants.Textures.DarkOrange;
+        var lightOrange = GameConstants.Textures.LightOrange;
+        var offWhite = GameConstants.Textures.OffWhite;
+        var blue = GameConstants.Textures.Blue;
+
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
+        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
+
+        var innerX = boxX + 3;
+        var innerY = boxY + 3;
+        var innerW = boxWidth - 6;
+        var innerH = boxHeight - 6;
+
+        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
+
+        var fillX = innerX + 3;
+        var fillY = innerY + 3;
+        var fillW = innerW - 6;
+        var fillH = innerH - 6;
+
+        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
+
+        var textStartY = fillY + 6;
+        var textLeftX = fillX + leftMargin;
+
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
+
+        var text2Y = textStartY + size1.Y + lineSpacing;
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
+
+        var text3Y = text2Y + size2.Y + lineSpacing;
+        if (!string.IsNullOrEmpty(line3))
+        {
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
+        }
+    }
+
+    public void DrawEquipStatsBox(
+        float scale,
+        int attack,
+        int defense,
+        int move,
+        int agility,
+        Vector2 position)
+    {
+        var fontSize = (int)(8 * scale);
+        var textColor = Color.White;
+
+        var labels = new[] { "ATTACK", "DEFENSE", "MOVE", "AGILITY" };
+        var values = new[]
+        {
+            attack.ToString(),
+            defense.ToString(),
+            move.ToString(),
+            agility.ToString()
+        };
+
+        var padding = 12;
+        var lineSpacing = 4;
+        var leftMargin = 8;
+        var valueGap = 16;
+
+        float maxLabelWidth = 0;
+        float maxValueWidth = 0;
+        float lineHeight = 0;
+
+        for (var i = 0; i < labels.Length; i++)
+        {
+            var labelSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), labels[i], fontSize, 1);
+            var valueSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), values[i], fontSize, 1);
+
+            if (labelSize.X > maxLabelWidth)
+            {
+                maxLabelWidth = labelSize.X;
+            }
+
+            if (valueSize.X > maxValueWidth)
+            {
+                maxValueWidth = valueSize.X;
+            }
+
+            if (labelSize.Y > lineHeight)
+            {
+                lineHeight = labelSize.Y;
+            }
+        }
+
+        var contentWidth = maxLabelWidth + valueGap + maxValueWidth;
+        var contentHeight = (lineHeight * labels.Length) + (lineSpacing * (labels.Length - 1));
+
+        var boxWidth = (int)contentWidth + padding * 2;
+        var boxHeight = (int)contentHeight + padding * 2;
+
+        var boxX = (int)(position.X * scale) - padding;
+        var boxY = (int)(position.Y * scale) - padding;
+
+        var darkOrange = GameConstants.Textures.DarkOrange;
+        var lightOrange = GameConstants.Textures.LightOrange;
+        var offWhite = GameConstants.Textures.OffWhite;
+        var blue = GameConstants.Textures.Blue;
+
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
+        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
+        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
+
+        var innerX = boxX + 3;
+        var innerY = boxY + 3;
+        var innerW = boxWidth - 6;
+        var innerH = boxHeight - 6;
+
+        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
+
+        var fillX = innerX + 3;
+        var fillY = innerY + 3;
+        var fillW = innerW - 6;
+        var fillH = innerH - 6;
+
+        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
+
+        var textStartY = fillY + 6;
+        var labelX = fillX + leftMargin;
+        var valueRightX = fillX + fillW - leftMargin;
+
+        var y = textStartY;
+
+        for (var i = 0; i < labels.Length; i++)
+        {
+            Raylib.DrawTextEx(
+                Raylib.GetFontDefault(),
+                labels[i],
+                new Vector2(labelX, y),
+                fontSize,
+                1,
+                textColor
+            );
+
+            var valueSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), values[i], fontSize, 1);
+            var valueX = valueRightX - valueSize.X;
+
+            Raylib.DrawTextEx(
+                Raylib.GetFontDefault(),
+                values[i],
+                new Vector2(valueX, y),
+                fontSize,
+                1,
+                textColor
+            );
+
+            y += (int)(lineHeight + lineSpacing);
+        }
+    }
+
     public float EaseInOut(float t)
     {
         return t < 0.5f ? 2 * t * t : 1 - (float)Math.Pow(-2 * t + 2, 2) / 2;

@@ -114,9 +114,9 @@ public class BattleItemMenu : IGameState
         {
             Logger.Warning("Item::Give not implemented.");
         }
-        else
+        else // EQUIP
         {
-            Logger.Warning("Item::Equip not implemented.");
+            GameStateManager.ChangeStateType(GameStateType.EquipItem);
         }
     }
 
