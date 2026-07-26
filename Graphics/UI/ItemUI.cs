@@ -8,12 +8,12 @@ namespace SomberInertia.Graphics.UI;
 
 public class ItemUI
 {
-    public record ItemIconData(Vector2 Position, Item Item);
+    public record ItemIconData(Vector2 Position, ItemName ItemName);
 
     private Vector2 _centerPosition;
     private Vector2 _itemInformationBoxCoordinates;
     private int _selectedItemIconIndex;
-    private Item _selectedItem;
+    private ItemName _selectedItemName;
 
     private readonly Dictionary<Direction, int> _itemIndexByDirection = new()
     {
@@ -31,7 +31,7 @@ public class ItemUI
         ) / GameStateManager.CurrentScale;
 
         _itemInformationBoxCoordinates = new Vector2(_centerPosition.X + 65, _centerPosition.Y);
-        _selectedItem = ItemManager.Create(ItemName.NoItem);
+        _selectedItemName = ItemName.NoItem;
 
         Reset();
     }
@@ -39,7 +39,7 @@ public class ItemUI
     public void Reset()
     {
         _selectedItemIconIndex = -1;
-        _selectedItem = ItemManager.Create(ItemName.NoItem);
+        _selectedItemName = ItemName.NoItem;
     }
 
     public void SetSelected(Direction direction, Unit currentUnit)
@@ -55,17 +55,16 @@ public class ItemUI
             return;
         }
 
-        var family = currentUnit.Items[index];
+        var slot = currentUnit.Items[index];
 
-        if (family != null)
+        if (slot.Name != ItemName.NoItem)
         {
             _selectedItemIconIndex = index;
-            _selectedItem = currentUnit.GetItemAtIndex(index);
+            _selectedItemName = slot.Name;
 
-            // for setting the red border
-            ItemIcons.SetSelectedItem(_selectedItem.Name);
+            ItemIcons.SetSelectedItem(_selectedItemName);
 
-            Logger.Debug($"Selected item index: [{index}].");
+            Logger.Debug($"Selected item index: [{index}], name: [{_selectedItemName}].");
         }
     }
 
@@ -79,9 +78,24 @@ public class ItemUI
         return _selectedItemIconIndex != -1;
     }
 
-    public Item GetSelectedItem()
+    public ItemName GetSelectedItemName()
     {
-        return _selectedItem;
+        return _selectedItemName;
+    }
+
+    public ItemSlot GetSelectedSlot(Unit currentUnit)
+    {
+        if (_selectedItemIconIndex < 0 || _selectedItemIconIndex >= currentUnit.Items.Length)
+        {
+            return ItemSlot.Empty;
+        }
+
+        return currentUnit.Items[_selectedItemIconIndex];
+    }
+
+    public ItemData GetSelectedItemData()
+    {
+        return ItemDatabase.Get(_selectedItemName);
     }
 
     public Vector2 GetItemInformationBoxCoordinates()
@@ -96,9 +110,9 @@ public class ItemUI
             var offset = direction.GetMenuOffset();
             var position = _centerPosition + offset * GameConstants.TILE_SIZE;
 
-            var item = currentUnit.GetItemAtIndex(index);
+            var slot = currentUnit.GetItemAtIndex(index);
 
-            yield return new ItemIconData(position, item);
+            yield return new ItemIconData(position, slot.Name);
         }
     }
 }

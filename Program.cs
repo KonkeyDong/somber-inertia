@@ -9,7 +9,6 @@ using SomberInertia.Core.Combat;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
 using SomberInertia.Core.Combat.Item;
-using SomberInertia.Core.Combat.Item.Weapon;
 
 namespace SomberInertia;
 
@@ -49,14 +48,14 @@ class Program
         Raylib.SetTargetFPS(60);
 
         MagicManager.Initialize();
-        WeaponManager.Initialize();
-        ItemManager.Initialize();
+        ItemDatabase.Initialize();
         var game = new Game(new Grid(11, 10));
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 15;
         max.HP.Current = 1;
-        max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
+        // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
+        max.AddItem(ItemName.ShortSword, autoEquipWeapon: true);
         max.LearnSpell(MagicManager.Create(MagicName.Egress1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
         max.LearnSpell(MagicManager.Create(MagicName.Blaze2));
@@ -66,12 +65,14 @@ class Program
         max.LearnSpell(MagicManager.Create(MagicName.Heal3));
         max.LearnSpell(MagicManager.Create(MagicName.Heal4));
         max.LearnSpell(MagicManager.Create(MagicName.Bolt3));
-        max.AddItem(ItemManager.Create(ItemName.MedicalHerb));
-        max.AddItem(ItemManager.Create(ItemName.Antidote));
+        max.AddItem(ItemName.MedicalHerb);
+        max.AddItem(ItemName.Antidote);
+
+        Logger.Info(max.GetEquippedWeaponName().ToString());
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Attack = 15;
-        anri.EquipWeapon(WeaponManager.Create(ItemName.Unarmed));
+        anri.AddItem(ItemName.Unarmed, autoEquipWeapon: true);
 
         var goblin1 = new Monster(UnitName.Goblin, MovementType.Warrior, 5);
         goblin1.Defense = 5;

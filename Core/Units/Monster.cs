@@ -1,6 +1,5 @@
 using SomberInertia.Enums;
 using SomberInertia.Core.Combat.Item;
-using SomberInertia.Core.Combat.Item.Weapon;
 
 namespace SomberInertia.Core.Units;
 
@@ -20,7 +19,6 @@ public class Monster : Unit
 
             Friendly = false;
             Promoted = false;
-            EquipWeapon(WeaponManager.Create(ItemName.Unarmed));
 
             Logger.Info($"Monster created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
         }

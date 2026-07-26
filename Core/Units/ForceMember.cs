@@ -1,7 +1,6 @@
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
 using SomberInertia.Core.Combat.Item;
-using SomberInertia.Core.Combat.Item.Weapon;
 
 namespace SomberInertia.Core.Units;
 
@@ -27,7 +26,6 @@ public class ForceMember : Unit
 
         Friendly = true;
         Promoted = false;
-        EquipWeapon(WeaponManager.Create(ItemName.Unarmed));
 
         Logger.Info($"Force Member created -> {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}.");
     }
