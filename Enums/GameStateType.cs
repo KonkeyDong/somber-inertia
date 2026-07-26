@@ -38,4 +38,5 @@ public enum GameStateType
     ExitBattleScreen,
     DropItem,
     PromptYesNo,
+    EquipItem,
 }
