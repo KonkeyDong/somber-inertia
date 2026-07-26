@@ -5,7 +5,6 @@ using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
 using SomberInertia.Core.Combat.Item;
 
-
 using System.Numerics;
 using System.Text;
 using Raylib_cs;
@@ -25,7 +24,7 @@ public abstract class Unit
             Max = max;
         }
 
-        public override string ToString() 
+        public override string ToString()
         {
             if (Max == 0)
             {
@@ -41,7 +40,7 @@ public abstract class Unit
 
     public UnitName Name { get; protected set; }
     public MovementType MovementType { get; protected set; }
-    public virtual bool Promoted { get; set; } =  false;
+    public virtual bool Promoted { get; set; } = false;
 
     public Dictionary<MagicFamily, List<MagicName>> KnownSpells { get; } = new();
     public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
@@ -53,7 +52,6 @@ public abstract class Unit
     public Direction FacingDirection { get; set; } = Direction.Down;
     private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
 
-    // Core reference - source of truth for position
     protected Block? _block;
     public Block? Block
     {
@@ -62,20 +60,17 @@ public abstract class Unit
         {
             if (_block == value)
             {
-                return; // avoid spam on same value
+                return;
             }
 
             _block = value;
         }
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // Movement Animation (smooth sliding between tiles)
-    // ─────────────────────────────────────────────────────────────
     public Vector2 WorldPosition { get; private set; }
     public Vector2 TargetWorldPosition { get; private set; }
 
-    private Vector2 _startWorldPosition; // ← important for correct lerp
+    private Vector2 _startWorldPosition;
     private float _movementTimer;
 
     private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay / 7);
@@ -84,8 +79,6 @@ public abstract class Unit
     private bool _isAnimating;
     public bool IsAnimating => _isAnimating;
 
-
-    // Stats
     public Stat HP { get; set; }
     public Stat MP { get; set; }
     public int Attack { get; set; }
@@ -96,22 +89,25 @@ public abstract class Unit
 
     public bool Friendly { get; set; }
 
-    public Unit(UnitName name, MovementType movementType, int movement)
+    public Unit(UnitName name)
     {
-        Name = name;
-        MovementType = movementType;
+        var data = UnitDatabase.Get(name);
 
-        Movement = movement;
-        HP = new Stat(10);
-        MP = new Stat(10);
+        Name = data.Name;
+        MovementType = data.MovementType;
+        Movement = data.Movement;
+        HP = new Stat(data.BaseHP);
+        MP = new Stat(data.BaseMP);
+        Attack = data.BaseAttack;
+        Defense = data.BaseDefense;
+        Speed = data.BaseSpeed;
+
         StatusEffects = new();
-
         InitializeItemSlots();
         EquipUnarmed();
-
         LoadWalkAnimations();
 
-        Logger.Info($"Unit created → {Name.GetDisplayName()} ({movementType}), Movement: {movement}");
+        Logger.Info($"Unit created → {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}");
     }
 
     private void InitializeItemSlots()
@@ -164,6 +160,7 @@ public abstract class Unit
         {
             HP.Current = 0;
         }
+
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
@@ -240,8 +237,13 @@ public abstract class Unit
         StatusEffectSystem.ProcessSleep(this);
     }
 
-    public override string ToString() => $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
+    public override string ToString()
+    {
+        return $"{Name.GetDisplayName()} ({MovementType}) HP = [{HP.Current} / {HP.Max}] at {Block?.PrintGridCoordinates() ?? "[null]"}";
+    }
+
     public string GetDisplayName() => Name.GetDisplayName();
+
     public string CombatToString()
     {
         var weaponData = GetEquippedWeaponData();
@@ -306,8 +308,6 @@ public abstract class Unit
         return new List<MagicName> { MagicName.NoSpell };
     }
 
-    // This assumes that the last spell is the strongest. Spells should only
-    // be added in ascending level order upon level requirement met.
     public MagicName GetHighestMagicLevelInBucket(MagicFamily magicFamily)
     {
         var list = GetMagicListInBucket(magicFamily);
@@ -316,7 +316,6 @@ public abstract class Unit
             return MagicName.NoSpell;
         }
 
-        // Assumes spells are learned in ascending level order
         return list[list.Count - 1];
     }
 
@@ -426,11 +425,9 @@ public abstract class Unit
         return (data.AllowedJobs & job) != 0;
     }
 
-    // -----------------
-    // Animation methods
-    // -----------------
     #region Animations
-    public void ResetStartingWorldPosition() 
+
+    public void ResetStartingWorldPosition()
     {
         if (Block == null)
         {
@@ -442,12 +439,12 @@ public abstract class Unit
 
     public void StartMovingTo(Block targetBlock)
     {
-        if (targetBlock == null) 
+        if (targetBlock == null)
         {
             return;
         }
 
-        _startWorldPosition = WorldPosition; // save where we are now
+        _startWorldPosition = WorldPosition;
         TargetWorldPosition = targetBlock.GetPixelCoordinates();
         _movementTimer = 0f;
         _isAnimating = true;
@@ -522,21 +519,16 @@ public abstract class Unit
         int frameIndex;
         if (_isAnimating)
         {
-            // Use the fast movement flipper while sliding
             frameIndex = _movementFlipper.IsOn ? 1 : 0;
         }
         else
         {
-            // Use the global slow idle flipper when standing still
             frameIndex = globalFrameFlipperFlag ? 1 : 0;
         }
 
         return animations[frameIndex];
     }
 
-    // ---------------------------
-    // Read Spritesheet Frame Data
-    // ---------------------------
     public void LoadWalkAnimations()
     {
         _walkAnimations.Clear();
