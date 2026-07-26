@@ -143,12 +143,12 @@ public class Grid
 
     public void CalculateWeaponAttackRange(Unit unit)
     {
-        if (unit?.Block == null || unit.Weapon == null)
+        if (unit?.Block == null)
         {
             return;
         }
 
-        WeaponAttackRangeSet = CalculateEffectDistanceRange(unit, unit.Weapon.DistanceRange);
+        WeaponAttackRangeSet = CalculateEffectDistanceRange(unit, unit.GetEquippedWeaponData().DistanceRange);
     }
 
     public void CalculateMagicAttackRange(Unit unit, Magic magic)

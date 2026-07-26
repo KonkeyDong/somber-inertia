@@ -183,7 +183,7 @@ public class BattleSpriteManager
 
     private static string BuildDictionaryKey(Unit unit)
     {
-        return $"{unit.Name.GetBaseName()}{unit.Weapon.Name}";
+        return $"{unit.Name.GetBaseName()}{unit.GetEquippedWeaponName()}";
     }
 
     private static string BuildAssetDirPath(Unit unit)
@@ -191,7 +191,9 @@ public class BattleSpriteManager
         if (unit.Friendly)
         {
             var promoted = unit.Promoted ? "Promoted" : "Unpromoted";
-            return Path.Combine("Assets", "Sprites", "Characters", unit.Name.GetBaseName(), promoted, "Battle", unit.Weapon.Name.GetBaseName());
+            var weapon = unit.GetEquippedWeaponData();
+
+            return Path.Combine("Assets", "Sprites", "Characters", unit.Name.GetBaseName(), promoted, "Battle", weapon.Name.GetBaseName());
         }
 
         // enemies

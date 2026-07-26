@@ -130,9 +130,11 @@ public static class GameConstants
 
         public static string BuildKey(Unit unit)
         {
-            var ItemName = unit.Weapon.Name.GetBaseName() ?? "None";
+            var weaponName = unit.GetEquippedWeaponName();
+            Logger.Debug(unit.Name.GetBaseName());
+            Logger.Debug(weaponName.ToString());
 
-            return $"{unit.Name.GetBaseName()}_{ItemName}";
+            return $"{unit.Name.GetBaseName()}_{weaponName.GetBaseName()}";
         }
     }
 }

@@ -20,7 +20,8 @@ public static class CombatSystem
         }
 
         Logger.Info("   Attack hits!");
-        var baseDamage = (attacker.Attack + attacker.Weapon.Attack) - defender.Defense;
+
+        var baseDamage = (attacker.Attack + attacker.GetEquippedWeaponData().Attack) - defender.Defense;
         if (baseDamage <= 0)
         {
             Logger.Info($"{attacker.Name}'s attack [{attacker.Attack}] is less than or equal to {defender.Name}'s defense [{defender.Defense}]. Minimum damage is 1");
@@ -51,8 +52,10 @@ public static class CombatSystem
         Logger.Warning("Critical hit not implemented.");
         context.Crit = false;
 
+        var weapon = context.Attacker.GetEquippedWeaponData();
+
         Logger.Info("   Attack hits!");
-        var baseDamage = (context.Attacker.Attack + context.Attacker.Weapon.Attack) - context.Defender.Defense;
+        var baseDamage = (context.Attacker.Attack + weapon.Attack) - context.Defender.Defense;
         if (baseDamage <= 0)
         {
             Logger.Info($"{context.Attacker.Name}'s attack [{context.Attacker.Attack}] is less than or equal to {context.Defender.Name}'s defense [{context.Defender.Defense}]. Minimum damage is 1");

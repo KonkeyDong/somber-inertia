@@ -4,7 +4,7 @@ using SomberInertia.Graphics;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
 using SomberInertia.Core.Combat.Item;
-using SomberInertia.Core.Combat.Item.Weapon;
+
 
 using System.Numerics;
 using System.Text;
@@ -47,7 +47,8 @@ public abstract class Unit
     public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
     public bool HasSpells => KnownSpells.Count > 0;
 
-    public Item?[] Items = new Item?[GameConstants.MAX_BUCKET_SIZE];
+    public ItemSlot[] Items = new ItemSlot[GameConstants.MAX_BUCKET_SIZE];
+    public int EquippedWeaponIndex { get; set; } = -1; // -1 = Unarmed
 
     public Direction FacingDirection { get; set; } = Direction.Down;
     private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
@@ -88,7 +89,6 @@ public abstract class Unit
     public Stat HP { get; set; }
     public Stat MP { get; set; }
     public int Attack { get; set; }
-    public Weapon Weapon { get; set; } = null!;
     public int Defense { get; set; }
     public int Speed { get; set; }
     public int Movement { get; protected set; }
@@ -106,19 +106,52 @@ public abstract class Unit
         MP = new Stat(10);
         StatusEffects = new();
 
-        // default for now
-        EquipWeapon(WeaponManager.Create(ItemName.Unarmed));
+        InitializeItemSlots();
+        EquipUnarmed();
 
         LoadWalkAnimations();
 
         Logger.Info($"Unit created → {Name.GetDisplayName()} ({movementType}), Movement: {movement}");
     }
 
-    public void EquipWeapon(Weapon weapon)
+    private void InitializeItemSlots()
     {
-        Logger.Warning("Unit::EquipWeapon(): will need to redesign when items are more incorporated.");
+        for (var i = 0; i < Items.Length; i++)
+        {
+            Items[i] = ItemSlot.Empty;
+        }
+    }
 
-        Weapon = weapon;
+    public void EquipUnarmed()
+    {
+        EquippedWeaponIndex = -1;
+    }
+
+    public bool EquipWeaponAtIndex(int index)
+    {
+        if (index < 0 || index >= Items.Length)
+        {
+            Logger.Error($"EquipWeaponAtIndex(): index [{index}] out of range.");
+            return false;
+        }
+
+        var slot = Items[index];
+        if (slot.IsEmpty)
+        {
+            Logger.Warning("EquipWeaponAtIndex(): slot is empty.");
+            return false;
+        }
+
+        var data = ItemDatabase.Get(slot.Name);
+        if (!data.Type.IsWeapon())
+        {
+            Logger.Warning($"EquipWeaponAtIndex(): [{slot.Name}] is not a weapon.");
+            return false;
+        }
+
+        EquippedWeaponIndex = index;
+        Logger.Info($"Equipped [{slot.Name}] from slot [{index}].");
+        return true;
     }
 
     public void TakeDamage(int amount)
@@ -219,15 +252,18 @@ public abstract class Unit
     public string GetDisplayName() => Name.GetDisplayName();
     public string CombatToString()
     {
+        var weaponData = GetEquippedWeaponData();
+        var weaponSlot = GetEquippedWeaponSlot();
+
         var sb = new StringBuilder();
         sb.AppendLine($"   {GetDisplayName()}:");
-        sb.AppendLine($"   HP            = [{HP.ToString()}]");
-        sb.AppendLine($"   MP            = [{MP.ToString()}]");
-        sb.AppendLine($"   Eq. Weapon    = [{Weapon.Name}]");
-        sb.AppendLine($"   Offense       = [{Weapon.Attack + Attack}]");
+        sb.AppendLine($"   HP            = [{HP}]");
+        sb.AppendLine($"   MP            = [{MP}]");
+        sb.AppendLine($"   Eq. Weapon    = [{weaponData.Name}] ({weaponSlot.Condition})");
+        sb.AppendLine($"   Offense       = [{GetTotalOffense()}]");
         sb.AppendLine($"   Defense       = [{Defense}]");
         sb.AppendLine($"   Speed         = [{Speed}]");
-        sb.AppendLine($"   Movement Type = [{MovementType.ToString()}]");
+        sb.AppendLine($"   Movement Type = [{MovementType}]");
 
         return sb.ToString();
     }
@@ -294,20 +330,27 @@ public abstract class Unit
         return spell;
     }
 
-    // Returns a bool. False = item cannot be added (already holding max number of items).
-    // True = an item was added to the unit successfully.
-    public bool AddItem(Item item)
+    public bool AddItem(ItemName itemName, ItemCondition condition = ItemCondition.Normal, bool autoEquipWeapon = false)
     {
-        return FillFirstAvailableBucket(item);
-    }
-
-    private bool FillFirstAvailableBucket(Item item)
-    {
-        for (var i = 0; i < GameConstants.MAX_BUCKET_SIZE; i++)
+        for (var i = 0; i < Items.Length; i++)
         {
-            if (Items[i] == null)
+            if (Items[i].IsEmpty)
             {
-                Items[i] = item;
+                Items[i] = new ItemSlot
+                {
+                    Name = itemName,
+                    Condition = condition
+                };
+
+                if (autoEquipWeapon && EquippedWeaponIndex < 0)
+                {
+                    var data = ItemDatabase.Get(itemName);
+                    if (data.Type.IsWeapon())
+                    {
+                        EquippedWeaponIndex = i;
+                    }
+                }
+
                 return true;
             }
         }
@@ -315,19 +358,77 @@ public abstract class Unit
         return false;
     }
 
-    public Item GetFirstItemInBucket()
+    public ItemSlot GetItemAtIndex(int index)
     {
-        if (Items[0] == null)
+        if (index < 0 || index >= Items.Length)
         {
-            return ItemManager.Create(ItemName.NoItem);
+            return ItemSlot.Empty;
         }
 
-        return Items[0]!;
+        return Items[index];
     }
 
-    public Item GetItemAtIndex(int index)
+    public ItemName GetEquippedWeaponName()
     {
-        return Items[index] ?? ItemManager.Create(ItemName.NoItem);
+        if (EquippedWeaponIndex < 0 || EquippedWeaponIndex >= Items.Length)
+        {
+            return ItemName.Unarmed;
+        }
+
+        var slot = Items[EquippedWeaponIndex];
+        if (slot.IsEmpty)
+        {
+            return ItemName.Unarmed;
+        }
+
+        return slot.Name;
+    }
+
+    public ItemSlot GetEquippedWeaponSlot()
+    {
+        if (EquippedWeaponIndex < 0 || EquippedWeaponIndex >= Items.Length)
+        {
+            return new ItemSlot
+            {
+                Name = ItemName.Unarmed,
+                Condition = ItemCondition.Normal
+            };
+        }
+
+        return Items[EquippedWeaponIndex];
+    }
+
+    public ItemData GetEquippedWeaponData()
+    {
+        return ItemDatabase.Get(GetEquippedWeaponName());
+    }
+
+    public int GetTotalOffense()
+    {
+        var weaponData = GetEquippedWeaponData();
+        return Attack + weaponData.Attack;
+    }
+
+    public void UnequipWeapon()
+    {
+        EquippedWeaponIndex = -1;
+    }
+
+    public bool CanUseWeaponAsItem(ItemName itemName, Job job)
+    {
+        var data = ItemDatabase.Get(itemName);
+
+        if (data.SpellName == MagicName.NoSpell)
+        {
+            return false;
+        }
+
+        if (data.AllowedJobs == Job.Any)
+        {
+            return true;
+        }
+
+        return (data.AllowedJobs & job) != 0;
     }
 
     // -----------------
