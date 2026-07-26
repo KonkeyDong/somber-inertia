@@ -65,7 +65,7 @@ public class SelectMagic : IGameState
     private void SetSelectedMagic(Direction direction)
     {
         _game.MagicUI.SetSelected(direction, _currentUnit);
-        _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
+        _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagicData());
     }
 
     public void Update()
@@ -86,6 +86,10 @@ public class SelectMagic : IGameState
             _game.Renderer.DrawMagicIcon(scale, iconData.Family, iconData.Position);
         }
 
-        _game.Renderer.DrawSpellInfoBox(scale, _game.MagicUI.GetSelectedMagic(), _game.MagicUI.GetMagicInformationBoxCoordinates());
+        _game.Renderer.DrawSpellInfoBox(
+            scale,
+            _game.MagicUI.GetSelectedMagicData(),
+            _game.MagicUI.GetMagicInformationBoxCoordinates()
+        );
     }
 }

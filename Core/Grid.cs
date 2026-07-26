@@ -151,7 +151,7 @@ public class Grid
         WeaponAttackRangeSet = CalculateEffectDistanceRange(unit, unit.GetEquippedWeaponData().DistanceRange);
     }
 
-    public void CalculateMagicAttackRange(Unit unit, Magic magic)
+    public void CalculateMagicAttackRange(Unit unit, MagicData magic)
     {
         if (unit?.Block == null)
         {
@@ -164,7 +164,7 @@ public class Grid
     // Similar to CalculateMagicAttackRange(), but sets the SpellEffectRangeSet.
     // Used for when you cast an AOE spell on a unit and you need to get all units
     // at that unit's location, not the caster's location.
-    public void CalculateSpellEffectRange(Unit unit, Magic magic)
+    public void CalculateSpellEffectRange(Unit unit, MagicData magic)
     {
         if (unit?.Block == null)
         {

@@ -27,7 +27,7 @@ public class SelectMagicTargets : IGameState
         _currentUnit = _game.GetCurrentUnit();
         _blinker = new FrameFlipper(GameConstants.Animations.BlinkDelay);
 
-        var offensive = _game.MagicUI.GetSelectedMagic().Offensive;
+        var offensive = _game.MagicUI.GetSelectedMagicData().Offensive;
         _listOfUnits = offensive ? _game.UnfriendlyUnitsInRange : _game.FriendlyUnitsInRange;
     }
 
@@ -50,17 +50,19 @@ public class SelectMagicTargets : IGameState
 
     public void HandleInput()
     {
-        if (_listOfUnits.Count() > 1)
+        if (_listOfUnits.Count > 1)
         {
             var changed = false;
+
             if (Raylib.IsKeyPressed(KeyboardKey.Left))
             {
-                _currentIndex = (_currentIndex + 1) % _listOfUnits.Count();
+                _currentIndex = (_currentIndex + 1) % _listOfUnits.Count;
                 changed = true;
             }
+
             if (Raylib.IsKeyPressed(KeyboardKey.Right))
             {
-                _currentIndex = (_currentIndex - 1 + _listOfUnits.Count()) % _listOfUnits.Count();
+                _currentIndex = (_currentIndex - 1 + _listOfUnits.Count) % _listOfUnits.Count;
                 changed = true;
             }
 
@@ -78,7 +80,10 @@ public class SelectMagicTargets : IGameState
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
             Logger.Info(_magicContext.ToString());
-            _game.MagicUI.GetSelectedMagic().Cast(_magicContext);
+
+            var spellName = _game.MagicUI.GetSelectedMagicName();
+            MagicDatabase.Cast(spellName, _magicContext);
+
             GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
         }
 
@@ -91,7 +96,10 @@ public class SelectMagicTargets : IGameState
     private void SetMagicContext()
     {
         var selectedUnit = _listOfUnits[_currentIndex];
-        _game.Grid.CalculateSpellEffectRange(selectedUnit, _game.MagicUI.GetSelectedMagic());
+        var spellData = _game.MagicUI.GetSelectedMagicData();
+
+        // Prefer MagicData overload if you have it; otherwise pass TargetRange
+        _game.Grid.CalculateSpellEffectRange(selectedUnit, spellData);
 
         var unitsInRange = _game.Grid.BuildListOfUnitsInSpellEffectRange(selectedUnit);
         _magicContext = new MagicContext(_currentUnit, unitsInRange, _game.Grid);
