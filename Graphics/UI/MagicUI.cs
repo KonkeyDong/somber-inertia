@@ -15,8 +15,8 @@ public class MagicUI
     private int _selectedMagicIconIndex;
     private int _selectedMagicLevel;
     private MagicFamily _selectedMagicFamily;
-    private List<Magic> _selectedMagicList = new();
-    private Magic _selectedMagic;
+    private List<MagicName> _selectedMagicList = new();
+    private MagicName _selectedMagicName;
 
     private readonly Dictionary<Direction, int> _spellIndexByDirection = new()
     {
@@ -34,7 +34,7 @@ public class MagicUI
         ) / GameStateManager.CurrentScale;
 
         _magicInformationBoxCoordinates = new Vector2(_centerPosition.X + 65, _centerPosition.Y);
-        _selectedMagic = MagicManager.Create(MagicName.NoSpell);
+        _selectedMagicName = MagicName.NoSpell;
 
         Reset();
     }
@@ -44,8 +44,8 @@ public class MagicUI
         _selectedMagicIconIndex = -1;
         _selectedMagicLevel = 0;
         _selectedMagicFamily = MagicFamily.NoSpell;
-        _selectedMagicList = new();
-        _selectedMagic = MagicManager.Create(MagicName.NoSpell);
+        _selectedMagicList = new List<MagicName>();
+        _selectedMagicName = MagicName.NoSpell;
     }
 
     public void SetSelected(Direction direction, Unit currentUnit)
@@ -68,13 +68,12 @@ public class MagicUI
             _selectedMagicIconIndex = index;
             _selectedMagicFamily = (MagicFamily)family;
             _selectedMagicList = currentUnit.GetMagicListInBucket(_selectedMagicFamily);
-            _selectedMagic = currentUnit.GetHighestMagicLevelInBucket(_selectedMagicFamily);
-            _selectedMagicLevel = _selectedMagicList.Count - 1;
+            _selectedMagicName = currentUnit.GetHighestMagicLevelInBucket(_selectedMagicFamily);
+            _selectedMagicLevel = Math.Max(0, _selectedMagicList.Count - 1);
 
-            // for setting the red border
             MagicIcons.SetSelectedSpell(_selectedMagicFamily);
 
-            Logger.Debug($"Selected magic index: [{index}].");
+            Logger.Debug($"Selected magic index: [{index}], family: [{_selectedMagicFamily}], spell: [{_selectedMagicName}].");
         }
     }
 
@@ -93,9 +92,14 @@ public class MagicUI
         return _selectedMagicIconIndex != -1;
     }
 
-    public Magic GetSelectedMagic()
+    public MagicName GetSelectedMagicName()
     {
-        return _selectedMagic;
+        return _selectedMagicName;
+    }
+
+    public MagicData GetSelectedMagicData()
+    {
+        return MagicDatabase.Get(_selectedMagicName);
     }
 
     public Vector2 GetMagicInformationBoxCoordinates()
@@ -105,12 +109,12 @@ public class MagicUI
 
     public bool IsSelectedMagicOffensive()
     {
-        return _selectedMagic.Offensive;
+        return GetSelectedMagicData().Offensive;
     }
 
     public void NextSpellLevel()
     {
-        if (_selectedMagicList.Count == 1)
+        if (_selectedMagicList.Count <= 1)
         {
             return;
         }
@@ -122,12 +126,12 @@ public class MagicUI
             _selectedMagicLevel = 0;
         }
 
-        _selectedMagic = _selectedMagicList[_selectedMagicLevel];
+        _selectedMagicName = _selectedMagicList[_selectedMagicLevel];
     }
 
     public void PreviousSpellLevel()
     {
-        if (_selectedMagicList.Count == 1)
+        if (_selectedMagicList.Count <= 1)
         {
             return;
         }
@@ -139,7 +143,7 @@ public class MagicUI
             _selectedMagicLevel = _selectedMagicList.Count - 1;
         }
 
-        _selectedMagic = _selectedMagicList[_selectedMagicLevel];
+        _selectedMagicName = _selectedMagicList[_selectedMagicLevel];
     }
 
     public IEnumerable<MagicIconData> GetMagicIconsToDraw(float scale, Unit currentUnit)

@@ -37,19 +37,19 @@ public class SelectMagicLevel : IGameState
         if (Raylib.IsKeyPressed(KeyboardKey.Left))
         {
             _game.MagicUI.PreviousSpellLevel();
-            _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
+            _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagicData());
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Right))
         {
             _game.MagicUI.NextSpellLevel();
-            _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
+            _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagicData());
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
         {
-            var spell = _game.MagicUI.GetSelectedMagic();
-            Logger.Info(spell.ToString());
+            var spellData = _game.MagicUI.GetSelectedMagicData();
+            Logger.Info(spellData.ToString());
             GameStateManager.ChangeStateType(GameStateType.PrepareMagicTargets);
         }
 
@@ -83,6 +83,11 @@ public class SelectMagicLevel : IGameState
             _game.Renderer.DrawMagicIcon(scale, iconData.Family, iconData.Position);
         }
 
-        _game.Renderer.DrawSpellInfoBox(scale, _game.MagicUI.GetSelectedMagic(), _game.MagicUI.GetMagicInformationBoxCoordinates(), _blinker.IsOn);
+        _game.Renderer.DrawSpellInfoBox(
+            scale,
+            _game.MagicUI.GetSelectedMagicData(),
+            _game.MagicUI.GetMagicInformationBoxCoordinates(),
+            _blinker.IsOn
+        );
     }
 }

@@ -274,9 +274,9 @@ public class Renderer
         Raylib.DrawTextEx(Raylib.GetFontDefault(), text, finalTextPos, fontSize, 1, textColor);
     }
 
-    public void DrawSpellInfoBox(float scale, Magic spell, Vector2 position, bool highlightLevel = false)
+    public void DrawSpellInfoBox(float scale, MagicData spell, Vector2 position, bool highlightLevel = false)
     {
-        var spellName = spell.Name.GetBaseName();
+        var spellName = spell.Name.GetBaseName(); // or GetDisplayName()
         var level = spell.Level;
         var mpCost = spell.MPCost;
 

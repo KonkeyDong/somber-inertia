@@ -43,7 +43,7 @@ public abstract class Unit
     public MovementType MovementType { get; protected set; }
     public virtual bool Promoted { get; set; } =  false;
 
-    public Dictionary<MagicFamily, List<Magic>> KnownSpells { get; } = new();
+    public Dictionary<MagicFamily, List<MagicName>> KnownSpells { get; } = new();
     public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
     public bool HasSpells => KnownSpells.Count > 0;
 
@@ -268,27 +268,24 @@ public abstract class Unit
         return sb.ToString();
     }
 
-    public void LearnSpell(Magic spell)
+    public void LearnSpell(MagicName spellName)
     {
-        Logger.Debug("LearnSpell():");
-        var family = spell.Name.ToFamily();
+        var data = MagicDatabase.Get(spellName);
+        var family = data.Family;
 
         if (!MagicFamilyBuckets.Contains(family))
         {
-            Logger.Debug($"  Creating new bucket for magic family [{family}].");
             FillFirstAvailableBucket(family);
         }
 
         if (!KnownSpells.ContainsKey(family))
         {
-            Logger.Debug("  Initializing new List<Magic>().");
-            KnownSpells[family] = new List<Magic>();
+            KnownSpells[family] = new List<MagicName>();
         }
 
-        if (!KnownSpells[family].Any(s => s.Name == spell.Name))
+        if (!KnownSpells[family].Contains(spellName))
         {
-            Logger.Debug($"  Adding spell [{spell.Name.GetDisplayName()}].");
-            KnownSpells[family].Add(spell);
+            KnownSpells[family].Add(spellName);
         }
     }
 
@@ -306,28 +303,34 @@ public abstract class Unit
         Logger.Error($"magic family [{family}] could not be added to bucket as bucket as reached capacity.");
     }
 
-    public List<Magic> GetMagicListInBucket(MagicFamily magicFamily)
+    public List<MagicName> GetMagicListInBucket(MagicFamily magicFamily)
     {
         if (KnownSpells.TryGetValue(magicFamily, out var spells))
         {
             return spells;
         }
 
-        Logger.Error($"Magic family [{magicFamily}] could not be found in KnownSpells dictionary.");
-        return new List<Magic>() { MagicManager.Create(MagicName.NoSpell) };
+        Logger.Error($"Magic family [{magicFamily}] not found.");
+        return new List<MagicName> { MagicName.NoSpell };
     }
 
     // This assumes that the last spell is the strongest. Spells should only
     // be added in ascending level order upon level requirement met.
-    public Magic GetHighestMagicLevelInBucket(MagicFamily magicFamily)
+    public MagicName GetHighestMagicLevelInBucket(MagicFamily magicFamily)
     {
-        var spell = GetMagicListInBucket(magicFamily).LastOrDefault();
-        if (spell == null)
+        var list = GetMagicListInBucket(magicFamily);
+        if (list.Count == 0)
         {
-            Logger.Error("Last spell in dictionary KnownSpells is null.");
+            return MagicName.NoSpell;
         }
 
-        return spell;
+        // Assumes spells are learned in ascending level order
+        return list[list.Count - 1];
+    }
+
+    public MagicData GetHighestMagicDataInBucket(MagicFamily magicFamily)
+    {
+        return MagicDatabase.Get(GetHighestMagicLevelInBucket(magicFamily));
     }
 
     public bool AddItem(ItemName itemName, ItemCondition condition = ItemCondition.Normal, bool autoEquipWeapon = false)

@@ -47,24 +47,26 @@ class Program
         Raylib.InitWindow(width, height, "Somber Inertia");
         Raylib.SetTargetFPS(60);
 
-        MagicManager.Initialize();
+        MagicDatabase.Initialize();
         ItemDatabase.Initialize();
         var game = new Game(new Grid(11, 10));
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
         max.Attack = 15;
         max.HP.Current = 1;
+        max.MP.Max = 99;
+        max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
         max.AddItem(ItemName.ShortSword, autoEquipWeapon: true);
-        max.LearnSpell(MagicManager.Create(MagicName.Egress1));
-        max.LearnSpell(MagicManager.Create(MagicName.Blaze1));
-        max.LearnSpell(MagicManager.Create(MagicName.Blaze2));
-        max.LearnSpell(MagicManager.Create(MagicName.Blaze3));
-        max.LearnSpell(MagicManager.Create(MagicName.Heal1));
-        max.LearnSpell(MagicManager.Create(MagicName.Heal2));
-        max.LearnSpell(MagicManager.Create(MagicName.Heal3));
-        max.LearnSpell(MagicManager.Create(MagicName.Heal4));
-        max.LearnSpell(MagicManager.Create(MagicName.Bolt3));
+        max.LearnSpell(MagicName.Egress1);
+        max.LearnSpell(MagicName.Blaze1);
+        max.LearnSpell(MagicName.Blaze2);
+        max.LearnSpell(MagicName.Blaze3);
+        max.LearnSpell(MagicName.Heal1);
+        max.LearnSpell(MagicName.Heal2);
+        max.LearnSpell(MagicName.Heal3);
+        max.LearnSpell(MagicName.Heal4);
+        max.LearnSpell(MagicName.Bolt3);
         max.AddItem(ItemName.MedicalHerb);
         max.AddItem(ItemName.Antidote);
 
