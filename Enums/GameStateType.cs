@@ -36,4 +36,5 @@ public enum GameStateType
     BattleResolution,
     EnterBattleScreen,
     ExitBattleScreen,
+    DropItem,
 }

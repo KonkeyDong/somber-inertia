@@ -1,7 +1,7 @@
 using SomberInertia.Core.Units;
 using System.Text;
 
-namespace SomberInertia.Core.Combat.Items;
+namespace SomberInertia.Core.Combat.Item;
 
 public class ItemContext
 {

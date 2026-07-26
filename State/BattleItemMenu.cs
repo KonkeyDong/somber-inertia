@@ -108,8 +108,7 @@ public class BattleItemMenu : IGameState
         }
         else if (_selectedCommand == CommandIconType.Drop)
         {
-            // GameStateManager.ChangeStateType(GameStateType.TransitionSelectorToNextUnit);
-            Logger.Warning("Item::Drop not implemented.");
+            GameStateManager.ChangeStateType(GameStateType.DropItem);
         }
         else if (_selectedCommand == CommandIconType.Give)
         {

@@ -68,7 +68,7 @@ public static class ItemNameExtensions
             ItemName.TurboPepper => "Turbo Pepper",
 
             // Key Items
-            ItemName.OrgOfLight => "Orb of Light",
+            ItemName.OrbOfLight => "Orb of Light",
             ItemName.DomingoEgg => "Domingo Egg",
             ItemName.MoonStone => "Moon Stone",
             ItemName.LunarDew => "Lunar Dew",

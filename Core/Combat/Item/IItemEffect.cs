@@ -1,4 +1,4 @@
-namespace SomberInertia.Core.Combat.Items;
+namespace SomberInertia.Core.Combat.Item;
 
 public interface IItemEffect
 {

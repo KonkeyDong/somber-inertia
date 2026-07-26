@@ -8,6 +8,7 @@ using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.StatusEffect;
+using SomberInertia.Core.Combat.Item;
 using SomberInertia.Core.Combat.Item.Weapon;
 
 namespace SomberInertia;
@@ -49,6 +50,7 @@ class Program
 
         MagicManager.Initialize();
         WeaponManager.Initialize();
+        ItemManager.Initialize();
         var game = new Game(new Grid(11, 10));
 
         var max = new ForceMember(UnitName.Max, MovementType.Warrior, 4);
@@ -64,6 +66,8 @@ class Program
         max.LearnSpell(MagicManager.Create(MagicName.Heal3));
         max.LearnSpell(MagicManager.Create(MagicName.Heal4));
         max.LearnSpell(MagicManager.Create(MagicName.Bolt3));
+        max.AddItem(ItemManager.Create(ItemName.MedicalHerb));
+        max.AddItem(ItemManager.Create(ItemName.Antidote));
 
         var anri = new ForceMember(UnitName.Anri, MovementType.Warrior, 4);
         anri.Attack = 15;
@@ -89,6 +93,7 @@ class Program
         GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
         CommandIcons.Load();
         MagicIcons.Load();
+        ItemIcons.Load();
         DeathSprites.Load();
         BattleBackgrounds.Load();
 
