@@ -13,6 +13,18 @@ namespace SomberInertia.Core.Graphics;
 
 public class Renderer
 {
+    private readonly record struct InfoBoxMetrics(
+        int FillX,
+        int FillY,
+        int FillW,
+        int FillH,
+        int TextLeftX,
+        int TextStartY,
+        int FontSize,
+        int LineSpacing,
+        int LeftMargin
+    );
+
     public Renderer()
     {
 
@@ -223,320 +235,193 @@ public class Renderer
         Draw(scale, sprite, position);   
     }
 
-    public void DrawBattleMenuMessage(float scale, string text, Vector2 textPos)
+    private InfoBoxMetrics DrawInfoBoxFrame(float scale, Vector2 position, float contentWidth, float contentHeight)
     {
         var fontSize = (int)(8 * scale);
-        var textColor = Color.White;
+        var padding = 12;
+        var lineSpacing = 4;
+        var leftMargin = 8;
 
-        var textSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, 1);
-        var padding = 14;
+        var boxWidth = (int)contentWidth + padding * 2;
+        var boxHeight = (int)contentHeight + padding * 2;
+        var boxX = (int)(position.X * scale) - padding;
+        var boxY = (int)(position.Y * scale) - padding;
 
-        var boxWidth = (int)textSize.X + padding * 2;
-        var boxHeight = (int)textSize.Y + padding * 2;
-        var boxX = (int)(textPos.X * scale) - padding;
-        var boxY = (int)(textPos.Y * scale) - padding;
-
-        // Colors from your config
         var darkOrange = GameConstants.Textures.DarkOrange;
         var lightOrange = GameConstants.Textures.LightOrange;
         var offWhite = GameConstants.Textures.OffWhite;
         var blue = GameConstants.Textures.Blue;
 
-        // === Outer dark orange border ===
         Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
-
-        // === Light orange bevel (top + left) ===
         Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
         Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
 
-        // === OffWhite inner layer ===
-        var offWhiteX = boxX + 3;
-        var offWhiteY = boxY + 3;
-        var offWhiteW = boxWidth - 6;
-        var offWhiteH = boxHeight - 6;
+        var innerX = boxX + 3;
+        var innerY = boxY + 3;
+        var innerW = boxWidth - 6;
+        var innerH = boxHeight - 6;
+        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
 
-        Raylib.DrawRectangle(offWhiteX, offWhiteY, offWhiteW, offWhiteH, offWhite);
+        var fillX = innerX + 3;
+        var fillY = innerY + 3;
+        var fillW = innerW - 6;
+        var fillH = innerH - 6;
+        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
 
-        // === Blue fill ===
-        var blueX = offWhiteX + 3;
-        var blueY = offWhiteY + 3;
-        var blueW = offWhiteW - 6;
-        var blueH = offWhiteH - 6;
-
-        Raylib.DrawRectangle(blueX, blueY, blueW, blueH, blue);
-
-        // === Draw text centered ===
-        var finalTextPos = new Vector2(
-            boxX + (boxWidth - textSize.X) / 2,
-            boxY + (boxHeight - textSize.Y) / 2
+        return new InfoBoxMetrics(
+            fillX,
+            fillY,
+            fillW,
+            fillH,
+            fillX + leftMargin,
+            fillY + 6,
+            fontSize,
+            lineSpacing,
+            leftMargin
         );
-
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), text, finalTextPos, fontSize, 1, textColor);
     }
 
-    public void DrawSpellInfoBox(float scale, MagicData spell, Vector2 position, bool highlightLevel = false)
+    private static void SplitDisplayName(string displayName, out string line1, out string line2)
     {
-        var spellName = spell.Name.GetBaseName(); // or GetDisplayName()
-        var level = spell.Level;
-        var mpCost = spell.MPCost;
-
-        var fontSize = (int)(8 * scale);
-        var textColor = Color.White;
-
-        // Prepare lines
-        var line1 = spellName;
-        var line2 = $"Level {level}";
-        var line3Left = "MP";
-        var line3Right = mpCost.ToString();
-
-        // Measure text
-        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
-        var size2 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line2, fontSize, 1);
-        var sizeLeft = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line3Left, fontSize, 1);
-        var sizeRight = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line3Right, fontSize, 1);
-
-        var padding = 12;
-        var lineSpacing = 4;
-        var leftMargin = 8;
-
-        // Calculate box dimensions
-        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, sizeLeft.X + sizeRight.X + 20));
-        var contentHeight = size1.Y + size2.Y + sizeLeft.Y + (lineSpacing * 2);
-
-        var boxWidth = (int)contentWidth + padding * 2;
-        var boxHeight = (int)contentHeight + padding * 2;
-
-        var boxX = (int)(position.X * scale) - padding;
-        var boxY = (int)(position.Y * scale) - padding;
-
-        // === Border layers ===
-        var darkOrange = GameConstants.Textures.DarkOrange;
-        var lightOrange = GameConstants.Textures.LightOrange;
-        var offWhite = GameConstants.Textures.OffWhite;
-        var blue = GameConstants.Textures.Blue;
-
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
-        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
-
-        var innerX = boxX + 3;
-        var innerY = boxY + 3;
-        var innerW = boxWidth - 6;
-        var innerH = boxHeight - 6;
-
-        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
-
-        var fillX = innerX + 3;
-        var fillY = innerY + 3;
-        var fillW = innerW - 6;
-        var fillH = innerH - 6;
-
-        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
-
-        // === Text positioning ===
-        var textStartY = fillY + 6;
-        var textLeftX = fillX + leftMargin;
-
-        // Line 1 - Name (left justified)
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
-
-        // Line 2 - Level (with optional red highlight)
-        var text2Y = textStartY + size1.Y + lineSpacing;
-
-        if (highlightLevel)
-        {
-            var highlightPadding = 2;
-            var highlightX = (int)(textLeftX - highlightPadding);
-            var highlightY = (int)(text2Y - highlightPadding);
-            var highlightWidth = (int)(size2.X + (highlightPadding * 2));
-            var highlightHeight = (int)(size2.Y + (highlightPadding * 2));
-
-            Raylib.DrawRectangle(highlightX, highlightY, highlightWidth, highlightHeight, GameConstants.Textures.DarkRed);
-        }
-
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
-
-        // Line 3 - MP left + Cost right
-        var text3Y = text2Y + size2.Y + lineSpacing;
-        var text3RightX = fillX + fillW - sizeRight.X - leftMargin;
-
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line3Left, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line3Right, new Vector2(text3RightX, text3Y), fontSize, 1, textColor);
-    }
-
-    public void DrawUnitInfoBox(float scale, Unit unit, Vector2 position, int alpha = 255)
-    {
-        var name = unit.GetDisplayName();
-        var hpText = $"HP: {unit.HP.ToString()}";      // assumes you have a ToString() that does "current / max"
-        var mpText = $"MP: {unit.MP.ToString()}";      // same for MP
-
-        var fontSize = (int)(8 * scale);
-        var textColor = Color.White;
-
-        // Prepare lines
-        var line1 = name;
-        var line2 = hpText;
-        var line3 = mpText;
-
-        // Measure text
-        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
-        var size2 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line2, fontSize, 1);
-        var size3 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line3, fontSize, 1);
-
-        var padding = 12;
-        var lineSpacing = 4;
-        var leftMargin = 8;
-
-        // Calculate box dimensions
-        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X + 20));
-        var contentHeight = size1.Y + size2.Y + size3.Y + (lineSpacing * 2);
-
-        var boxWidth = (int)contentWidth + padding * 2;
-        var boxHeight = (int)contentHeight + padding * 2;
-
-        var boxX = (int)(position.X * scale) - padding;
-        var boxY = (int)(position.Y * scale) - padding;
-
-        // === Border layers ===
-        var darkOrange = GameConstants.Textures.DarkOrange;
-        var lightOrange = GameConstants.Textures.LightOrange;
-        var offWhite = GameConstants.Textures.OffWhite;
-        var blue = GameConstants.Textures.Blue;
-
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
-        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
-
-        var innerX = boxX + 3;
-        var innerY = boxY + 3;
-        var innerW = boxWidth - 6;
-        var innerH = boxHeight - 6;
-
-        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
-
-        var fillX = innerX + 3;
-        var fillY = innerY + 3;
-        var fillW = innerW - 6;
-        var fillH = innerH - 6;
-
-        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
-
-        // === Text positioning ===
-        var textStartY = fillY + 6;
-        var textLeftX = fillX + leftMargin;
-
-        // Line 1 - Name (left justified)
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
-
-        // Line 2 - HP (left justified)
-        var text2Y = textStartY + size1.Y + lineSpacing;
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
-
-        // Line 3 - MP left + current MP right
-        var text3Y = text2Y + size2.Y + lineSpacing;
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
-    }
-
-    public void DrawItemInfoBox(float scale, ItemData item, bool isEquipped, Vector2 position)
-    {
-        var displayName = item.Name.GetDisplayName();
-        var fontSize = (int)(8 * scale);
-        var textColor = Color.White;
-
-        // Split name across two lines: all words except last on line 1, last word on line 2
         var words = displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        string line1;
-        string line2;
 
         if (words.Length <= 1)
         {
             line1 = displayName;
             line2 = "";
+            return;
         }
-        else
+
+        line1 = string.Join(" ", words.Take(words.Length - 1));
+        line2 = words[words.Length - 1];
+    }
+
+    private static Vector2 Measure(string text, int fontSize)
+    {
+        return Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, 1);
+    }
+
+    public void DrawBattleMenuMessage(float scale, string text, Vector2 textPos)
+    {
+        var fontSize = (int)(8 * scale);
+        var textSize = Measure(text, fontSize);
+        var metrics = DrawInfoBoxFrame(scale, textPos, textSize.X, textSize.Y);
+
+        var finalTextPos = new Vector2(
+            metrics.FillX + (metrics.FillW - textSize.X) / 2,
+            metrics.FillY + (metrics.FillH - textSize.Y) / 2
+        );
+
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), text, finalTextPos, metrics.FontSize, 1, Color.White);
+    }
+
+    public void DrawSpellInfoBox(float scale, MagicData spell, Vector2 position, bool highlightLevel = false)
+    {
+        var fontSize = (int)(8 * scale);
+        var line1 = spell.Name.GetBaseName();
+        var line2 = $"Level {spell.Level}";
+        var line3Left = "MP";
+        var line3Right = spell.MPCost.ToString();
+
+        var size1 = Measure(line1, fontSize);
+        var size2 = Measure(line2, fontSize);
+        var sizeLeft = Measure(line3Left, fontSize);
+        var sizeRight = Measure(line3Right, fontSize);
+
+        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, sizeLeft.X + sizeRight.X + 20));
+        var contentHeight = size1.Y + size2.Y + sizeLeft.Y + (4 * 2);
+
+        var m = DrawInfoBoxFrame(scale, position, contentWidth, contentHeight);
+        var y = m.TextStartY;
+
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size1.Y + m.LineSpacing);
+
+        if (highlightLevel)
         {
-            line1 = string.Join(" ", words.Take(words.Length - 1));
-            line2 = words[words.Length - 1];
+            var pad = 2;
+            Raylib.DrawRectangle(
+                (int)(m.TextLeftX - pad),
+                (int)(y - pad),
+                (int)(size2.X + pad * 2),
+                (int)(size2.Y + pad * 2),
+                GameConstants.Textures.DarkRed
+            );
         }
 
-        var line3 = isEquipped ? "EQUIPPED" : "";
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size2.Y + m.LineSpacing);
 
-        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
-        var size2 = Raylib.MeasureTextEx(
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line3Left, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        Raylib.DrawTextEx(
             Raylib.GetFontDefault(),
-            string.IsNullOrEmpty(line2) ? "A" : line2, // keep height stable if empty
-            fontSize,
-            1
+            line3Right,
+            new Vector2(m.FillX + m.FillW - sizeRight.X - m.LeftMargin, y),
+            m.FontSize,
+            1,
+            Color.White
         );
-        var size3 = Raylib.MeasureTextEx(
-            Raylib.GetFontDefault(),
-            string.IsNullOrEmpty(line3) ? "EQUIPPED" : line3,
-            fontSize,
-            1
-        );
+    }
 
-        var padding = 12;
-        var lineSpacing = 4;
-        var leftMargin = 8;
+    public void DrawUnitInfoBox(float scale, Unit unit, Vector2 position, int alpha = 255)
+    {
+        var fontSize = (int)(8 * scale);
+        var line1 = unit.GetDisplayName();
+        var line2 = $"HP: {unit.HP}";
+        var line3 = $"MP: {unit.MP}";
+
+        var size1 = Measure(line1, fontSize);
+        var size2 = Measure(line2, fontSize);
+        var size3 = Measure(line3, fontSize);
 
         var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X));
-        var contentHeight = size1.Y + size2.Y + size3.Y + (lineSpacing * 2);
+        var contentHeight = size1.Y + size2.Y + size3.Y + (4 * 2);
 
-        var boxWidth = (int)contentWidth + padding * 2;
-        var boxHeight = (int)contentHeight + padding * 2;
+        var m = DrawInfoBoxFrame(scale, position, contentWidth, contentHeight);
+        var y = m.TextStartY;
 
-        var boxX = (int)(position.X * scale) - padding;
-        var boxY = (int)(position.Y * scale) - padding;
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size1.Y + m.LineSpacing);
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size2.Y + m.LineSpacing);
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+    }
 
-        var darkOrange = GameConstants.Textures.DarkOrange;
-        var lightOrange = GameConstants.Textures.LightOrange;
-        var offWhite = GameConstants.Textures.OffWhite;
-        var blue = GameConstants.Textures.Blue;
+    public void DrawItemInfoBox(float scale, ItemData item, bool isEquipped, Vector2 position)
+    {
+        var fontSize = (int)(8 * scale);
+        SplitDisplayName(item.Name.GetDisplayName(), out var line1, out var line2);
+        var line3 = isEquipped ? "EQUIPPED" : "";
 
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
-        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
+        var size1 = Measure(line1, fontSize);
+        var size2 = Measure(string.IsNullOrEmpty(line2) ? "A" : line2, fontSize);
+        var size3 = Measure(string.IsNullOrEmpty(line3) ? "EQUIPPED" : line3, fontSize);
 
-        var innerX = boxX + 3;
-        var innerY = boxY + 3;
-        var innerW = boxWidth - 6;
-        var innerH = boxHeight - 6;
+        var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X));
+        var contentHeight = size1.Y + size2.Y + size3.Y + (4 * 2);
 
-        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
+        var m = DrawInfoBoxFrame(scale, position, contentWidth, contentHeight);
+        var y = m.TextStartY;
 
-        var fillX = innerX + 3;
-        var fillY = innerY + 3;
-        var fillW = innerW - 6;
-        var fillH = innerH - 6;
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size1.Y + m.LineSpacing);
 
-        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
-
-        var textStartY = fillY + 6;
-        var textLeftX = fillX + leftMargin;
-
-        // Line 1 - name part 1
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
-
-        // Line 2 - name part 2
-        var text2Y = textStartY + size1.Y + lineSpacing;
         if (!string.IsNullOrEmpty(line2))
         {
-            Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
         }
 
-        // Line 3 - EQUIPPED
-        var text3Y = text2Y + size2.Y + lineSpacing;
+        y += (int)(size2.Y + m.LineSpacing);
+
         if (isEquipped)
         {
-            Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
         }
     }
 
     public void DrawEquipWeaponInfoBox(float scale, ItemData item, Vector2 position)
     {
         var fontSize = (int)(8 * scale);
-        var textColor = Color.White;
-
         var line1 = "WEAPON";
         string line2;
         string line3;
@@ -548,104 +433,35 @@ public class Renderer
         }
         else
         {
-            var displayName = item.Name.GetDisplayName();
-            var words = displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            if (words.Length <= 1)
-            {
-                line2 = displayName;
-                line3 = "";
-            }
-            else
-            {
-                line2 = string.Join(" ", words.Take(words.Length - 1));
-                line3 = words[words.Length - 1];
-            }
+            SplitDisplayName(item.Name.GetDisplayName(), out line2, out line3);
         }
 
-        var size1 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line1, fontSize, 1);
-        var size2 = Raylib.MeasureTextEx(Raylib.GetFontDefault(), line2, fontSize, 1);
-        var size3 = Raylib.MeasureTextEx(
-            Raylib.GetFontDefault(),
-            string.IsNullOrEmpty(line3) ? "A" : line3,
-            fontSize,
-            1
-        );
-
-        var padding = 12;
-        var lineSpacing = 4;
-        var leftMargin = 8;
+        var size1 = Measure(line1, fontSize);
+        var size2 = Measure(line2, fontSize);
+        var size3 = Measure(string.IsNullOrEmpty(line3) ? "A" : line3, fontSize);
 
         var contentWidth = Math.Max(size1.X, Math.Max(size2.X, size3.X));
-        var contentHeight = size1.Y + size2.Y + size3.Y + (lineSpacing * 2);
+        var contentHeight = size1.Y + size2.Y + size3.Y + (4 * 2);
 
-        var boxWidth = (int)contentWidth + padding * 2;
-        var boxHeight = (int)contentHeight + padding * 2;
+        var m = DrawInfoBoxFrame(scale, position, contentWidth, contentHeight);
+        var y = m.TextStartY;
 
-        var boxX = (int)(position.X * scale) - padding;
-        var boxY = (int)(position.Y * scale) - padding;
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size1.Y + m.LineSpacing);
+        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
+        y += (int)(size2.Y + m.LineSpacing);
 
-        var darkOrange = GameConstants.Textures.DarkOrange;
-        var lightOrange = GameConstants.Textures.LightOrange;
-        var offWhite = GameConstants.Textures.OffWhite;
-        var blue = GameConstants.Textures.Blue;
-
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
-        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
-
-        var innerX = boxX + 3;
-        var innerY = boxY + 3;
-        var innerW = boxWidth - 6;
-        var innerH = boxHeight - 6;
-
-        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
-
-        var fillX = innerX + 3;
-        var fillY = innerY + 3;
-        var fillW = innerW - 6;
-        var fillH = innerH - 6;
-
-        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
-
-        var textStartY = fillY + 6;
-        var textLeftX = fillX + leftMargin;
-
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line1, new Vector2(textLeftX, textStartY), fontSize, 1, textColor);
-
-        var text2Y = textStartY + size1.Y + lineSpacing;
-        Raylib.DrawTextEx(Raylib.GetFontDefault(), line2, new Vector2(textLeftX, text2Y), fontSize, 1, textColor);
-
-        var text3Y = text2Y + size2.Y + lineSpacing;
         if (!string.IsNullOrEmpty(line3))
         {
-            Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(textLeftX, text3Y), fontSize, 1, textColor);
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), line3, new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
         }
     }
 
-    public void DrawEquipStatsBox(
-        float scale,
-        int attack,
-        int defense,
-        int move,
-        int agility,
-        Vector2 position)
+    public void DrawEquipStatsBox(float scale, int attack, int defense, int move, int agility, Vector2 position)
     {
         var fontSize = (int)(8 * scale);
-        var textColor = Color.White;
-
         var labels = new[] { "ATTACK", "DEFENSE", "MOVE", "AGILITY" };
-        var values = new[]
-        {
-            attack.ToString(),
-            defense.ToString(),
-            move.ToString(),
-            agility.ToString()
-        };
-
-        var padding = 12;
-        var lineSpacing = 4;
-        var leftMargin = 8;
+        var values = new[] { attack.ToString(), defense.ToString(), move.ToString(), agility.ToString() };
         var valueGap = 16;
 
         float maxLabelWidth = 0;
@@ -654,87 +470,36 @@ public class Renderer
 
         for (var i = 0; i < labels.Length; i++)
         {
-            var labelSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), labels[i], fontSize, 1);
-            var valueSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), values[i], fontSize, 1);
+            var labelSize = Measure(labels[i], fontSize);
+            var valueSize = Measure(values[i], fontSize);
 
-            if (labelSize.X > maxLabelWidth)
-            {
-                maxLabelWidth = labelSize.X;
-            }
-
-            if (valueSize.X > maxValueWidth)
-            {
-                maxValueWidth = valueSize.X;
-            }
-
-            if (labelSize.Y > lineHeight)
-            {
-                lineHeight = labelSize.Y;
-            }
+            maxLabelWidth = Math.Max(maxLabelWidth, labelSize.X);
+            maxValueWidth = Math.Max(maxValueWidth, valueSize.X);
+            lineHeight = Math.Max(lineHeight, labelSize.Y);
         }
 
         var contentWidth = maxLabelWidth + valueGap + maxValueWidth;
-        var contentHeight = (lineHeight * labels.Length) + (lineSpacing * (labels.Length - 1));
+        var contentHeight = (lineHeight * labels.Length) + (4 * (labels.Length - 1));
 
-        var boxWidth = (int)contentWidth + padding * 2;
-        var boxHeight = (int)contentHeight + padding * 2;
-
-        var boxX = (int)(position.X * scale) - padding;
-        var boxY = (int)(position.Y * scale) - padding;
-
-        var darkOrange = GameConstants.Textures.DarkOrange;
-        var lightOrange = GameConstants.Textures.LightOrange;
-        var offWhite = GameConstants.Textures.OffWhite;
-        var blue = GameConstants.Textures.Blue;
-
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, boxHeight, darkOrange);
-        Raylib.DrawRectangle(boxX, boxY, boxWidth, 3, lightOrange);
-        Raylib.DrawRectangle(boxX, boxY, 3, boxHeight, lightOrange);
-
-        var innerX = boxX + 3;
-        var innerY = boxY + 3;
-        var innerW = boxWidth - 6;
-        var innerH = boxHeight - 6;
-
-        Raylib.DrawRectangle(innerX, innerY, innerW, innerH, offWhite);
-
-        var fillX = innerX + 3;
-        var fillY = innerY + 3;
-        var fillW = innerW - 6;
-        var fillH = innerH - 6;
-
-        Raylib.DrawRectangle(fillX, fillY, fillW, fillH, blue);
-
-        var textStartY = fillY + 6;
-        var labelX = fillX + leftMargin;
-        var valueRightX = fillX + fillW - leftMargin;
-
-        var y = textStartY;
+        var m = DrawInfoBoxFrame(scale, position, contentWidth, contentHeight);
+        var y = (float)m.TextStartY;
+        var valueRightX = m.FillX + m.FillW - m.LeftMargin;
 
         for (var i = 0; i < labels.Length; i++)
         {
-            Raylib.DrawTextEx(
-                Raylib.GetFontDefault(),
-                labels[i],
-                new Vector2(labelX, y),
-                fontSize,
-                1,
-                textColor
-            );
+            Raylib.DrawTextEx(Raylib.GetFontDefault(), labels[i], new Vector2(m.TextLeftX, y), m.FontSize, 1, Color.White);
 
-            var valueSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), values[i], fontSize, 1);
-            var valueX = valueRightX - valueSize.X;
-
+            var valueSize = Measure(values[i], m.FontSize);
             Raylib.DrawTextEx(
                 Raylib.GetFontDefault(),
                 values[i],
-                new Vector2(valueX, y),
-                fontSize,
+                new Vector2(valueRightX - valueSize.X, y),
+                m.FontSize,
                 1,
-                textColor
+                Color.White
             );
 
-            y += (int)(lineHeight + lineSpacing);
+            y += lineHeight + m.LineSpacing;
         }
     }
 
