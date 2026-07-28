@@ -112,7 +112,13 @@ public class BattleItemMenu : IGameState
         }
         else if (_selectedCommand == CommandIconType.Give)
         {
-            Logger.Warning("Item::Give not implemented.");
+            if (!_currentUnit.HasGiveableItem())
+            {
+                Logger.Warning("Give: no giveable items in inventory.");
+                return;
+            }
+
+            GameStateManager.ChangeStateType(GameStateType.GiveWhichItem);
         }
         else // EQUIP
         {

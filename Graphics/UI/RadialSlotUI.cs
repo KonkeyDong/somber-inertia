@@ -35,6 +35,17 @@ public abstract class RadialSlotUI
         _selectedIndex = -1;
     }
 
+    public void SetLayoutCenter(Vector2 center)
+    {
+        _centerPosition = center;
+        _infoBoxPosition = RadialMenuLayout.GetInfoBoxPosition(center);
+    }
+
+    public void ResetLayoutCenter()
+    {
+        SetLayoutCenter(RadialMenuLayout.GetCenterPosition());
+    }
+
     protected bool TryGetIndex(Direction direction, out int index)
     {
         if (!RadialMenuLayout.IndexByDirection.TryGetValue(direction, out index))

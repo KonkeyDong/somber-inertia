@@ -363,6 +363,12 @@ public abstract class Unit
 
     public bool AddItem(ItemName itemName, ItemCondition condition = ItemCondition.Normal, bool autoEquipWeapon = false)
     {
+        if (itemName == ItemName.Unarmed)
+        {
+            Logger.Warning($"Unit [{Name.GetDisplayName()}] cannot add unarmed to item list because being unarmed is without an item.");
+            return false;
+        }
+
         for (var i = 0; i < Items.Length; i++)
         {
             if (Items[i].IsEmpty)
@@ -387,6 +393,155 @@ public abstract class Unit
         }
 
         return false;
+    }
+
+    // True if the item can be given or traded. Empty and Unarmed are never transferable.
+    public static bool IsGiveableItem(ItemName name)
+    {
+        return name != ItemName.NoItem && name != ItemName.Unarmed;
+    }
+
+    public static bool IsGiveableSlot(ItemSlot slot) => IsGiveableItem(slot.Name);
+
+    public bool HasGiveableItem()
+    {
+        for (var i = 0; i < Items.Length; i++)
+        {
+            if (IsGiveableSlot(Items[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool HasEmptyItemSlot()
+    {
+        for (var i = 0; i < Items.Length; i++)
+        {
+            if (Items[i].IsEmpty)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int FindFirstEmptyItemSlot()
+    {
+        for (var i = 0; i < Items.Length; i++)
+        {
+            if (Items[i].IsEmpty)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public int FindFirstGiveableItemSlot()
+    {
+        for (var i = 0; i < Items.Length; i++)
+        {
+            if (IsGiveableSlot(Items[i]))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /// Free-slot transfer: copy giver slot into recipient inventory, then remove from giver.
+    public bool GiveItemTo(Unit recipient, int giverSlotIndex)
+    {
+        if (recipient == null)
+        {
+            Logger.Error("GiveItemTo(): recipient is null.");
+            return false;
+        }
+
+        if (giverSlotIndex < 0 || giverSlotIndex >= Items.Length)
+        {
+            Logger.Error($"GiveItemTo(): giver slot [{giverSlotIndex}] out of range.");
+            return false;
+        }
+
+        var slot = Items[giverSlotIndex];
+        if (!IsGiveableSlot(slot))
+        {
+            Logger.Warning($"GiveItemTo(): slot [{giverSlotIndex}] is not giveable ({slot.Name}).");
+            return false;
+        }
+
+        if (!recipient.HasEmptyItemSlot())
+        {
+            Logger.Warning("GiveItemTo(): recipient inventory is full.");
+            return false;
+        }
+
+        if (!recipient.AddItem(slot.Name, slot.Condition, autoEquipWeapon: false))
+        {
+            Logger.Error("GiveItemTo(): failed to add item to recipient.");
+            return false;
+        }
+
+        RemoveItemAtIndex(giverSlotIndex);
+        Logger.Info($"{GetDisplayName()} gave [{slot.Name}] to {recipient.GetDisplayName()}.");
+
+        return true;
+    }
+
+    /// Swap giveable items between this unit and another. Unequips either side if the swapped slot was equipped.
+    public bool SwapItemWith(Unit other, int myIndex, int otherIndex)
+    {
+        if (other == null)
+        {
+            Logger.Error("SwapItemWith(): other unit is null.");
+            return false;
+        }
+
+        if (myIndex < 0 || myIndex >= Items.Length || otherIndex < 0 || otherIndex >= other.Items.Length)
+        {
+            Logger.Error($"SwapItemWith(): index out of range (mine={myIndex}, other={otherIndex}).");
+            return false;
+        }
+
+        var mySlot = Items[myIndex];
+        var otherSlot = other.Items[otherIndex];
+
+        if (!IsGiveableSlot(mySlot) || !IsGiveableSlot(otherSlot))
+        {
+            Logger.Warning($"SwapItemWith(): one or both slots are not giveable ({mySlot.Name} / {otherSlot.Name}).");
+            return false;
+        }
+
+        // Unequip before mutating so equip indices stay stable.
+        if (EquippedWeaponIndex == myIndex)
+        {
+            UnequipWeapon();
+        }
+
+        if (other.EquippedWeaponIndex == otherIndex)
+        {
+            other.UnequipWeapon();
+        }
+
+        Items[myIndex] = otherSlot;
+        other.Items[otherIndex] = mySlot;
+
+        Logger.Info($"{GetDisplayName()} swapped [{mySlot.Name}] with {other.GetDisplayName()}'s [{otherSlot.Name}].");
+
+        return true;
+    }
+
+    /// Icon display name: Unarmed is shown as the empty (NoItem) icon.
+    public static ItemName GetDisplayItemName(ItemName name)
+    {
+        return name == ItemName.Unarmed ? ItemName.NoItem : name;
     }
 
     public ItemSlot GetItemAtIndex(int index)

@@ -26,7 +26,10 @@ public class Grid
     public HashSet<(int x, int y)> WeaponAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> MagicAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> SpellEffectRangeSet { get; private set; } = new HashSet<(int x, int y)>();
+    public HashSet<(int x, int y)> GiveRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public readonly RangeTint RangeTint = new RangeTint(GameConstants.Animations.RangeTintFrameDelay);
+
+    private static readonly Combat.Range GiveDistanceRange = new Combat.Range(1, 1);
 
     // Static constructor will create the movement cost dictionary only once when Grid is first accessed.
     static Grid()
@@ -82,6 +85,7 @@ public class Grid
         WeaponAttackRangeSet.Clear();
         MagicAttackRangeSet.Clear();
         SpellEffectRangeSet.Clear();
+        GiveRangeSet.Clear();
     }
 
     public void CalculateUnitMovementRange(Unit unit)
@@ -149,6 +153,16 @@ public class Grid
         }
 
         WeaponAttackRangeSet = CalculateEffectDistanceRange(unit, unit.GetEquippedWeaponData().DistanceRange);
+    }
+
+    public void CalculateGiveRange(Unit unit)
+    {
+        if (unit?.Block == null)
+        {
+            return;
+        }
+
+        GiveRangeSet = CalculateEffectDistanceRange(unit, GiveDistanceRange);
     }
 
     public void CalculateMagicAttackRange(Unit unit, MagicData magic)
@@ -257,6 +271,13 @@ public class Grid
         Logger.Debug("Grid::BuildListOfUnitsInSpellEffectRange() building list of units in spell effect range.");
 
         return BuildListOfUnitsInRange(unit, SpellEffectRangeSet);
+    }
+
+    public List<Unit> BuildListOfUnitsInGiveRange(Unit unit)
+    {
+        Logger.Debug("Grid::BuildListOfUnitsInGiveRange() building list of units in give range.");
+
+        return BuildListOfUnitsInRange(unit, GiveRangeSet);
     }
 
     private List<Unit> BuildListOfUnitsInRange(Unit unit, HashSet<(int x, int y)> rangeSet)

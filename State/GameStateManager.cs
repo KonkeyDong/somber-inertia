@@ -30,6 +30,13 @@ public static class GameStateManager
         BuildGameState();
     }
 
+    /// Prime a temporary notice message and transition to <see cref="GameStateType.MessageNotice"/>.
+    public static void ShowMessageNotice(string message, GameStateType returnState)
+    {
+        Game.MessageNotice.Set(message, returnState);
+        ChangeStateType(GameStateType.MessageNotice);
+    }
+
     private static void BuildGameState()
     {
         IGameState newGameState = CurrentStateType switch
@@ -46,9 +53,7 @@ public static class GameStateManager
             GameStateType.AnimateUnitDeaths => new AnimateUnitDeaths(Game),
             GameStateType.SelectMagic => new SelectMagic(Game),
             GameStateType.SelectMagicLevel => new SelectMagicLevel(Game),
-            GameStateType.NoMagicAvailable => new NoMagicAvailable(Game),
-            GameStateType.NoAttackTargetAvailable => new NoAttackTargetAvailable(Game),
-            GameStateType.NoMagicTargetAvailable => new NoMagicTargetAvailable(Game),
+            GameStateType.MessageNotice => new MessageNotice(Game),
             GameStateType.SelectMagicTargets => new SelectMagicTargets(Game),
             GameStateType.EnterBattleScreen => new EnterBattleScreen(Game),
             GameStateType.BattleResolution => new BattleResolution(Game),
@@ -56,6 +61,9 @@ public static class GameStateManager
             GameStateType.DropItem => new DropItem(Game),
             GameStateType.PromptYesNo => new PromptYesNo(Game),
             GameStateType.EquipItem => new EquipItem(Game),
+            GameStateType.GiveWhichItem => new GiveWhichItem(Game),
+            GameStateType.GiveItemToWhom => new GiveItemToWhom(Game),
+            GameStateType.TradeWhichItemFromAdjacentNeighbor => new TradeWhichItemFromAdjacentNeighbor(Game),
 
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };

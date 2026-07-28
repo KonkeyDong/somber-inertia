@@ -26,6 +26,9 @@ public class EndTurn : IGameState
         _game.ResetListOfUnitsInRange();
         _game.MagicUI.Reset();
         _game.ItemUI.Reset();
+        _game.ItemUI.ResetLayoutCenter();
+        _game.Give.Reset();
+        _game.MessageNotice.Reset();
         _game.AttackContext?.Reset();
 
         // If a unit begins their turn dying from poison, the AnimateUnitDeath
