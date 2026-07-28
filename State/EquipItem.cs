@@ -160,14 +160,10 @@ public class EquipItem : IGameState
 
     private void UpdateSelectedIcon()
     {
-        if (_isUnarmedSelected)
-        {
-            ItemIcons.SetSelectedItem(ItemName.Unarmed);
-            return;
-        }
-
-        var name = _currentUnit.Items[_selectedIndex].Name;
-        ItemIcons.SetSelectedItem(name);
+        // Selection blink is driven per-slot via DrawItemIcon(..., isSelected).
+        // Restart flipper when the selected slot changes.
+        ItemIcons.ClearSelection();
+        ItemIcons.Reset();
     }
 
     private void ConfirmEquip()
@@ -227,12 +223,14 @@ public class EquipItem : IGameState
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        // Radial icons
+        // Radial icons — highlight by slot index, not item name
         foreach (var (direction, index) in _indexByDirection)
         {
             var position = RadialMenuLayout.GetIconPosition(_centerPosition, direction);
             var itemName = GetDisplayedItemName(index);
-            _game.Renderer.DrawItemIcon(scale, itemName, position);
+            var isSelected = (_isUnarmedSelected && index == 3)
+                || (!_isUnarmedSelected && index == _selectedIndex);
+            _game.Renderer.DrawItemIcon(scale, itemName, position, isSelected);
         }
 
         // Right: weapon name box

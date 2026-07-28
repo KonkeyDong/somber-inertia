@@ -89,6 +89,40 @@ public static class GameConstants
         public const int MAX_MOVEMENT_COST = 255;
     }
 
+    public static class MessageNotice
+    {
+        public const string NoMagic = "No magic";
+        public const string NoItem = "No Item";
+        public const string NoTarget = "No target";
+    }
+
+    public static class Give
+    {
+        public static class Positions
+        {
+            // Bottom-right unit info when selecting a give recipient
+            public static readonly Vector2 RecipientInfoBox = new Vector2(200, 160);
+
+            // Recipient inventory radial sits above the info box
+            public static readonly Vector2 RecipientInventoryCenter = new Vector2(200, 110);
+
+            // Trade UI uses lower-center radial for the neighbor's inventory
+            public static readonly Vector2 TradeInventoryCenter = new Vector2(
+                Window.Width / 2f,
+                Window.Height * 0.75f
+            );
+
+            // Give/swap summary panel on PromptYesNo (logical coords)
+            public static readonly Vector2 TradePromptBox = new Vector2(72, 70);
+        }
+
+        /// <summary>Yes/No vertical center when trade summary panel is shown.</summary>
+        public const float TradePromptYesNoYFactor = 0.82f;
+
+        public const float TradePromptColumnGap = 24f;
+        public const float TradePromptNameToIconGap = 6f;
+    }
+
     public static class Battle
     {
         public static class Positions

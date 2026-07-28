@@ -75,7 +75,9 @@ class Program
 
         var anri = new ForceMember(UnitName.Anri);
         anri.Attack = 15;
-        anri.AddItem(ItemName.Unarmed, autoEquipWeapon: true);
+        // Unarmed equip is default (index -1); do not put Unarmed in inventory.
+        anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: true);
+        anri.AddItem(ItemName.MedicalHerb);
 
         var goblin1 = new Monster(UnitName.Goblin);
         goblin1.Defense = 5;
@@ -87,7 +89,7 @@ class Program
         dwarf.HP.Current = 1;
 
         game.AddUnit(max, 0, 0);
-        game.AddUnit(anri, 1, 1);
+        game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
         game.AddUnit(dwarf, 3, 1);
         game.AddUnit(runeKnight, 4, 1);
         game.AddUnit(goblin1, 3, 2);

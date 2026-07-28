@@ -88,7 +88,7 @@ public class DropItem : IGameState
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(scale, _currentUnit))
         {
-            _game.Renderer.DrawItemIcon(scale, iconData.ItemName, iconData.Position);
+            _game.Renderer.DrawItemIcon(scale, iconData.ItemName, iconData.Position, iconData.IsSelected);
         }
 
         _game.Renderer.DrawItemInfoBox(scale, _game.ItemUI.GetSelectedItemData(), _game.ItemUI.IsSelectedItemEquipped(_currentUnit), _game.ItemUI.GetInformationBoxCoordinates());

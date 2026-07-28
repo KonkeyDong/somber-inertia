@@ -14,6 +14,7 @@ public interface IIconSet<TKey> where TKey : Enum
     void Tick();
     void SetSelected(TKey key);
     Sprite GetSprite(TKey key);
+    Sprite GetSprite(TKey key, bool isSelected);
     void Reset();
 }
 
@@ -71,19 +72,21 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
 
     public Sprite GetSprite(TKey key)
     {
+        // Name/type-keyed selection (commands, magic families). Prefer the
+        // isSelected overload for inventory slots that can share the same key.
+        var isSelected = EqualityComparer<TKey>.Default.Equals(key, _selectedKey);
+        return GetSprite(key, isSelected);
+    }
+
+    public Sprite GetSprite(TKey key, bool isSelected)
+    {
         if (!_animations.ContainsKey(key))
         {
             Logger.Error($"Icon for [{key}] not found in IconSet.");
-            return null;
+            return null!;
         }
 
-        var frame = 0;
-
-        if (EqualityComparer<TKey>.Default.Equals(key, _selectedKey))
-        {
-            frame = _frameFlipper.IsOn ? 1 : 0;
-        }
-
+        var frame = (isSelected && _frameFlipper.IsOn) ? 1 : 0;
         return _animations[key][frame];
     }
 

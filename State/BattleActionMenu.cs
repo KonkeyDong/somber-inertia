@@ -118,12 +118,23 @@ public class BattleActionMenu : IGameState
             }
             else
             {
-                GameStateManager.ChangeStateType(GameStateType.NoMagicAvailable);
+                GameStateManager.ShowMessageNotice(
+                    GameConstants.MessageNotice.NoMagic,
+                    GameStateType.BattleActionMenu);
             }
         }
-        else
+        else // Item
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+            if (_currentUnit.HasGiveableItem())
+            {
+                GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+            }
+            else
+            {
+                GameStateManager.ShowMessageNotice(
+                    GameConstants.MessageNotice.NoItem,
+                    GameStateType.BattleActionMenu);
+            }
         }
     }
 

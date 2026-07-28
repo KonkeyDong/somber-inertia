@@ -148,6 +148,7 @@ public class Renderer
     public void DrawMovementRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MovementRangeSet);
     public void DrawWeaponAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.WeaponAttackRangeSet);
     public void DrawMagicAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MagicAttackRangeSet);
+    public void DrawGiveRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.GiveRangeSet);
     private void DrawRangeBlockColor(float scale, Grid grid, HashSet<(int x, int y)> hashSet)
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
@@ -229,10 +230,10 @@ public class Renderer
         Draw(scale, sprite, position);
     }
 
-    public void DrawItemIcon(float scale, ItemName name, Vector2 position)
+    public void DrawItemIcon(float scale, ItemName name, Vector2 position, bool isSelected = false)
     {
-        var sprite = ItemIcons.GetSprite(name);
-        Draw(scale, sprite, position);   
+        var sprite = ItemIcons.GetSprite(name, isSelected);
+        Draw(scale, sprite, position);
     }
 
     private InfoBoxMetrics DrawInfoBoxFrame(float scale, Vector2 position, float contentWidth, float contentHeight)
@@ -500,6 +501,92 @@ public class Renderer
             );
 
             y += lineHeight + m.LineSpacing;
+        }
+    }
+
+    public void DrawTradePromptBox(
+        float scale,
+        string actionLabel,
+        string giverName,
+        ItemName giverItem,
+        string receiverName,
+        ItemName? receiverItem,
+        Vector2 position)
+    {
+        var fontSize = (int)(8 * scale);
+        var iconLogical = GameConstants.TILE_SIZE;
+        var columnGap = GameConstants.Give.TradePromptColumnGap * scale;
+        var nameToIconGap = GameConstants.Give.TradePromptNameToIconGap * scale;
+
+        var actionSize = Measure(actionLabel, fontSize);
+        var giverNameSize = Measure(giverName, fontSize);
+        var receiverNameSize = Measure(receiverName, fontSize);
+
+        var iconPixel = iconLogical * scale;
+        var leftColWidth = Math.Max(giverNameSize.X, iconPixel);
+        var rightColWidth = Math.Max(receiverNameSize.X, iconPixel);
+        var contentWidth = Math.Max(actionSize.X, leftColWidth + columnGap + rightColWidth);
+        var contentHeight = actionSize.Y
+            + nameToIconGap
+            + Math.Max(giverNameSize.Y, receiverNameSize.Y)
+            + nameToIconGap
+            + iconPixel;
+
+        var m = DrawInfoBoxFrame(scale, position, contentWidth, contentHeight);
+
+        // Action title centered at top
+        var actionX = m.FillX + (m.FillW - actionSize.X) / 2f;
+        var y = (float)m.TextStartY;
+        Raylib.DrawTextEx(
+            Raylib.GetFontDefault(),
+            actionLabel,
+            new Vector2(actionX, y),
+            m.FontSize,
+            1,
+            Color.White
+        );
+
+        y += actionSize.Y + nameToIconGap;
+
+        // Names: left column left-justified, right column right-justified
+        var leftColLeft = m.TextLeftX;
+        var rightColRight = m.FillX + m.FillW - m.LeftMargin;
+
+        Raylib.DrawTextEx(
+            Raylib.GetFontDefault(),
+            giverName,
+            new Vector2(leftColLeft, y),
+            m.FontSize,
+            1,
+            Color.White
+        );
+
+        Raylib.DrawTextEx(
+            Raylib.GetFontDefault(),
+            receiverName,
+            new Vector2(rightColRight - receiverNameSize.X, y),
+            m.FontSize,
+            1,
+            Color.White
+        );
+
+        y += Math.Max(giverNameSize.Y, receiverNameSize.Y) + nameToIconGap;
+
+        // Icons under each column (logical coords for DrawItemIcon)
+        var iconYLogical = y / scale;
+        var leftIconXLogical = leftColLeft / scale;
+        var rightIconXLogical = (rightColRight - iconPixel) / scale;
+
+        DrawItemIcon(scale, giverItem, new Vector2(leftIconXLogical, iconYLogical), isSelected: false);
+
+        if (receiverItem.HasValue)
+        {
+            DrawItemIcon(
+                scale,
+                receiverItem.Value,
+                new Vector2(rightIconXLogical, iconYLogical),
+                isSelected: false
+            );
         }
     }
 

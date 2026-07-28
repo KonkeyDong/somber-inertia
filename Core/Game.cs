@@ -23,6 +23,8 @@ public class Game
     public AttackContext AttackContext { get; set; } = null!;
 
     public PromptContext Prompt { get; set; } = new PromptContext();
+    public GiveContext Give { get; set; } = new GiveContext();
+    public MessageNoticeContext MessageNotice { get; set; } = new MessageNoticeContext();
 
     public bool FirstUnitDiedFromPoison { get; private set; }
     public Unit? UnitThatDiedFromPoison { get; private set; }

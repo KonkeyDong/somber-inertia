@@ -29,9 +29,7 @@ public enum GameStateType
     AnimateUnitDeaths,
     SelectMagic,
     SelectMagicLevel,
-    NoMagicAvailable,
-    NoAttackTargetAvailable,
-    NoMagicTargetAvailable,
+    MessageNotice,
     SelectMagicTargets,
     BattleResolution,
     EnterBattleScreen,
@@ -39,4 +37,7 @@ public enum GameStateType
     DropItem,
     PromptYesNo,
     EquipItem,
+    GiveWhichItem,
+    GiveItemToWhom,
+    TradeWhichItemFromAdjacentNeighbor,
 }

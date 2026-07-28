@@ -30,7 +30,9 @@ public class PrepareMagicTargets : IGameState
             }
             else 
             {
-                GameStateManager.ChangeStateType(GameStateType.NoMagicTargetAvailable);
+                GameStateManager.ShowMessageNotice(
+                    GameConstants.MessageNotice.NoTarget,
+                    GameStateType.SelectMagicLevel);
             }
         }
         else 
@@ -42,7 +44,9 @@ public class PrepareMagicTargets : IGameState
             }
             else 
             {
-                GameStateManager.ChangeStateType(GameStateType.NoMagicTargetAvailable);
+                GameStateManager.ShowMessageNotice(
+                    GameConstants.MessageNotice.NoTarget,
+                    GameStateType.SelectMagicLevel);
             }
         }
     }

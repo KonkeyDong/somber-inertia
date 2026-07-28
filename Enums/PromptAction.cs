@@ -3,5 +3,7 @@ namespace SomberInertia.Enums;
 public enum PromptAction
 {
     None,
-    DropItem
+    DropItem,
+    GiveItem,
+    TradeItem,
 }

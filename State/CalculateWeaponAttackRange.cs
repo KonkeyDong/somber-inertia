@@ -30,7 +30,9 @@ public class CalculateWeaponAttackRange : IGameState
         }
         else 
         {
-            GameStateManager.ChangeStateType(GameStateType.NoAttackTargetAvailable);
+            GameStateManager.ShowMessageNotice(
+                GameConstants.MessageNotice.NoTarget,
+                GameStateType.BattleActionMenu);
         }
     }
 

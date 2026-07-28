@@ -1,9 +1,9 @@
 using System.Numerics;
 using Raylib_cs;
 using SomberInertia.Core;
+using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
-using SomberInertia.Core.Units;
 
 namespace SomberInertia.State;
 
@@ -32,14 +32,22 @@ public class PromptYesNo : IGameState
 
     public void Exit()
     {
+    }
 
+    private bool IsGiveOrTradePrompt()
+    {
+        return _game.Prompt.Action is PromptAction.GiveItem or PromptAction.TradeItem;
     }
 
     private void UpdateCenterPosition()
     {
+        var yFactor = IsGiveOrTradePrompt()
+            ? GameConstants.Give.TradePromptYesNoYFactor
+            : 0.75f;
+
         _centerPosition = new Vector2(
             GameStateManager.CurrentWidth / 2f,
-            GameStateManager.CurrentHeight * 0.75f
+            GameStateManager.CurrentHeight * yFactor
         ) / GameStateManager.CurrentScale;
     }
 
@@ -99,6 +107,32 @@ public class PromptYesNo : IGameState
                 _currentUnit.RemoveItemAtIndex(_game.Prompt.ItemSlotIndex);
                 break;
 
+            case PromptAction.GiveItem:
+            {
+                var recipient = _game.Give.Recipient;
+                if (recipient == null)
+                {
+                    Logger.Error("PromptYesNo GiveItem: recipient is null.");
+                    break;
+                }
+
+                _currentUnit.GiveItemTo(recipient, _game.Give.GiverSlotIndex);
+                break;
+            }
+
+            case PromptAction.TradeItem:
+            {
+                var recipient = _game.Give.Recipient;
+                if (recipient == null)
+                {
+                    Logger.Error("PromptYesNo TradeItem: recipient is null.");
+                    break;
+                }
+
+                _currentUnit.SwapItemWith(recipient, _game.Give.GiverSlotIndex, _game.Give.RecipientSlotIndex);
+                break;
+            }
+
             case PromptAction.None:
             default:
                 Logger.Warning("PromptYesNo: No prompt action set.");
@@ -125,10 +159,59 @@ public class PromptYesNo : IGameState
         CommandIcons.Tick();
     }
 
+    private void DrawTradeSummary(float scale)
+    {
+        var recipient = _game.Give.Recipient;
+        if (recipient == null)
+        {
+            Logger.Error("PromptYesNo: cannot draw trade summary; recipient is null.");
+            return;
+        }
+
+        var giverIndex = _game.Give.GiverSlotIndex;
+        if (giverIndex < 0 || giverIndex >= _currentUnit.Items.Length)
+        {
+            Logger.Error($"PromptYesNo: invalid giver slot [{giverIndex}].");
+            return;
+        }
+
+        var giverItem = Unit.GetDisplayItemName(_currentUnit.Items[giverIndex].Name);
+        ItemName? receiverItem = null;
+        var actionLabel = "Give";
+
+        if (_game.Prompt.Action == PromptAction.TradeItem)
+        {
+            actionLabel = "Swap";
+            var receiverIndex = _game.Give.RecipientSlotIndex;
+            if (receiverIndex < 0 || receiverIndex >= recipient.Items.Length)
+            {
+                Logger.Error($"PromptYesNo: invalid receiver slot [{receiverIndex}].");
+                return;
+            }
+
+            receiverItem = Unit.GetDisplayItemName(recipient.Items[receiverIndex].Name);
+        }
+
+        _game.Renderer.DrawTradePromptBox(
+            scale,
+            actionLabel,
+            _currentUnit.GetDisplayName(),
+            giverItem,
+            recipient.GetDisplayName(),
+            receiverItem,
+            GameConstants.Give.Positions.TradePromptBox
+        );
+    }
+
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+
+        if (IsGiveOrTradePrompt())
+        {
+            DrawTradeSummary(scale);
+        }
 
         var gap = GameConstants.TILE_SIZE * IconSpacingTiles;
 
