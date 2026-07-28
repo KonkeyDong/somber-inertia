@@ -9,8 +9,8 @@ namespace SomberInertia.State;
 
 public class NoAttackTargetAvailable : IGameState
 {
-    private Game _game { get; set; }
-    private Unit _currentUnit { get; set; }
+    private readonly Game _game;
+    private Unit _currentUnit;
     private int _countdownTimer = GameConstants.Animations.SwitchStateCountdownTimer;
 
     public NoAttackTargetAvailable(Game game)

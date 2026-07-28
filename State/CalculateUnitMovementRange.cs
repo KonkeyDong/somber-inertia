@@ -67,7 +67,7 @@ public class CalculateUnitMovementRange : IGameState
         _countdownTimer.Tick();
         _game.FrameFlipper.Tick();
 
-        if ((_isPoisoned || _isSleeping) && !_countdownTimer.GetIsActive())
+        if ((_isPoisoned || _isSleeping) && !_countdownTimer.IsActive)
         {
             if (_isPoisoned)
             {

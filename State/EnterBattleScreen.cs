@@ -15,7 +15,7 @@ public class EnterBattleScreen : IGameState
     private readonly DelayIterator _delayIterator;
 
     private float _progress = 0f;
-    private const float _duration = 60; // total frames for the transition
+    private const float Duration = 60; // total frames for the transition
 
     // Animation start positions for sprites
     private Vector2 _startUnfriendlyPosition;
@@ -66,7 +66,7 @@ public class EnterBattleScreen : IGameState
 
         if (_progress < 1f)
         {
-            _progress += 1f / _duration;
+            _progress += 1f / Duration;
             _progress = Math.Min(1f, _progress);
         }
         else

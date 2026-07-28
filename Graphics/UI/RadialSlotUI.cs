@@ -5,34 +5,34 @@ namespace SomberInertia.Graphics.UI;
 
 public abstract class RadialSlotUI
 {
-    protected int SelectedIndex = -1;
-    protected Vector2 CenterPosition;
-    protected Vector2 InfoBoxPosition;
+    protected int _selectedIndex = -1;
+    protected Vector2 _centerPosition;
+    protected Vector2 _infoBoxPosition;
 
     protected RadialSlotUI()
     {
-        CenterPosition = RadialMenuLayout.GetCenterPosition();
-        InfoBoxPosition = RadialMenuLayout.GetInfoBoxPosition(CenterPosition);
+        _centerPosition = RadialMenuLayout.GetCenterPosition();
+        _infoBoxPosition = RadialMenuLayout.GetInfoBoxPosition(_centerPosition);
     }
 
     public bool HasSelection()
     {
-        return SelectedIndex != -1;
+        return _selectedIndex != -1;
     }
 
     public int GetSelectedIndex()
     {
-        return SelectedIndex;
+        return _selectedIndex;
     }
 
     public Vector2 GetInformationBoxCoordinates()
     {
-        return InfoBoxPosition;
+        return _infoBoxPosition;
     }
 
     public virtual void Reset()
     {
-        SelectedIndex = -1;
+        _selectedIndex = -1;
     }
 
     protected bool TryGetIndex(Direction direction, out int index)

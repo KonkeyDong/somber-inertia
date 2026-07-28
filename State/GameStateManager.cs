@@ -7,7 +7,7 @@ namespace SomberInertia.State;
 public static class GameStateManager
 {
     public static GameStateType CurrentStateType { get; private set; }
-    public static IGameState? _gameState { get; private set; }
+    public static IGameState? GameState { get; private set; }
     public static Game Game { get; private set; } = null!;
 
     public static int CurrentWidth = (int)(GameConstants.Window.Width * GameConstants.Window.Scale);
@@ -60,10 +60,10 @@ public static class GameStateManager
             _ => throw new ArgumentOutOfRangeException(nameof(CurrentStateType), CurrentStateType, "Unknown game state")
         };
 
-        _gameState?.Exit();
+        GameState?.Exit();
 
-        _gameState = newGameState;
-        _gameState.Enter();
+        GameState = newGameState;
+        GameState.Enter();
     }
 
     private static void ResizeWindow()
@@ -118,17 +118,17 @@ public static class GameStateManager
         HandleLoggingToggle();
 
         // game state specific input
-        _gameState?.HandleInput();
+        GameState?.HandleInput();
     }
 
-    public static void Update() => _gameState?.Update();
+    public static void Update() => GameState?.Update();
 
     public static void Draw()
     {
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Color.RayWhite);
 
-        _gameState?.Draw(CurrentScale);
+        GameState?.Draw(CurrentScale);
 
         Raylib.EndDrawing();
     }

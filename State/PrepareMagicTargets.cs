@@ -7,8 +7,8 @@ namespace SomberInertia.State;
 
 public class PrepareMagicTargets : IGameState
 {
-    private Game _game { get; set; }
-    private Unit _currentUnit { get; set; }
+    private readonly Game _game;
+    private Unit _currentUnit;
 
     public PrepareMagicTargets(Game game)
     {
