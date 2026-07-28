@@ -14,7 +14,7 @@ public class ExitBattleScreen : IGameState
     private readonly Sprite _foregroundSprite;
 
     private float _progress = 0f;
-    private const float _duration = 60; // frames for the full transition
+    private const float Duration = 60; // frames for the full transition
 
     public ExitBattleScreen(Game game)
     {
@@ -49,7 +49,7 @@ public class ExitBattleScreen : IGameState
 
         if (_progress < 1f)
         {
-            _progress += 1f / _duration;
+            _progress += 1f / Duration;
             _progress = Math.Min(1f, _progress);
         }
         else

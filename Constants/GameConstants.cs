@@ -100,7 +100,7 @@ public static class GameConstants
             public static readonly Vector2 FriendlyStats   = new Vector2(200, 15);
         }
 
-        private static readonly Dictionary<string, Vector2> SpritePositions = new()
+        private static readonly Dictionary<string, Vector2> _spritePositions = new()
         {
             // Force Members
             { $"{UnitName.Max.GetBaseName()}_{ItemName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
@@ -117,7 +117,7 @@ public static class GameConstants
             Logger.Warning("Will need to add other characters/monsters base positions and adjust in battle states.");
             var key = BuildKey(unit);
 
-            if (SpritePositions.TryGetValue(key, out var position))
+            if (_spritePositions.TryGetValue(key, out var position))
             {
                 return position;
             }

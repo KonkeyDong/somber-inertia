@@ -36,7 +36,7 @@ public class MagicUI : RadialSlotUI
             return;
         }
 
-        if (SelectedIndex == index)
+        if (_selectedIndex == index)
         {
             return;
         }
@@ -45,7 +45,7 @@ public class MagicUI : RadialSlotUI
 
         if (family != null)
         {
-            SelectedIndex = index;
+            _selectedIndex = index;
             _selectedMagicFamily = (MagicFamily)family;
             _selectedMagicList = currentUnit.GetMagicListInBucket(_selectedMagicFamily);
             _selectedMagicName = currentUnit.GetHighestMagicLevelInBucket(_selectedMagicFamily);
@@ -115,7 +115,7 @@ public class MagicUI : RadialSlotUI
     {
         foreach (var (direction, index) in RadialMenuLayout.IndexByDirection)
         {
-            var position = RadialMenuLayout.GetIconPosition(CenterPosition, direction);
+            var position = RadialMenuLayout.GetIconPosition(_centerPosition, direction);
 
             var bucket = currentUnit.MagicFamilyBuckets[index];
             var family = bucket != null ? (MagicFamily)bucket : MagicFamily.NoSpell;

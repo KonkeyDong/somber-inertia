@@ -9,9 +9,9 @@ namespace SomberInertia.State;
 
 public class SelectEnemyForPhysicalAttack : IGameState
 {
-    private Game _game { get; set; }
-    private Unit _currentUnit { get; set; }
-    private int _currentIndex { get; set; }
+    private readonly Game _game;
+    private Unit _currentUnit;
+    private int _currentIndex;
 
     public SelectEnemyForPhysicalAttack(Game game)
     {

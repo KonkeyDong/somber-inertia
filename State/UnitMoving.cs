@@ -10,9 +10,9 @@ namespace SomberInertia.State;
 
 public class UnitMoving : IGameState
 {
-    private Game _game { get; set; }
-    private Unit _currentUnit { get; set; }
-    private CountdownTimer _countdownTimer { get; set; }
+    private readonly Game _game;
+    private Unit _currentUnit;
+    private readonly CountdownTimer _countdownTimer;
 
     public UnitMoving(Game game)
     {
@@ -69,7 +69,7 @@ public class UnitMoving : IGameState
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawMovementRange(scale, _game.Grid);
 
-        if (_countdownTimer.GetIsActive())
+        if (_countdownTimer.IsActive)
         {
             _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
         }

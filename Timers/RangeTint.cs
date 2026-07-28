@@ -5,12 +5,12 @@ using Raylib_cs;
 public class RangeTint : ITimers
 {
     private readonly int _maxNumberOfFrames;
-    private int _frameCounter { get; set; }
+    private int _frameCounter;
 
     private int _currentIndex = 0;
     private int _direction = 1; // 1 = forward, -1 = backward
 
-    private static readonly Color[] TintLevels =
+    private static readonly Color[] _tintLevels =
     {
         new Color(255, 255, 255, 255),   // 0: Full bright (no tint)
         new Color(200, 220, 255, 200),   // 1: Light blue
@@ -36,9 +36,9 @@ public class RangeTint : ITimers
             _currentIndex += _direction;
 
             // Reverse direction at the ends
-            if (_currentIndex >= TintLevels.Length - 1)
+            if (_currentIndex >= _tintLevels.Length - 1)
             {
-                _currentIndex = TintLevels.Length - 1;
+                _currentIndex = _tintLevels.Length - 1;
                 _direction = -1;        // Start going backwards
             }
             else if (_currentIndex <= 0)
@@ -49,7 +49,7 @@ public class RangeTint : ITimers
         }
     }
 
-    public Color GetCurrentColor() => TintLevels[_currentIndex];
+    public Color GetCurrentColor() => _tintLevels[_currentIndex];
 
     // Optional: Reset to start
     public void Reset()

@@ -7,8 +7,8 @@ namespace SomberInertia.State;
 
 public class CalculateWeaponAttackRange : IGameState
 {
-    private Game _game { get; set; }
-    private Unit _currentUnit { get; set; }
+    private readonly Game _game;
+    private Unit _currentUnit;
 
     public CalculateWeaponAttackRange(Game game)
     {

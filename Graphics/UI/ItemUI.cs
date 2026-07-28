@@ -30,7 +30,7 @@ public class ItemUI : RadialSlotUI
             return;
         }
 
-        if (SelectedIndex == index)
+        if (_selectedIndex == index)
         {
             return;
         }
@@ -39,7 +39,7 @@ public class ItemUI : RadialSlotUI
 
         if (slot.Name != ItemName.NoItem)
         {
-            SelectedIndex = index;
+            _selectedIndex = index;
             _selectedItemName = slot.Name;
 
             ItemIcons.SetSelectedItem(_selectedItemName);
@@ -55,17 +55,17 @@ public class ItemUI : RadialSlotUI
 
     public int GetSelectedItemIndex()
     {
-        return SelectedIndex;
+        return _selectedIndex;
     }
 
     public ItemSlot GetSelectedSlot(Unit currentUnit)
     {
-        if (SelectedIndex < 0 || SelectedIndex >= currentUnit.Items.Length)
+        if (_selectedIndex < 0 || _selectedIndex >= currentUnit.Items.Length)
         {
             return ItemSlot.Empty;
         }
 
-        return currentUnit.Items[SelectedIndex];
+        return currentUnit.Items[_selectedIndex];
     }
 
     public ItemData GetSelectedItemData()
@@ -77,7 +77,7 @@ public class ItemUI : RadialSlotUI
     {
         foreach (var (direction, index) in RadialMenuLayout.IndexByDirection)
         {
-            var position = RadialMenuLayout.GetIconPosition(CenterPosition, direction);
+            var position = RadialMenuLayout.GetIconPosition(_centerPosition, direction);
             var slot = currentUnit.GetItemAtIndex(index);
 
             yield return new ItemIconData(position, slot.Name);
@@ -86,11 +86,11 @@ public class ItemUI : RadialSlotUI
 
     public bool IsSelectedItemEquipped(Unit unit)
     {
-        if (SelectedIndex < 0)
+        if (_selectedIndex < 0)
         {
             return false;
         }
 
-        return SelectedIndex == unit.EquippedWeaponIndex;
+        return _selectedIndex == unit.EquippedWeaponIndex;
     }
 }
