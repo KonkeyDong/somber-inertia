@@ -75,14 +75,14 @@ public class BattleItemMenu : IGameState
             SetSelectedCommand(CommandIconType.Equip);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
             ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            CancelMenu();
+            CancelSelection();
         }
     }
 
@@ -126,7 +126,7 @@ public class BattleItemMenu : IGameState
         }
     }
 
-    private void CancelMenu()
+    private void CancelSelection()
     {
         GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }

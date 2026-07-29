@@ -84,18 +84,18 @@ public class GiveItemToWhom : IGameState
             }
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            ConfirmRecipient();
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.GiveWhichItem);
+            CancelSelection();
         }
     }
 
-    private void ConfirmRecipient()
+    private void ConfirmSelection()
     {
         var recipient = _friendliesInRange[_currentIndex];
         _game.Give.Recipient = recipient;
@@ -120,6 +120,11 @@ public class GiveItemToWhom : IGameState
 
             GameStateManager.ChangeStateType(GameStateType.TradeWhichItemFromAdjacentNeighbor);
         }
+    }
+
+    private void CancelSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.GiveWhichItem);
     }
 
     public void Update()

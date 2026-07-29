@@ -43,17 +43,18 @@ public class MessageNotice : IGameState
         _game.MessageNotice.Reset();
     }
 
-    private void Dismiss()
-    {
-        GameStateManager.ChangeStateType(_returnState);
-    }
-
     public void HandleInput()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.X) || Raylib.IsKeyPressed(KeyboardKey.C))
+        // Z, C, or X all dismiss the notice
+        if (Input.IsDismissPressed())
         {
-            Dismiss();
+            ConfirmSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        GameStateManager.ChangeStateType(_returnState);
     }
 
     public void Update()
@@ -66,7 +67,7 @@ public class MessageNotice : IGameState
         if (_countdownTimer <= 0)
         {
             Logger.Info("MessageNotice: countdown exhausted.");
-            Dismiss();
+            ConfirmSelection();
         }
     }
 

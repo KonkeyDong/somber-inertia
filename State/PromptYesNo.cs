@@ -63,14 +63,14 @@ public class PromptYesNo : IGameState
             SetSelection(yes: false);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
             ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            OnNo();
+            CancelSelection();
         }
     }
 
@@ -95,6 +95,11 @@ public class PromptYesNo : IGameState
         {
             OnNo();
         }
+    }
+
+    private void CancelSelection()
+    {
+        OnNo();
     }
 
     private void OnYes()

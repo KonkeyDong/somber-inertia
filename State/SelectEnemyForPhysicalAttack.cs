@@ -62,13 +62,26 @@ public class SelectEnemyForPhysicalAttack : IGameState
             }
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            _game.AttackContext = new AttackContext(_currentUnit, _game.UnfriendlyUnitsInRange[_currentIndex]);
-            GameStateManager.ChangeStateType(GameStateType.EnterBattleScreen);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X)) { GameStateManager.ChangeStateType(GameStateType.BattleActionMenu); }
+        if (Input.IsCancelPressed())
+        {
+            CancelSelection();
+        }
+    }
+
+    private void ConfirmSelection()
+    {
+        _game.AttackContext = new AttackContext(_currentUnit, _game.UnfriendlyUnitsInRange[_currentIndex]);
+        GameStateManager.ChangeStateType(GameStateType.EnterBattleScreen);
+    }
+
+    private void CancelSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
     public void Update()

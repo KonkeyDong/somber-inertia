@@ -46,22 +46,27 @@ public class SelectMagicLevel : IGameState
             _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagicData());
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            var spellData = _game.MagicUI.GetSelectedMagicData();
-            Logger.Info(spellData.ToString());
-            GameStateManager.ChangeStateType(GameStateType.PrepareMagicTargets);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.SelectMagic);
+            CancelSelection();
         }
     }
 
-    private void CancelMenu()
+    private void ConfirmSelection()
     {
-        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
+        var spellData = _game.MagicUI.GetSelectedMagicData();
+        Logger.Info(spellData.ToString());
+        GameStateManager.ChangeStateType(GameStateType.PrepareMagicTargets);
+    }
+
+    private void CancelSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.SelectMagic);
     }
 
     public void Update()

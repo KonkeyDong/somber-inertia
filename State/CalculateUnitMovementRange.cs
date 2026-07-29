@@ -56,10 +56,15 @@ public class CalculateUnitMovementRange : IGameState
 
     public void HandleInput()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            _countdownTimer.Stop();
+            ConfirmSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        _countdownTimer.Stop();
     }
 
     public void Update()

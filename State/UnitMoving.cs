@@ -43,12 +43,17 @@ public class UnitMoving : IGameState
         if (Raylib.IsKeyPressed(KeyboardKey.Left)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Left); }
         if (Raylib.IsKeyPressed(KeyboardKey.Right)) { _game.Grid.MoveUnitInDirection(_currentUnit, Direction.Right); }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C)) 
+        if (Input.IsConfirmPressed())
         {
-            if (_currentUnit.Block != null && !_currentUnit.Block.IsFullyOccupied())
-            {
-                GameStateManager.ChangeStateType(GameStateType.BattleActionMenu); 
-            }
+            ConfirmSelection();
+        }
+    }
+
+    private void ConfirmSelection()
+    {
+        if (_currentUnit.Block != null && !_currentUnit.Block.IsFullyOccupied())
+        {
+            GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
         }
     }
 

@@ -74,28 +74,38 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
             SetSelectedItem(Direction.Down);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            if (!_game.ItemUI.HasValidSelection())
-            {
-                Logger.Warning("TradeWhichItemFromAdjacentNeighbor: no valid item selected.");
-                return;
-            }
-
-            _game.Give.RecipientSlotIndex = _game.ItemUI.GetSelectedIndex();
-
-            _game.Prompt.Action = PromptAction.TradeItem;
-            _game.Prompt.ReturnStateOnYes = GameStateType.EndTurn;
-            _game.Prompt.ReturnStateOnNo = GameStateType.TradeWhichItemFromAdjacentNeighbor;
-            GameStateManager.ChangeStateType(GameStateType.PromptYesNo);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            _game.ItemUI.Reset();
-            _game.ItemUI.ResetLayoutCenter();
-            GameStateManager.ChangeStateType(GameStateType.GiveItemToWhom);
+            CancelSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        if (!_game.ItemUI.HasValidSelection())
+        {
+            Logger.Warning("TradeWhichItemFromAdjacentNeighbor: no valid item selected.");
+            return;
+        }
+
+        _game.Give.RecipientSlotIndex = _game.ItemUI.GetSelectedIndex();
+
+        _game.Prompt.Action = PromptAction.TradeItem;
+        _game.Prompt.ReturnStateOnYes = GameStateType.EndTurn;
+        _game.Prompt.ReturnStateOnNo = GameStateType.TradeWhichItemFromAdjacentNeighbor;
+        GameStateManager.ChangeStateType(GameStateType.PromptYesNo);
+    }
+
+    private void CancelSelection()
+    {
+        _game.ItemUI.Reset();
+        _game.ItemUI.ResetLayoutCenter();
+        GameStateManager.ChangeStateType(GameStateType.GiveItemToWhom);
     }
 
     public void Update()

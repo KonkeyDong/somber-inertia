@@ -72,27 +72,37 @@ public class GiveWhichItem : IGameState
             SetSelectedItem(Direction.Down);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            if (!_game.ItemUI.HasValidSelection())
-            {
-                Logger.Warning("GiveWhichItem: no valid item selected.");
-                return;
-            }
-
-            _game.Give.GiverSlotIndex = _game.ItemUI.GetSelectedIndex();
-            _game.Give.Recipient = null;
-            _game.Give.RecipientSlotIndex = -1;
-
-            GameStateManager.ChangeStateType(GameStateType.GiveItemToWhom);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            _game.ItemUI.Reset();
-            _game.ItemUI.ResetLayoutCenter();
-            GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+            CancelSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        if (!_game.ItemUI.HasValidSelection())
+        {
+            Logger.Warning("GiveWhichItem: no valid item selected.");
+            return;
+        }
+
+        _game.Give.GiverSlotIndex = _game.ItemUI.GetSelectedIndex();
+        _game.Give.Recipient = null;
+        _game.Give.RecipientSlotIndex = -1;
+
+        GameStateManager.ChangeStateType(GameStateType.GiveItemToWhom);
+    }
+
+    private void CancelSelection()
+    {
+        _game.ItemUI.Reset();
+        _game.ItemUI.ResetLayoutCenter();
+        GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
     }
 
     public void Update()
