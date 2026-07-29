@@ -2,5 +2,13 @@ namespace SomberInertia.Enums;
 
 public enum ForegroundNames
 {
-    Rock
+    BrickRoad,
+    Grass,
+    Mountain,
+    Road,
+    RoughTerrain,
+    Sand,
+    Ship,
+    StoneRoad,
+    Water
 }
