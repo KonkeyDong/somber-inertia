@@ -77,20 +77,30 @@ public class SelectMagicTargets : IGameState
             }
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            Logger.Info(_magicContext.ToString());
-
-            var spellName = _game.MagicUI.GetSelectedMagicName();
-            MagicDatabase.Cast(spellName, _magicContext);
-
-            GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
+            CancelSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        Logger.Info(_magicContext.ToString());
+
+        var spellName = _game.MagicUI.GetSelectedMagicName();
+        MagicDatabase.Cast(spellName, _magicContext);
+
+        GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
+    }
+
+    private void CancelSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
     }
 
     private void SetMagicContext()
@@ -105,11 +115,6 @@ public class SelectMagicTargets : IGameState
         _magicContext = new MagicContext(_currentUnit, unitsInRange, _game.Grid);
 
         _areaOfEffect = _game.Grid.GetBlocksFromRangeSet(_game.Grid.SpellEffectRangeSet);
-    }
-
-    private void CancelMenu()
-    {
-        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
     public void Update()

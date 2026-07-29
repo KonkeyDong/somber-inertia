@@ -51,15 +51,25 @@ public class SelectMagic : IGameState
             SetSelectedMagic(Direction.Down);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
+            CancelSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.SelectMagicLevel);
+    }
+
+    private void CancelSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.BattleActionMenu);
     }
 
     private void SetSelectedMagic(Direction direction)

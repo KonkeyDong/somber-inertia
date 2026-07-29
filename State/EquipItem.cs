@@ -88,14 +88,14 @@ public class EquipItem : IGameState
             TrySelect(Direction.Down);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            ConfirmEquip();
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+            CancelSelection();
         }
     }
 
@@ -166,7 +166,7 @@ public class EquipItem : IGameState
         ItemIcons.Reset();
     }
 
-    private void ConfirmEquip()
+    private void ConfirmSelection()
     {
         if (_isUnarmedSelected)
         {
@@ -183,6 +183,11 @@ public class EquipItem : IGameState
 
         _currentUnit.EquipWeaponAtIndex(_selectedIndex);
         Logger.Info($"{_currentUnit.GetDisplayName()} equipped {_currentUnit.Items[_selectedIndex].Name}.");
+        GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+    }
+
+    private void CancelSelection()
+    {
         GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
     }
 

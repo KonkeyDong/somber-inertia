@@ -56,21 +56,30 @@ public class DropItem : IGameState
             SetSelectedItem(Direction.Down);
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.Z) || Raylib.IsKeyPressed(KeyboardKey.C))
+        if (Input.IsConfirmPressed())
         {
-            // _currentUnit.RemoveItemAtIndex(_game.ItemUI.GetSelectedItemIndex());
-            _game.Prompt.Action = PromptAction.DropItem;
-            _game.Prompt.ItemSlotIndex = _game.ItemUI.GetSelectedIndex();
-            _game.Prompt.ReturnStateOnNo = GameStateType.DropItem;
-            _game.Prompt.ReturnStateOnYes = GameStateType.BattleItemMenu;
-
-            GameStateManager.ChangeStateType(GameStateType.PromptYesNo);
+            ConfirmSelection();
         }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.X))
+        if (Input.IsCancelPressed())
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
+            CancelSelection();
         }
+    }
+
+    private void ConfirmSelection()
+    {
+        _game.Prompt.Action = PromptAction.DropItem;
+        _game.Prompt.ItemSlotIndex = _game.ItemUI.GetSelectedIndex();
+        _game.Prompt.ReturnStateOnNo = GameStateType.DropItem;
+        _game.Prompt.ReturnStateOnYes = GameStateType.BattleItemMenu;
+
+        GameStateManager.ChangeStateType(GameStateType.PromptYesNo);
+    }
+
+    private void CancelSelection()
+    {
+        GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
     }
 
     public void Update()
