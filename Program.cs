@@ -76,7 +76,7 @@ class Program
         var anri = new ForceMember(UnitName.Anri);
         anri.Attack = 15;
         // Unarmed equip is default (index -1); do not put Unarmed in inventory.
-        anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: true);
+        anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: false);
         anri.AddItem(ItemName.MedicalHerb);
 
         var goblin1 = new Monster(UnitName.Goblin);
@@ -102,6 +102,7 @@ class Program
         ItemIcons.Load();
         DeathSprites.Load();
         BattleBackgrounds.Load();
+        BattleForegrounds.Load();
 
         while (!Raylib.WindowShouldClose())
         {

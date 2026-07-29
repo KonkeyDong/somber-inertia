@@ -24,6 +24,11 @@ public class FrameRect
     public int OffsetX { get; set; } = 0;
     public int OffsetY { get; set; } = 0;
 
+    public FrameRect()
+    {
+        
+    }
+
     public FrameRect Copy()
     {
         return new FrameRect

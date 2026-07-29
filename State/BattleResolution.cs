@@ -24,10 +24,7 @@ public class BattleResolution : IGameState
         _battleSequenceFrameLimit = _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count;
         _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
 
-        _foregroundSprite = new Sprite("Assets/Foregrounds/Rock.png", new FrameRect
-        {
-            X = 0, Y = 0, W = 96, H = 32
-        });
+        _foregroundSprite = BattleForegrounds.Get(ForegroundNames.Rock);
     }
 
     public void Enter()

@@ -18,6 +18,11 @@ public class Sprite
 
     private static readonly Random _random = new Random();
 
+    public Sprite()
+    {
+        FrameRect = new FrameRect();
+    }
+
     public Sprite(string path, FrameRect frameRect)
     {
         Texture = SpriteManager.Load(path);
