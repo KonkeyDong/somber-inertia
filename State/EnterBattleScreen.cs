@@ -27,7 +27,7 @@ public class EnterBattleScreen : IGameState
         _game = game;
         _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
 
-        _foregroundSprite = BattleForegrounds.Get(ForegroundNames.Rock);
+        _foregroundSprite = BattleForegrounds.Get(ForegroundNames.RoughTerrain);
     }
 
     public void Enter()
