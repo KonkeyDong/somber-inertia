@@ -40,7 +40,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
         _animations.Clear();
         var totalFrames = 0;
 
-        var jsonPath = Path.Combine(_rootPath, GameConstants.Files.FRAME_DATA_FILE_NAME);
+        var jsonPath = Path.Combine(_rootPath, GameConstants.Files.FrameData);
         var frames = SpriteManager.ExtractFrameData(jsonPath);
 
         foreach (var key in Enum.GetValues(typeof(TKey)))

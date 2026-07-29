@@ -28,8 +28,7 @@ public static class GameConstants
 
     public static class Files
     {
-        public const string FRAME_DATA_FILE_NAME = "FrameData.json";
-        public const string BATTLE_BACKGROUND_FRAME_DATA_FILE_NAME = "BattleBackgroundData.json";
+        public const string FrameData = "FrameData.json";
     }
 
     public static class Folders
