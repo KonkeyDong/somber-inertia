@@ -5,6 +5,7 @@ using SomberInertia.Enums;
 using SomberInertia.Core.Combat;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Combat.Item;
+using SomberInertia.State;
 using System.Numerics;
 
 using Raylib_cs;
@@ -142,6 +143,39 @@ public class Renderer
                     gridColor
                 );
             }
+        }
+    }
+
+    public void DrawDebugLogicalGrid(float scale, int logicalSpacing, Color color)
+    {
+        if (logicalSpacing <= 0)
+        {
+            return;
+        }
+
+        var step = logicalSpacing * scale;
+        var width = GameStateManager.CurrentWidth;
+        var height = GameStateManager.CurrentHeight;
+        var lineThickness = Math.Max(1f, scale);
+
+        for (var x = 0f; x <= width; x += step)
+        {
+            Raylib.DrawLineEx(
+                new Vector2(x, 0),
+                new Vector2(x, height),
+                lineThickness,
+                color
+            );
+        }
+
+        for (var y = 0f; y <= height; y += step)
+        {
+            Raylib.DrawLineEx(
+                new Vector2(0, y),
+                new Vector2(width, y),
+                lineThickness,
+                color
+            );
         }
     }
 

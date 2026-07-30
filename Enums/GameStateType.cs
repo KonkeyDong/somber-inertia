@@ -32,6 +32,7 @@ public enum GameStateType
     MessageNotice,
     SelectMagicTargets,
     BattleResolution,
+    BattleResolutionDebug,
     EnterBattleScreen,
     ExitBattleScreen,
     DropItem,
