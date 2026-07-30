@@ -1,0 +1,9 @@
+{ "frames": [
+   {
+    "frame": { "x": 0, "y": 0, "w": 72, "h": 84, "offsetX": -25, "offsetY": 0 }
+   },
+   {
+    "frame": { "x": 72, "y": 0, "w": 72, "h": 84, "offsetX": -30, "offsetY": 0 }
+   }
+ ]
+}

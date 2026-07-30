@@ -1,21 +1,9 @@
 { "frames": [
    {
-    "filename": "Sprite-0003 0.",
-    "frame": { "x": 0, "y": 0, "w": 66, "h": 74 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 66, "h": 74 },
-    "sourceSize": { "w": 66, "h": 74 },
-    "duration": 100
+    "frame": { "x": 0, "y": 0, "w": 66, "h": 74 }
    },
    {
-    "filename": "Sprite-0003 1.",
-    "frame": { "x": 66, "y": 0, "w": 66, "h": 74 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 66, "h": 74 },
-    "sourceSize": { "w": 66, "h": 74 },
-    "duration": 100
+    "frame": { "x": 66, "y": 0, "w": 66, "h": 74 }
    }
  ],
  "meta": {

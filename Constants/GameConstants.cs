@@ -137,6 +137,7 @@ public static class GameConstants
         {
             // Force Members
             { $"{UnitName.Max.GetBaseName()}_{ItemName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
+            { $"{UnitName.Max.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(145, 90) },
             { $"{UnitName.Anri.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
 
             // Monsters
