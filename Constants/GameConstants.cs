@@ -13,6 +13,10 @@ public static class GameConstants
         public static readonly Color Color = Color.Yellow;
         public const int FontSize = 16;
         public const int Spacing = 1;
+
+        /// <summary>Logical-pixel spacing for battle debug grid (screen step = value * scale).</summary>
+        public const int BattleGridLogicalSpacing = 20;
+        public static readonly Color BattleGridColor = new Color(180, 40, 40, 255);
     }
 
     public static class Window

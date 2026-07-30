@@ -57,6 +57,7 @@ public static class GameStateManager
             GameStateType.SelectMagicTargets => new SelectMagicTargets(Game),
             GameStateType.EnterBattleScreen => new EnterBattleScreen(Game),
             GameStateType.BattleResolution => new BattleResolution(Game),
+            GameStateType.BattleResolutionDebug => new BattleResolutionDebug(Game),
             GameStateType.ExitBattleScreen => new ExitBattleScreen(Game),
             GameStateType.DropItem => new DropItem(Game),
             GameStateType.PromptYesNo => new PromptYesNo(Game),

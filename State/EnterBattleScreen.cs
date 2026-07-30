@@ -68,7 +68,16 @@ public class EnterBattleScreen : IGameState
         }
         else
         {
-            GameStateManager.ChangeStateType(GameStateType.BattleResolution);
+            // Debug (F1): manual frame scrubber. AttackContext must be built while debug is on
+            // so BuildBattleScene uses one copy per pose.
+            if (Logger.InDebugMode())
+            {
+                GameStateManager.ChangeStateType(GameStateType.BattleResolutionDebug);
+            }
+            else
+            {
+                GameStateManager.ChangeStateType(GameStateType.BattleResolution);
+            }
         }
     }
 
