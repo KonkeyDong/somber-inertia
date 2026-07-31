@@ -110,7 +110,7 @@ public class EnterBattleScreen : IGameState
             var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _game.AttackContext.ForceMemberSpriteSet.BasePosition, eased);
 
             // Draw battle background
-            var background = BattleBackgrounds.Frames[0];
+            var background = BattleBackgrounds.Get(BackgroundNames.Battle01);
             _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
             _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
             _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);

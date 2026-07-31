@@ -116,7 +116,7 @@ public class BattleResolutionDebug : IGameState
         Raylib.ClearBackground(Color.Black);
 
         // Layer: background → grid → foreground → character sprites → HUD
-        var background = BattleBackgrounds.Frames[0];
+        var background = BattleBackgrounds.Get(BackgroundNames.Battle01);
         _game.Renderer.Draw(scale, background, GameConstants.Battle.Positions.Background);
 
         _game.Renderer.DrawDebugLogicalGrid(

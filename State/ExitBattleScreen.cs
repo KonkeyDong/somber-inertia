@@ -71,7 +71,7 @@ public class ExitBattleScreen : IGameState
             var battleAlpha = (byte)(255 * (1f - eased * 2));
 
             // Draw current battle screen with fading alpha
-            var background = BattleBackgrounds.Frames[0];
+            var background = BattleBackgrounds.Get(BackgroundNames.Battle01);
             _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
 
             _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
