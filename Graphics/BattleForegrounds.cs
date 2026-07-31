@@ -4,40 +4,10 @@ namespace SomberInertia.Graphics;
 
 public static class BattleForegrounds
 {
-    private static Dictionary<ForegroundNames, Sprite> _foregroundMap { get; set; } = new();
+    private static readonly BattlePlaneSet<ForegroundNames> _set =
+        new BattlePlaneSet<ForegroundNames>("Assets/Foregrounds", "Battle foregrounds");
 
-    public static void Load()
-    {        
-        if (_foregroundMap.Count > 0)
-        {
-            Logger.Debug("Battle foregrounds frame data has already been loaded.");
-            return;
-        }
+    public static void Load() => _set.Load();
 
-        var basePath = "Assets/Foregrounds";
-        var jsonPath = Path.Combine(basePath, GameConstants.Files.FrameData);
-
-        foreach (var name in Enum.GetValues<ForegroundNames>())
-        {
-            var pngPath = Path.Combine(basePath, $"{name}.png");
-
-            foreach (var frame in SpriteManager.ExtractFrameData(jsonPath))
-            {
-                _foregroundMap[name] = new Sprite(pngPath, frame);
-            }
-        }
-
-        Logger.Info("Battle foregounds have been loaded.");
-    }
-
-    public static Sprite Get(ForegroundNames name)
-    {
-        if (_foregroundMap.TryGetValue(name, out var sprite))
-        {
-            return sprite;
-        }
-
-        Logger.Error($"Could not find foreground sprite {name.ToString()}.");
-        return new Sprite();
-    }
+    public static Sprite Get(ForegroundNames name) => _set.Get(name);
 }

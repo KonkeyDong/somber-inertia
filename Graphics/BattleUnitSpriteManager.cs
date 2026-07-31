@@ -7,7 +7,7 @@ using Raylib_cs;
 
 namespace SomberInertia.Graphics;
 
-public class BattleSpriteSet
+public class BattleUnitSpriteSet
 {
     public List<Sprite> Idle = new();
     public List<Sprite> Attack = new();
@@ -31,7 +31,7 @@ public class BattleSpriteSet
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.AppendLine("BattleSpriteSet:");
+        sb.AppendLine("BattleUnitSpriteSet:");
         sb.AppendLine("   Idle count          : " + Idle.Count);
         sb.AppendLine("   Attack count        : " + Attack.Count);
         sb.AppendLine("   BattleSequence count: " + BattleSequence.Count);
@@ -122,33 +122,33 @@ public class BattleSpriteSet
     }
 }
 
-public class BattleSpriteManager
+public class BattleUnitSpriteManager
 {
     // Key will be made of unit name and equipped weapon since Force Members can equip
     // different weapons.
-    private static readonly Dictionary<string, BattleSpriteSet> _spriteMap = new();
+    private static readonly Dictionary<string, BattleUnitSpriteSet> _spriteMap = new();
 
-    public static BattleSpriteSet Get(Unit unit)
+    public static BattleUnitSpriteSet Get(Unit unit)
     {
         var key = BuildDictionaryKey(unit);
-        Logger.Warning("BattleSpriteManager::Get() need to fix dictionary lookup.");
+        Logger.Warning("BattleUnitSpriteManager::Get() need to fix dictionary lookup.");
         // if (_spriteMap.TryGetValue(key, out var sprites))
         // {
         //     return sprites;
         // }
 
-        var spriteSet = LoadBattleSpriteSet(unit);
+        var spriteSet = LoadBattleUnitSpriteSet(unit);
         _spriteMap[key] = spriteSet;
 
         return spriteSet;
     }
 
-    private static BattleSpriteSet LoadBattleSpriteSet(Unit unit)
+    private static BattleUnitSpriteSet LoadBattleUnitSpriteSet(Unit unit)
     {
         var baseDirPath = BuildAssetDirPath(unit);
         Logger.Info("baseDirPath: " + baseDirPath);
 
-        var spriteSet = new BattleSpriteSet();
+        var spriteSet = new BattleUnitSpriteSet();
 
         // Load Idle
         var idleJson = Path.Combine(baseDirPath, "Idle.json");
