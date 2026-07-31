@@ -13,8 +13,8 @@ public class AttackContext
     public bool Crit { get; set; }
     public int Damage { get; set; }
 
-    public BattleSpriteSet ForceMemberSpriteSet { get; private set; } = new();
-    public BattleSpriteSet MonsterSpriteSet { get; private set; } = new();
+    public BattleUnitSpriteSet ForceMemberSpriteSet { get; private set; } = new();
+    public BattleUnitSpriteSet MonsterSpriteSet { get; private set; } = new();
 
     public AttackContext(Unit attacker, Unit defender)
     {
@@ -41,13 +41,13 @@ public class AttackContext
     }
 
     /// <summary>Sprite set for the unit who is attacking this exchange (not screen side).</summary>
-    public BattleSpriteSet GetAttackerSpriteSet()
+    public BattleUnitSpriteSet GetAttackerSpriteSet()
     {
         return Attacker.Friendly ? ForceMemberSpriteSet : MonsterSpriteSet;
     }
 
     /// <summary>Sprite set for the unit who is defending this exchange (not screen side).</summary>
-    public BattleSpriteSet GetDefenderSpriteSet()
+    public BattleUnitSpriteSet GetDefenderSpriteSet()
     {
         return Defender.Friendly ? ForceMemberSpriteSet : MonsterSpriteSet;
     }
@@ -55,8 +55,8 @@ public class AttackContext
     private void AssignBattleSprites()
     {
         Logger.Debug("AssignBattleSprites()");
-        var attackerSprites = BattleSpriteManager.Get(Attacker);
-        var defenderSprites = BattleSpriteManager.Get(Defender);
+        var attackerSprites = BattleUnitSpriteManager.Get(Attacker);
+        var defenderSprites = BattleUnitSpriteManager.Get(Defender);
 
         if (Defender.Friendly)
         {
