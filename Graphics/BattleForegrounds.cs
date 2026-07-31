@@ -7,9 +7,7 @@ public static class BattleForegrounds
     private static Dictionary<ForegroundNames, Sprite> _foregroundMap { get; set; } = new();
 
     public static void Load()
-    {
-        // Logger.Error("BattleForegrounds.cs has not been implemented.");
-        
+    {        
         if (_foregroundMap.Count > 0)
         {
             Logger.Debug("Battle foregrounds frame data has already been loaded.");
