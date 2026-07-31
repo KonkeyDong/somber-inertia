@@ -116,7 +116,7 @@ public class BattleResolutionDebug : IGameState
         Raylib.ClearBackground(Color.Black);
 
         // Layer: background → grid → foreground → character sprites → HUD
-        var background = BattleBackgrounds.Get(BackgroundNames.Battle01);
+        var background = BattleBackgrounds.Get(BackgroundNames.GatesOfGuardiana);
         _game.Renderer.Draw(scale, background, GameConstants.Battle.Positions.Background);
 
         _game.Renderer.DrawDebugLogicalGrid(

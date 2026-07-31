@@ -63,7 +63,7 @@ public class BattleResolution : IGameState
     public void Draw(float scale)
     {
         Raylib.ClearBackground(Color.Black);
-        var background = BattleBackgrounds.Get(BackgroundNames.Battle01);
+        var background = BattleBackgrounds.Get(BackgroundNames.GatesOfGuardiana);
         _game.Renderer.Draw(scale, background, GameConstants.Battle.Positions.Background);
         _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground);
         _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), GameConstants.Battle.Positions.UnfriendlyStats);
