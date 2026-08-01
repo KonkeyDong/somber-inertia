@@ -30,14 +30,53 @@ public static class GameConstants
     public const int TILE_SIZE = 24;
     public const int WORLD_MAP_SPRITE_SIZE = 24;
 
+    /// <summary>Fixed file names used under asset folders.</summary>
     public static class Files
     {
         public const string FrameData = "FrameData.json";
+        public const string IdleJson = "Idle.json";
+        public const string IdlePng = "Idle.png";
+        public const string AttackJson = "Attack.json";
+        public const string AttackPng = "Attack.png";
+        public const string GrassTile = "grass_tile.png";
+        public const string ForestTile = "forest_tile.png";
+        public const string PngExtension = ".png";
+        public const string JsonExtension = ".json";
     }
 
-    public static class Folders
+    /// <summary>
+    /// Asset roots and path segments. Full roots for fixed folders; segments for dynamic Path.Combine.
+    /// </summary>
+    public static class Paths
     {
-        public const string OVERWORLD_FOLDER_NAME = "Overworld";
+        public const string Root = "Assets";
+
+        public const string Backgrounds = "Assets/Backgrounds";
+        public const string Foregrounds = "Assets/Foregrounds";
+
+        public const string Sprites = "Assets/Sprites";
+        public const string Characters = "Assets/Sprites/Characters";
+        public const string Monsters = "Assets/Sprites/Monsters";
+        public const string Shared = "Assets/Sprites/Shared";
+
+        public const string CommandIcons = "Assets/Sprites/Shared/CommandIcons";
+        public const string ItemIcons = "Assets/Sprites/Shared/ItemIcons";
+        public const string MagicIcons = "Assets/Sprites/Shared/MagicIcons";
+
+        public const string BattleFieldDeath = "Assets/Sprites/Shared/BattleFieldDeath";
+
+        public const string GrassTile = "Assets/grass_tile.png";
+        public const string ForestTile = "Assets/forest_tile.png";
+
+        // Folder name segments (dynamic paths)
+        public const string Overworld = "Overworld";
+        public const string Battle = "Battle";
+        public const string Promoted = "Promoted";
+        public const string Unpromoted = "Unpromoted";
+
+        /// <summary>Folder segment under a force member: Promoted or Unpromoted.</summary>
+        public static string PromotionFolder(bool promoted) =>
+            promoted ? Promoted : Unpromoted;
     }
 
     // can only have 4 items or 4 spell families

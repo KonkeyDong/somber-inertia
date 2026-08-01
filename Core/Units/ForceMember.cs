@@ -10,7 +10,10 @@ public class ForceMember : Unit
     public int Level { get; set; }
 
     protected override string AssetRoot =>
-        $"Assets/Sprites/Characters/{Name.GetBaseName()}/{(Promoted ? "Promoted" : "Unpromoted")}";
+        Path.Combine(
+            GameConstants.Paths.Characters,
+            Name.GetBaseName(),
+            GameConstants.Paths.PromotionFolder(Promoted));
 
     public ForceMember(UnitName name)
         : base(name)

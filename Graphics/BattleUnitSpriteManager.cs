@@ -151,16 +151,16 @@ public class BattleUnitSpriteManager
         var spriteSet = new BattleUnitSpriteSet();
 
         // Load Idle
-        var idleJson = Path.Combine(baseDirPath, "Idle.json");
-        var idlePng = Path.Combine(baseDirPath, "Idle.png");
+        var idleJson = Path.Combine(baseDirPath, GameConstants.Files.IdleJson);
+        var idlePng = Path.Combine(baseDirPath, GameConstants.Files.IdlePng);
         if (File.Exists(idleJson) && File.Exists(idlePng))
         {
             spriteSet.Idle = LoadSpritesFromJson(idlePng, idleJson);
         }
 
         // Load Attack
-        var attackJson = Path.Combine(baseDirPath, "Attack.json");
-        var attackPng = Path.Combine(baseDirPath, "Attack.png");
+        var attackJson = Path.Combine(baseDirPath, GameConstants.Files.AttackJson);
+        var attackPng = Path.Combine(baseDirPath, GameConstants.Files.AttackPng);
         if (File.Exists(attackJson) && File.Exists(attackPng))
         {
             spriteSet.Attack = LoadSpritesFromJson(attackPng, attackJson);
@@ -190,13 +190,20 @@ public class BattleUnitSpriteManager
     {
         if (unit.Friendly)
         {
-            var promoted = unit.Promoted ? "Promoted" : "Unpromoted";
             var weapon = unit.GetEquippedWeaponData();
 
-            return Path.Combine("Assets", "Sprites", "Characters", unit.Name.GetBaseName(), promoted, "Battle", weapon.Name.GetBaseName());
+            return Path.Combine(
+                GameConstants.Paths.Characters,
+                unit.Name.GetBaseName(),
+                GameConstants.Paths.PromotionFolder(unit.Promoted),
+                GameConstants.Paths.Battle,
+                weapon.Name.GetBaseName());
         }
 
         // enemies
-        return Path.Combine("Assets", "Sprites", "Monsters", unit.Name.GetBaseName(), "Battle");
+        return Path.Combine(
+            GameConstants.Paths.Monsters,
+            unit.Name.GetBaseName(),
+            GameConstants.Paths.Battle);
     }
 }
