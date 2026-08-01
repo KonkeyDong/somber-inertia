@@ -60,7 +60,7 @@ public class Block
 
     public Vector2 GetPixelCoordinates()
     {
-        return new Vector2(X * GameConstants.TILE_SIZE, Y * GameConstants.TILE_SIZE);
+        return new Vector2(X * GameConstants.TileSize, Y * GameConstants.TileSize);
     }
 
     public string PrintGridCoordinates() => $"[{X}, {Y}]";

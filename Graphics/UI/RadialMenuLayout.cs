@@ -1,4 +1,5 @@
 using System.Numerics;
+using SomberInertia.Core.Graphics;
 using SomberInertia.Enums;
 using SomberInertia.State;
 
@@ -27,9 +28,28 @@ public static class RadialMenuLayout
         return new Vector2(center.X + 65, center.Y);
     }
 
+    public static Vector2 GetMenuMessagePosition(Vector2 center)
+    {
+        return new Vector2(center.X + 65, center.Y + 18);
+    }
+
     public static Vector2 GetIconPosition(Vector2 center, Direction direction)
     {
         var offset = direction.GetMenuOffset();
-        return center + offset * GameConstants.TILE_SIZE;
+        return center + offset * GameConstants.TileSize;
+    }
+
+    /// <summary>Draw command icons in the standard radial layout.</summary>
+    public static void DrawCommandIcons(
+        Renderer renderer,
+        float scale,
+        Vector2 center,
+        IReadOnlyDictionary<Direction, CommandIconType> commands)
+    {
+        foreach (var (direction, commandType) in commands)
+        {
+            var position = GetIconPosition(center, direction);
+            renderer.Draw(scale, CommandIcons.GetSprite(commandType), position);
+        }
     }
 }

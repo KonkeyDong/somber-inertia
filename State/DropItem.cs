@@ -92,7 +92,7 @@ public class DropItem : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawMovementRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(scale, _currentUnit))

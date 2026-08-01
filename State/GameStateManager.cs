@@ -10,9 +10,9 @@ public static class GameStateManager
     public static IGameState? GameState { get; private set; }
     public static Game Game { get; private set; } = null!;
 
-    public static int CurrentWidth = (int)(GameConstants.Window.Width * GameConstants.Window.Scale);
-    public static int CurrentHeight = (int)(GameConstants.Window.Height * GameConstants.Window.Scale);
-    public static float CurrentScale = GameConstants.Window.Scale;
+    public static int CurrentWidth { get; set; } = (int)(GameConstants.Window.Width * GameConstants.Window.Scale);
+    public static int CurrentHeight { get; set; } = (int)(GameConstants.Window.Height * GameConstants.Window.Scale);
+    public static float CurrentScale { get; set; } = GameConstants.Window.Scale;
 
     public static void InitializeGameState(GameStateType gameStateType, Game game)
     {
@@ -83,7 +83,7 @@ public static class GameStateManager
         CurrentHeight = (int)(GameConstants.Window.Height * CurrentScale);
 
         Raylib.SetWindowSize(CurrentWidth, CurrentHeight);
-        Game.Grid.BlockSize = (int)(GameConstants.TILE_SIZE * CurrentScale);
+        Game.Grid.BlockSize = (int)(GameConstants.TileSize * CurrentScale);
 
         Logger.Info($"ResizeWindow() Window resized to {CurrentWidth} x {CurrentHeight} (Scale: {CurrentScale:F2}x); BlockSize: {Game.Grid.BlockSize}");
     }

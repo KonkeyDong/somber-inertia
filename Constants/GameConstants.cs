@@ -8,6 +8,13 @@ namespace SomberInertia;
 
 public static class GameConstants
 {
+    // in pixels
+    public const int TileSize = 24;
+    public const int WorldMapSpriteSize = 24;
+    
+    // can only have 4 items or 4 spell families
+    public const int MaxBucketSize = 4;
+
     public static class Debug
     {
         public static readonly Color Color = Color.Yellow;
@@ -25,10 +32,6 @@ public static class GameConstants
         public const int Height = 224; // pixels
         public const float Scale = 3.0f;
     }
-
-    // in pixels
-    public const int TILE_SIZE = 24;
-    public const int WORLD_MAP_SPRITE_SIZE = 24;
 
     /// <summary>Fixed file names used under asset folders.</summary>
     public static class Files
@@ -79,9 +82,6 @@ public static class GameConstants
             promoted ? Promoted : Unpromoted;
     }
 
-    // can only have 4 items or 4 spell families
-    public const int MAX_BUCKET_SIZE = 4;
-
     public static class Animations
     {
         public const float HighlightTransitionSpeed = 200f; // lower number represents slower speed
@@ -117,8 +117,8 @@ public static class GameConstants
 
     public static class StatusEffects
     {
-        public const int POISON_DAMAGE_DENOMINATOR = 8; // max HP / POISON_DAMAGE_DENOMINATOR
-        public const int SLEEP_DURATION = 3; // _random.Next(GameConstants.SLEEP_DURATION); // 1 to 3 (technically 0 to 2) turns (turn 0 shows the awak message and skips turn)
+        public const int PoisonDamageDenominator = 8; // max HP / PoisonDamageDenominator
+        public const int SleepDuration = 3; // 1 to 3 turns (turn 0 shows wake message and skips turn)
     }
 
     public static class WorldMap
@@ -128,7 +128,7 @@ public static class GameConstants
             public static readonly Vector2 NoTargetMessageBox = new Vector2(100, 100);
         }
 
-        public const int MAX_MOVEMENT_COST = 255;
+        public const int MaxMovementCost = 255;
     }
 
     public static class MessageNotice
@@ -191,18 +191,15 @@ public static class GameConstants
 
         public static Vector2 GetSpritePosition(Unit unit)
         {
-            Logger.Warning("Will need to add other characters/monsters base positions and adjust in battle states.");
             var key = BuildKey(unit);
 
             if (_spritePositions.TryGetValue(key, out var position))
             {
                 return position;
             }
-            else
-            {
-                Logger.Error($"No base position defined for {key}. Aborting...");
-                return new Vector2(100, 100);
-            }
+
+            Logger.Error($"No base position defined for {key}. Aborting...");
+            return new Vector2(100, 100);
         }
 
         public static string BuildKey(Unit unit)

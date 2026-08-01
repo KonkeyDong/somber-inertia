@@ -45,11 +45,6 @@ public static class ItemDatabase
         return _items[ItemName.NoItem];
     }
 
-    public static bool Exists(ItemName name)
-    {
-        return _items.ContainsKey(name);
-    }
-
     private static void Register(ItemData data)
     {
         _items[data.Name] = data;

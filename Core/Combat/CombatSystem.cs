@@ -7,34 +7,6 @@ namespace SomberInertia.Core.Combat;
 
 public static class CombatSystem
 {
-
-    public static void Attack(Unit attacker, Unit defender)
-    {
-        Logger.Warning("DEPRECATED: use AttackV2 and pass an AttackContext object.");
-        Logger.Info($"{attacker.Name} attacks {defender.Name}.");
-        if (!CheckHit(attacker, defender))
-        {
-            Logger.Info("   Attack missed!");
-
-            return;
-        }
-
-        Logger.Info("   Attack hits!");
-
-        var baseDamage = (attacker.Attack + attacker.GetEquippedWeaponData().Attack) - defender.Defense;
-        if (baseDamage <= 0)
-        {
-            Logger.Info($"{attacker.Name}'s attack [{attacker.Attack}] is less than or equal to {defender.Name}'s defense [{defender.Defense}]. Minimum damage is 1");
-            defender.TakeDamage(1);
-            
-            return;
-        }
-
-        var variantDamage = CalculateVariance(baseDamage);
-
-        defender.TakeDamage(Math.Max(variantDamage, 1));
-    }
-
     public static void CalculateAttackOutcome(AttackContext context)
     {
         if (Miss(16))
@@ -59,16 +31,12 @@ public static class CombatSystem
         if (baseDamage <= 0)
         {
             Logger.Info($"{context.Attacker.Name}'s attack [{context.Attacker.Attack}] is less than or equal to {context.Defender.Name}'s defense [{context.Defender.Defense}]. Minimum damage is 1");
-            // defender.TakeDamage(1);
-
             context.Damage = 1;
-            
+
             return;
         }
 
         var variantDamage = CalculateVariance(baseDamage);
-
-        // defender.TakeDamage(Math.Max(variantDamage, 1));
 
         context.Damage = Math.Max(variantDamage, 1);
     }
@@ -85,13 +53,12 @@ public static class CombatSystem
         defender.TakeDamage(Math.Max(variantDamage, 1));
     }
 
-    private static bool CheckHit(Unit attacker, Unit defender) => !Chance(16);
     private static bool Miss(int denominator) => Chance(denominator);
 
     private static int CalculateVariance(int baseAmount)
     {
         Logger.Info($"  Base amount: [{baseAmount}].");
-        
+
         var variance = Raylib.GetRandomValue(75, 125);
         var variantDamage = (baseAmount * variance) / 100;
 

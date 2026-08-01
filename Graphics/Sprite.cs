@@ -64,7 +64,6 @@ public class Sprite
 
     public Sprite Jitter()
     {
-        Logger.Warning("Jitter(): make jitter offset amount a constant.");
         var jittered = new Sprite(Texture, FrameRect.Copy(), ownsTexture: true);
 
         var jitterOffset = GameConstants.Animations.JitterOffset;

@@ -30,11 +30,6 @@ public static class MagicDatabase
         return _spells[MagicName.NoSpell];
     }
 
-    public static bool Exists(MagicName name)
-    {
-        return _spells.ContainsKey(name);
-    }
-
     /// <summary>
     /// MP cost helper. Item-cast spells are free.
     /// </summary>

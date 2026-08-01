@@ -1,5 +1,3 @@
-using System.Numerics;
-using Raylib_cs;
 using SomberInertia.Core;
 using SomberInertia.Enums;
 using SomberInertia.Core.Units;
@@ -37,28 +35,12 @@ public class SelectEnemyForPhysicalAttack : IGameState
 
     public void HandleInput()
     {
-        if (_game.UnfriendlyUnitsInRange.Count() > 1)
+        if (Input.TryCycleIndex(ref _currentIndex, _game.UnfriendlyUnitsInRange.Count))
         {
-            var changed = false;
-            if (Raylib.IsKeyPressed(KeyboardKey.Left))
+            var newTarget = _game.UnfriendlyUnitsInRange[_currentIndex];
+            if (newTarget.Block != null)
             {
-
-                _currentIndex = (_currentIndex + 1) % _game.UnfriendlyUnitsInRange.Count();
-                changed = true;
-            }
-            if (Raylib.IsKeyPressed(KeyboardKey.Right))
-            {
-                _currentIndex = (_currentIndex - 1 + _game.UnfriendlyUnitsInRange.Count()) % _game.UnfriendlyUnitsInRange.Count();
-                changed = true;
-            }
-
-            if (changed)
-            {
-                var newTarget = _game.UnfriendlyUnitsInRange[_currentIndex];
-                if (newTarget.Block != null)
-                {
-                    _game.SetHighlightTarget(newTarget);
-                }
+                _game.SetHighlightTarget(newTarget);
             }
         }
 

@@ -19,7 +19,7 @@ public class Grid
 
     public readonly Block[,] Blocks;
 
-    public int BlockSize { get; set; } = (int)(GameConstants.TILE_SIZE * GameConstants.Window.Scale);
+    public int BlockSize { get; set; } = (int)(GameConstants.TileSize * GameConstants.Window.Scale);
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
     public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
@@ -130,7 +130,7 @@ public class Grid
 
                 var occupant = neighbor.PeekOccupant();
                 var enterCost = occupant != null && unit.Friendly != occupant.Friendly
-                    ? GameConstants.WorldMap.MAX_MOVEMENT_COST
+                    ? GameConstants.WorldMap.MaxMovementCost
                     : CalculateTerrainTypeCost(unit.MovementType, neighbor.TerrainType);
 
                 var totalCost = currentCost + enterCost;

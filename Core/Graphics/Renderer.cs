@@ -210,7 +210,7 @@ public class Renderer
 
     public void DrawHighlightRectangle(float scale, Vector2 newPosition)
     {
-        var tileSize = GameConstants.TILE_SIZE * scale;
+        var tileSize = GameConstants.TileSize * scale;
 
         var highlightRect = new Rectangle(
             newPosition.X * (int)scale,
@@ -548,7 +548,7 @@ public class Renderer
         Vector2 position)
     {
         var fontSize = (int)(8 * scale);
-        var iconLogical = GameConstants.TILE_SIZE;
+        var iconLogical = GameConstants.TileSize;
         var columnGap = GameConstants.Give.TradePromptColumnGap * scale;
         var nameToIconGap = GameConstants.Give.TradePromptNameToIconGap * scale;
 
