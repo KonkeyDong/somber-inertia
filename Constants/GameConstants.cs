@@ -182,6 +182,7 @@ public static class GameConstants
             { $"{UnitName.Max.GetBaseName()}_{ItemName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
             { $"{UnitName.Max.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(145, 90) },
             { $"{UnitName.Anri.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
+            { $"{UnitName.Anri.GetBaseName()}_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
 
             // Monsters
             { $"{UnitName.Goblin.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
