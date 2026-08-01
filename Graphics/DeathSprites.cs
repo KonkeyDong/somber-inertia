@@ -12,9 +12,8 @@ public static class DeathSprites
             return;
         }
 
-        var basePath = "Assets/Sprites/Shared/BattleFieldDeath";
-        var pngPath = Path.Combine(basePath + ".png");
-        var jsonPath = Path.Combine(basePath + ".json");
+        var pngPath = GameConstants.Paths.BattleFieldDeath + GameConstants.Files.PngExtension;
+        var jsonPath = GameConstants.Paths.BattleFieldDeath + GameConstants.Files.JsonExtension;
 
         foreach (var frame in SpriteManager.ExtractFrameData(jsonPath))
         {

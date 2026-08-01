@@ -5,7 +5,7 @@ namespace SomberInertia.Graphics;
 public static class BattleForegrounds
 {
     private static readonly BattlePlaneSet<ForegroundNames> _set =
-        new BattlePlaneSet<ForegroundNames>("Assets/Foregrounds", "Battle foregrounds");
+        new BattlePlaneSet<ForegroundNames>(GameConstants.Paths.Foregrounds, "Battle foregrounds");
 
     public static void Load() => _set.Load();
 

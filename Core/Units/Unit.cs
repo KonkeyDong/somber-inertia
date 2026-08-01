@@ -727,7 +727,7 @@ public abstract class Unit
 
         var totalFramesLoaded = 0;
 
-        var basePath = Path.Combine(AssetRoot, GameConstants.Folders.OVERWORLD_FOLDER_NAME);
+        var basePath = Path.Combine(AssetRoot, GameConstants.Paths.Overworld);
         var jsonPath = Path.Combine(basePath, GameConstants.Files.FrameData);
         var frames = SpriteManager.ExtractFrameData(jsonPath);
 

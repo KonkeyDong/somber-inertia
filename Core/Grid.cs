@@ -61,7 +61,7 @@ public class Grid
         {
             for (var y = 0; y < Height; y++)
             {
-                Blocks[x, y] = new Block("Assets/grass_tile.png", TerrainType.Plains, x, y);
+                Blocks[x, y] = new Block(GameConstants.Paths.GrassTile, TerrainType.Plains, x, y);
             }
         }
 
@@ -72,7 +72,7 @@ public class Grid
         };
         foreach (var point in tempCoords)
         {
-            Blocks[point.x, point.y] = new Block("Assets/forest_tile.png", TerrainType.Forest, point.x, point.y);
+            Blocks[point.x, point.y] = new Block(GameConstants.Paths.ForestTile, TerrainType.Forest, point.x, point.y);
         }
 
 

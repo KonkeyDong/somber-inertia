@@ -7,7 +7,7 @@ public static class ItemIcons
 {
     private static readonly IconSet<ItemName> _icons =
         new IconSet<ItemName>(
-            "Assets/Sprites/Shared/ItemIcons",
+            GameConstants.Paths.ItemIcons,
             GameConstants.Animations.BlinkDelay,
             getBaseName: icon => icon.GetBaseName());
 
