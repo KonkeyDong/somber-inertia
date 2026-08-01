@@ -4,6 +4,7 @@ using Raylib_cs;
 using SomberInertia.Core;
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
+using SomberInertia.Graphics.UI;
 using SomberInertia.Core.Units;
 
 namespace SomberInertia.State;
@@ -13,7 +14,6 @@ public class BattleItemMenu : IGameState
     private readonly Game _game;
     private Unit _currentUnit;
 
-    // Command layout: type + relative offset from center (in tile units)
     private static readonly Dictionary<Direction, CommandIconType> _commandByDirection = new()
     {
         { Direction.Up,    CommandIconType.Use   },
@@ -36,21 +36,11 @@ public class BattleItemMenu : IGameState
         _currentUnit = _game.GetCurrentUnit();
         _selectedCommand = CommandIconType.Use;
         CommandIcons.SetSelectedIcon(_selectedCommand);
-
-        UpdateCenterPosition();
+        _centerPosition = RadialMenuLayout.GetCenterPosition();
     }
 
     public void Exit()
     {
-    }
-
-    private void UpdateCenterPosition()
-    {
-        _centerPosition = new Vector2(
-            GameStateManager.CurrentWidth / 2f,
-            GameStateManager.CurrentHeight * 0.75f
-        ) / GameStateManager.CurrentScale;
-
     }
 
     public void HandleInput()
@@ -99,11 +89,10 @@ public class BattleItemMenu : IGameState
 
     private void ConfirmSelection()
     {
-        Logger.Debug($"BattleActionMenu: Confirmed command {_selectedCommand}");
+        Logger.Debug($"BattleItemMenu: Confirmed command {_selectedCommand}");
 
         if (_selectedCommand == CommandIconType.Use)
         {
-            // GameStateManager.ChangeStateType(GameStateType.CalculateWeaponAttackRange);
             Logger.Warning("Item::Use not implemented.");
         }
         else if (_selectedCommand == CommandIconType.Drop)
@@ -144,21 +133,11 @@ public class BattleItemMenu : IGameState
         _game.Renderer.DrawMovementRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        foreach (var (direction, commandType) in _commandByDirection)
-        {
-            var offset = direction.GetMenuOffset();
-            var position = _centerPosition + offset * GameConstants.TILE_SIZE;
-            var sprite = CommandIcons.GetSprite(commandType);
-            
-            _game.Renderer.Draw(scale, sprite, position);
-        }
-        
-        var messagePosition = _centerPosition;
-        messagePosition.X += 65;
-        messagePosition.Y += 18;
-
-        _game.Renderer.DrawBattleMenuMessage(scale, _selectedCommand.GetBaseName(), messagePosition);
+        _centerPosition = RadialMenuLayout.GetCenterPosition();
+        RadialMenuLayout.DrawCommandIcons(_game.Renderer, scale, _centerPosition, _commandByDirection);
+        _game.Renderer.DrawBattleMenuMessage(
+            scale,
+            _selectedCommand.GetBaseName(),
+            RadialMenuLayout.GetMenuMessagePosition(_centerPosition));
     }
-
-    public void OnResize() => UpdateCenterPosition();
 }

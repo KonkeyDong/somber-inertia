@@ -105,11 +105,6 @@ public static class UnitDatabase
         };
     }
 
-    public static bool Exists(UnitName name)
-    {
-        return _units.ContainsKey(name);
-    }
-
     private static void Register(UnitData data)
     {
         _units[data.Name] = data;

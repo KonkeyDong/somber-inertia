@@ -12,14 +12,14 @@ namespace SomberInertia.Core;
 
 public class Game
 {
-    public Renderer Renderer = new();
+    public Renderer Renderer { get; set; } = new();
     public Grid Grid { get; set; }
     public List<Unit> Units { get; set; } = new();
     public List<Unit> FriendlyUnitsInRange { get; set; } = new();
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
-    public FrameFlipper FrameFlipper = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay);
-    public MagicUI MagicUI = new MagicUI();
-    public ItemUI ItemUI = new ItemUI();
+    public FrameFlipper FrameFlipper { get; set; } = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay);
+    public MagicUI MagicUI { get; set; } = new();
+    public ItemUI ItemUI { get; set; } = new();
     public AttackContext AttackContext { get; set; } = null!;
 
     public PromptContext Prompt { get; set; } = new PromptContext();
@@ -62,16 +62,6 @@ public class Game
         }
 
         return Units[1];
-    }
-
-    public Unit GetLastUnit()
-    {
-        if (Units.Count == 0)
-        {
-            Logger.Error("Game::GetLastUnit() list Unit is empty.");
-        }
-
-        return Units[^1];
     }
 
     public void MoveFirstUnitToEndOfList()

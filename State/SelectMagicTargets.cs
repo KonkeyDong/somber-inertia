@@ -3,11 +3,8 @@ using SomberInertia.Core;
 using SomberInertia.Core.Combat;
 using SomberInertia.Core.Combat.Spells;
 using SomberInertia.Core.Units;
-using SomberInertia.Timers;
 using SomberInertia.Graphics;
 using System.Numerics;
-
-using Raylib_cs;
 
 namespace SomberInertia.State;
 
@@ -17,7 +14,6 @@ public class SelectMagicTargets : IGameState
     private readonly Unit _currentUnit;
     private readonly List<Unit> _listOfUnits;
     private int _currentIndex;
-    private readonly FrameFlipper _blinker;
     private MagicContext _magicContext = null!;
     private List<Block> _areaOfEffect = null!;
 
@@ -25,7 +21,6 @@ public class SelectMagicTargets : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-        _blinker = new FrameFlipper(GameConstants.Animations.BlinkDelay);
 
         var offensive = _game.MagicUI.GetSelectedMagicData().Offensive;
         _listOfUnits = offensive ? _game.UnfriendlyUnitsInRange : _game.FriendlyUnitsInRange;
@@ -50,30 +45,13 @@ public class SelectMagicTargets : IGameState
 
     public void HandleInput()
     {
-        if (_listOfUnits.Count > 1)
+        if (Input.TryCycleIndex(ref _currentIndex, _listOfUnits.Count))
         {
-            var changed = false;
-
-            if (Raylib.IsKeyPressed(KeyboardKey.Left))
+            var newTarget = _listOfUnits[_currentIndex];
+            if (newTarget.Block != null)
             {
-                _currentIndex = (_currentIndex + 1) % _listOfUnits.Count;
-                changed = true;
-            }
-
-            if (Raylib.IsKeyPressed(KeyboardKey.Right))
-            {
-                _currentIndex = (_currentIndex - 1 + _listOfUnits.Count) % _listOfUnits.Count;
-                changed = true;
-            }
-
-            if (changed)
-            {
-                var newTarget = _listOfUnits[_currentIndex];
-                if (newTarget.Block != null)
-                {
-                    _game.SetHighlightTarget(newTarget);
-                    SetMagicContext();
-                }
+                _game.SetHighlightTarget(newTarget);
+                SetMagicContext();
             }
         }
 

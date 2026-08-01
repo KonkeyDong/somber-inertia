@@ -22,7 +22,7 @@ public static class StatusEffectSystem
                 return new StatusEffectSlot
                 {
                     Type = StatusEffectType.Sleep,
-                    Duration = _random.Next(GameConstants.StatusEffects.SLEEP_DURATION)
+                    Duration = _random.Next(GameConstants.StatusEffects.SleepDuration)
                 };
 
             default:
@@ -37,7 +37,7 @@ public static class StatusEffectSystem
             return;
         }
 
-        var damage = (int)(unit.HP.Max / GameConstants.StatusEffects.POISON_DAMAGE_DENOMINATOR);
+        var damage = (int)(unit.HP.Max / GameConstants.StatusEffects.PoisonDamageDenominator);
         var finalDamage = Math.Max(2, damage);
 
         Logger.Info($"Poison damage dealt to unit [{unit.GetDisplayName()}] is [{finalDamage}].");

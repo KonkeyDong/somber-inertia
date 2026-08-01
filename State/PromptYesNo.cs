@@ -218,7 +218,7 @@ public class PromptYesNo : IGameState
             DrawTradeSummary(scale);
         }
 
-        var gap = GameConstants.TILE_SIZE * IconSpacingTiles;
+        var gap = GameConstants.TileSize * IconSpacingTiles;
 
         var yesPosition = new Vector2(_centerPosition.X - gap, _centerPosition.Y);
         var noPosition = new Vector2(_centerPosition.X + gap, _centerPosition.Y);

@@ -58,29 +58,12 @@ public class GiveItemToWhom : IGameState
             return;
         }
 
-        if (_friendliesInRange.Count > 1)
+        if (Input.TryCycleIndex(ref _currentIndex, _friendliesInRange.Count))
         {
-            var changed = false;
-
-            if (Raylib.IsKeyPressed(KeyboardKey.Left))
+            var newTarget = _friendliesInRange[_currentIndex];
+            if (newTarget.Block != null)
             {
-                _currentIndex = (_currentIndex + 1) % _friendliesInRange.Count;
-                changed = true;
-            }
-
-            if (Raylib.IsKeyPressed(KeyboardKey.Right))
-            {
-                _currentIndex = (_currentIndex - 1 + _friendliesInRange.Count) % _friendliesInRange.Count;
-                changed = true;
-            }
-
-            if (changed)
-            {
-                var newTarget = _friendliesInRange[_currentIndex];
-                if (newTarget.Block != null)
-                {
-                    _game.SetHighlightTarget(newTarget);
-                }
+                _game.SetHighlightTarget(newTarget);
             }
         }
 

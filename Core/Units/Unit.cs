@@ -43,10 +43,10 @@ public abstract class Unit
     public virtual bool Promoted { get; set; } = false;
 
     public Dictionary<MagicFamily, List<MagicName>> KnownSpells { get; } = new();
-    public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MAX_BUCKET_SIZE];
+    public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MaxBucketSize];
     public bool HasSpells => KnownSpells.Count > 0;
 
-    public ItemSlot[] Items = new ItemSlot[GameConstants.MAX_BUCKET_SIZE];
+    public ItemSlot[] Items = new ItemSlot[GameConstants.MaxBucketSize];
     public int EquippedWeaponIndex { get; set; } = -1; // -1 = Unarmed
 
     public Direction FacingDirection { get; set; } = Direction.Down;
@@ -322,7 +322,7 @@ public abstract class Unit
 
     private void FillFirstAvailableBucket(MagicFamily family)
     {
-        for (var i = 0; i < GameConstants.MAX_BUCKET_SIZE; i++)
+        for (var i = 0; i < GameConstants.MaxBucketSize; i++)
         {
             if (MagicFamilyBuckets[i] == null)
             {
