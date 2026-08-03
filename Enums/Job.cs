@@ -4,7 +4,7 @@ namespace SomberInertia.Enums;
 [Flags]
 public enum Job
 {
-    Any = 0,
+    Any = ~0,
     Swordsman = 1 << 0,
     Hero = 1 << 1,
     Warrior = 1 << 2,
