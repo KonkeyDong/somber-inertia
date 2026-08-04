@@ -4,7 +4,7 @@ namespace SomberInertia.Enums;
 [Flags]
 public enum Job
 {
-    Any = ~0,
+    Any = ~0, // all bits are 1; anyone can use (useful for consumable items)
     Swordsman = 1 << 0,
     Hero = 1 << 1,
     Warrior = 1 << 2,

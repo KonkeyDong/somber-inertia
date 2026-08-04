@@ -148,15 +148,7 @@ public class EquipItem : IGameState
         return CanJobEquip(data);
     }
 
-    private bool CanJobEquip(ItemData data)
-    {
-        if (data.AllowedJobs == Job.Any)
-        {
-            return true;
-        }
-
-        return (_job & data.AllowedJobs) != 0;
-    }
+    private bool CanJobEquip(ItemData data) => _job.IsAllowedBy(data.AllowedJobs);
 
     private void UpdateSelectedIcon()
     {
