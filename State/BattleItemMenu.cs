@@ -93,7 +93,15 @@ public class BattleItemMenu : IGameState
 
         if (_selectedCommand == CommandIconType.Use)
         {
-            Logger.Warning("Item::Use not implemented.");
+            if (!_currentUnit.HasUsableItem())
+            {
+                GameStateManager.ShowMessageNotice(
+                    GameConstants.MessageNotice.NoItem,
+                    GameStateType.BattleItemMenu);
+                return;
+            }
+
+            GameStateManager.ChangeStateType(GameStateType.UseWhichItem);
         }
         else if (_selectedCommand == CommandIconType.Drop)
         {

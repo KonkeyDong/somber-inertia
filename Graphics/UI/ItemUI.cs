@@ -5,9 +5,22 @@ using SomberInertia.Core.Combat.Item;
 
 namespace SomberInertia.Graphics.UI;
 
+/// <summary>
+/// Predicate for which inventory slots may be selected (and optionally shown) in item radials.
+/// </summary>
+public delegate bool ItemSlotFilter(ItemSlot itemSlot, Unit unit);
+
 public class ItemUI : RadialSlotUI
 {
     public record ItemIconData(Vector2 Position, ItemName ItemName, bool IsSelected);
+
+    /// <summary>Give / drop / trade: any non-empty, non-Unarmed item.</summary>
+    public static bool GiveableFilter(ItemSlot itemSlot, Unit unit) =>
+        Unit.IsGiveableItemSlot(itemSlot);
+
+    /// <summary>Use: job-allowed items with an effect or castable spell.</summary>
+    public static bool UsableFilter(ItemSlot itemSlot, Unit unit) =>
+        Unit.IsUsableItemSlot(itemSlot, unit.GetJob());
 
     private ItemName _selectedItemName;
 
@@ -25,7 +38,7 @@ public class ItemUI : RadialSlotUI
         ItemIcons.Reset();
     }
 
-    public void SetSelected(Direction direction, Unit currentUnit)
+    public void SetSelected(Direction direction, Unit currentUnit, ItemSlotFilter canSelect)
     {
         if (!TryGetIndex(direction, out var index))
         {
@@ -37,17 +50,15 @@ public class ItemUI : RadialSlotUI
             return;
         }
 
-        var slot = currentUnit.Items[index];
-
-        // Empty and Unarmed are not selectable for give/drop/trade flows.
-        if (!Unit.IsGiveableSlot(slot))
+        var itemSlot = currentUnit.Items[index];
+        if (!canSelect(itemSlot, currentUnit))
         {
             return;
         }
 
         _selectedIndex = index;
-        _selectedItemName = slot.Name;
-        ItemIcons.Reset(); // restart blink on the newly selected slot
+        _selectedItemName = itemSlot.Name;
+        ItemIcons.Reset();
 
         Logger.Debug($"Selected item index: [{index}], name: [{_selectedItemName}].");
     }
@@ -62,7 +73,7 @@ public class ItemUI : RadialSlotUI
         return _selectedIndex;
     }
 
-    public ItemSlot GetSelectedSlot(Unit currentUnit)
+    public ItemSlot GetSelectedItemSlot(Unit currentUnit)
     {
         if (_selectedIndex < 0 || _selectedIndex >= currentUnit.Items.Length)
         {
@@ -77,38 +88,61 @@ public class ItemUI : RadialSlotUI
         return ItemDatabase.Get(_selectedItemName);
     }
 
-    public IEnumerable<ItemIconData> GetItemIconsToDraw(float scale, Unit currentUnit)
+    /// <summary>
+    /// Radial icons. If <paramref name="blankDisallowed"/> is true, slots failing
+    /// <paramref name="canSelect"/> are drawn as empty (Use menu).
+    /// </summary>
+    public IEnumerable<ItemIconData> GetItemIconsToDraw(
+        Unit currentUnit,
+        ItemSlotFilter? canSelect = null,
+        bool blankDisallowed = false)
     {
         foreach (var (direction, index) in RadialMenuLayout.IndexByDirection)
         {
             var position = RadialMenuLayout.GetIconPosition(_centerPosition, direction);
-            var slot = currentUnit.GetItemAtIndex(index);
+            var itemSlot = currentUnit.GetItemAtIndex(index);
             var isSelected = index == _selectedIndex;
 
-            // Unarmed displays as empty (NoItem) icon
-            yield return new ItemIconData(position, Unit.GetDisplayItemName(slot.Name), isSelected);
+            ItemName displayName;
+            if (blankDisallowed && canSelect != null && !canSelect(itemSlot, currentUnit))
+            {
+                displayName = ItemName.NoItem;
+            }
+            else
+            {
+                displayName = Unit.GetDisplayItemName(itemSlot.Name);
+            }
+
+            yield return new ItemIconData(position, displayName, isSelected);
         }
     }
 
-    // Display-only inventory (e.g. give recipient preview). Never marks a slot selected.
+    /// <summary>
+    /// Display-only inventory (e.g. give recipient preview). Never marks a slot selected.
+    /// </summary>
     public IEnumerable<ItemIconData> GetItemIconsToDrawAt(Vector2 center, Unit unit)
     {
         foreach (var (direction, index) in RadialMenuLayout.IndexByDirection)
         {
             var position = RadialMenuLayout.GetIconPosition(center, direction);
-            var slot = unit.GetItemAtIndex(index);
+            var itemSlot = unit.GetItemAtIndex(index);
 
-            yield return new ItemIconData(position, Unit.GetDisplayItemName(slot.Name), IsSelected: false);
+            yield return new ItemIconData(position, Unit.GetDisplayItemName(itemSlot.Name), IsSelected: false);
         }
     }
 
-    public bool HasValidSelection()
+    public bool HasValidSelection(Unit unit, ItemSlotFilter canSelect)
     {
-        return _selectedIndex >= 0 && Unit.IsGiveableItem(_selectedItemName);
+        if (_selectedIndex < 0 || _selectedIndex >= unit.Items.Length)
+        {
+            return false;
+        }
+
+        return canSelect(unit.Items[_selectedIndex], unit);
     }
 
-    // Select the first giveable inventory slot (Up→Left→Right→Down order).
-    public void SelectFirstGiveableItem(Unit unit)
+    /// <summary>Select the first matching inventory slot (Up→Left→Right→Down order).</summary>
+    public void SelectFirstItem(Unit unit, ItemSlotFilter canSelect)
     {
         foreach (var direction in new[] { Direction.Up, Direction.Left, Direction.Right, Direction.Down })
         {
@@ -117,7 +151,7 @@ public class ItemUI : RadialSlotUI
                 continue;
             }
 
-            if (Unit.IsGiveableSlot(unit.Items[index]))
+            if (canSelect(unit.Items[index], unit))
             {
                 _selectedIndex = index;
                 _selectedItemName = unit.Items[index].Name;

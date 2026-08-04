@@ -3,6 +3,7 @@ using SomberInertia.Core;
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 using SomberInertia.Graphics;
+using SomberInertia.Graphics.UI;
 
 namespace SomberInertia.State;
 
@@ -38,7 +39,7 @@ public class GiveWhichItem : IGameState
 
         _game.ItemUI.Reset();
         _game.ItemUI.ResetLayoutCenter();
-        _game.ItemUI.SelectFirstGiveableItem(_currentUnit);
+        _game.ItemUI.SelectFirstItem(_currentUnit, ItemUI.GiveableFilter);
     }
 
     public void Exit()
@@ -47,7 +48,7 @@ public class GiveWhichItem : IGameState
 
     private void SetSelectedItem(Direction direction)
     {
-        _game.ItemUI.SetSelected(direction, _currentUnit);
+        _game.ItemUI.SetSelected(direction, _currentUnit, ItemUI.GiveableFilter);
     }
 
     public void HandleInput()
@@ -85,7 +86,7 @@ public class GiveWhichItem : IGameState
 
     private void ConfirmSelection()
     {
-        if (!_game.ItemUI.HasValidSelection())
+        if (!_game.ItemUI.HasValidSelection(_currentUnit, ItemUI.GiveableFilter))
         {
             Logger.Warning("GiveWhichItem: no valid item selected.");
             return;
@@ -118,12 +119,12 @@ public class GiveWhichItem : IGameState
         _game.Renderer.DrawGiveRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(scale, _currentUnit))
+        foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_currentUnit))
         {
             _game.Renderer.DrawItemIcon(scale, iconData.ItemName, iconData.Position, iconData.IsSelected);
         }
 
-        if (_game.ItemUI.HasValidSelection())
+        if (_game.ItemUI.HasValidSelection(_currentUnit, ItemUI.GiveableFilter))
         {
             _game.Renderer.DrawItemInfoBox(
                 scale,

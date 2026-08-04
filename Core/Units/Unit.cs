@@ -401,13 +401,56 @@ public abstract class Unit
         return name != ItemName.NoItem && name != ItemName.Unarmed;
     }
 
-    public static bool IsGiveableSlot(ItemSlot slot) => IsGiveableItem(slot.Name);
+    public static bool IsGiveableItemSlot(ItemSlot itemSlot) => IsGiveableItem(itemSlot.Name);
 
     public bool HasGiveableItem()
     {
         for (var i = 0; i < Items.Length; i++)
         {
-            if (IsGiveableSlot(Items[i]))
+            if (IsGiveableItemSlot(Items[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>Force members use their job; others are treated as <see cref="Job.Any"/>.</summary>
+    public Job GetJob()
+    {
+        return this is ForceMember forceMember ? forceMember.Job : Job.Any;
+    }
+
+    /// <summary>
+    /// True if the item can be selected under Use: job is allowed and the item has a
+    /// use effect (consumable effect or castable spell). Consumables use Job.Any so any job matches.
+    /// </summary>
+    public static bool IsUsableItem(ItemName name, Job unitJob)
+    {
+        if (name is ItemName.NoItem or ItemName.Unarmed)
+        {
+            return false;
+        }
+
+        var data = ItemDatabase.Get(name);
+        if (!unitJob.IsAllowedBy(data.AllowedJobs))
+        {
+            return false;
+        }
+
+        return data.EffectType != ItemEffectType.None || data.SpellName != MagicName.NoSpell;
+    }
+
+    public static bool IsUsableItemSlot(ItemSlot itemSlot, Job unitJob) =>
+        IsUsableItem(itemSlot.Name, unitJob);
+
+    public bool HasUsableItem()
+    {
+        var job = GetJob();
+        for (var i = 0; i < Items.Length; i++)
+        {
+            if (IsUsableItemSlot(Items[i], job))
             {
                 return true;
             }
@@ -446,7 +489,7 @@ public abstract class Unit
     {
         for (var i = 0; i < Items.Length; i++)
         {
-            if (IsGiveableSlot(Items[i]))
+            if (IsGiveableItemSlot(Items[i]))
             {
                 return i;
             }
@@ -470,10 +513,10 @@ public abstract class Unit
             return false;
         }
 
-        var slot = Items[giverSlotIndex];
-        if (!IsGiveableSlot(slot))
+        var itemSlot = Items[giverSlotIndex];
+        if (!IsGiveableItemSlot(itemSlot))
         {
-            Logger.Warning($"GiveItemTo(): slot [{giverSlotIndex}] is not giveable ({slot.Name}).");
+            Logger.Warning($"GiveItemTo(): slot [{giverSlotIndex}] is not giveable ({itemSlot.Name}).");
             return false;
         }
 
@@ -483,14 +526,14 @@ public abstract class Unit
             return false;
         }
 
-        if (!recipient.AddItem(slot.Name, slot.Condition, autoEquipWeapon: false))
+        if (!recipient.AddItem(itemSlot.Name, itemSlot.Condition, autoEquipWeapon: false))
         {
             Logger.Error("GiveItemTo(): failed to add item to recipient.");
             return false;
         }
 
         RemoveItemAtIndex(giverSlotIndex);
-        Logger.Info($"{GetDisplayName()} gave [{slot.Name}] to {recipient.GetDisplayName()}.");
+        Logger.Info($"{GetDisplayName()} gave [{itemSlot.Name}] to {recipient.GetDisplayName()}.");
 
         return true;
     }
@@ -510,12 +553,12 @@ public abstract class Unit
             return false;
         }
 
-        var mySlot = Items[myIndex];
-        var otherSlot = other.Items[otherIndex];
+        var myItemSlot = Items[myIndex];
+        var otherItemSlot = other.Items[otherIndex];
 
-        if (!IsGiveableSlot(mySlot) || !IsGiveableSlot(otherSlot))
+        if (!IsGiveableItemSlot(myItemSlot) || !IsGiveableItemSlot(otherItemSlot))
         {
-            Logger.Warning($"SwapItemWith(): one or both slots are not giveable ({mySlot.Name} / {otherSlot.Name}).");
+            Logger.Warning($"SwapItemWith(): one or both slots are not giveable ({myItemSlot.Name} / {otherItemSlot.Name}).");
             return false;
         }
 
@@ -530,10 +573,10 @@ public abstract class Unit
             other.UnequipWeapon();
         }
 
-        Items[myIndex] = otherSlot;
-        other.Items[otherIndex] = mySlot;
+        Items[myIndex] = otherItemSlot;
+        other.Items[otherIndex] = myItemSlot;
 
-        Logger.Info($"{GetDisplayName()} swapped [{mySlot.Name}] with {other.GetDisplayName()}'s [{otherSlot.Name}].");
+        Logger.Info($"{GetDisplayName()} swapped [{myItemSlot.Name}] with {other.GetDisplayName()}'s [{otherItemSlot.Name}].");
 
         return true;
     }

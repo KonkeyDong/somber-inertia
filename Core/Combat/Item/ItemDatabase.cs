@@ -144,6 +144,7 @@ public static class ItemDatabase
 
     private static void RegisterConsumables()
     {
+        // Consumables: AllowedJobs = Job.Any (any unit job may Use). Target friendlies in later states.
         Register(MakeConsumable(ItemName.MedicalHerb, new Range(0, 1), 10, ItemEffectType.Heal, 8));
         Register(MakeConsumable(ItemName.HealingSeed, new Range(0, 1), 200, ItemEffectType.Heal, 16));
         Register(MakeConsumable(ItemName.Antidote, new Range(0, 1), 20, ItemEffectType.RemovePoison, 0));

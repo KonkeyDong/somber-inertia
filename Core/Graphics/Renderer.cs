@@ -183,6 +183,7 @@ public class Renderer
     public void DrawWeaponAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.WeaponAttackRangeSet);
     public void DrawMagicAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MagicAttackRangeSet);
     public void DrawGiveRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.GiveRangeSet);
+    public void DrawItemUseRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.ItemUseRangeSet);
     private void DrawRangeBlockColor(float scale, Grid grid, HashSet<(int x, int y)> hashSet)
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
