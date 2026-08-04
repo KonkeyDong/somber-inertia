@@ -609,12 +609,7 @@ public abstract class Unit
             return false;
         }
 
-        if (data.AllowedJobs == Job.Any)
-        {
-            return true;
-        }
-
-        return (data.AllowedJobs & job) != 0;
+        return job.IsAllowedBy(data.AllowedJobs);
     }
 
     #region Animations
