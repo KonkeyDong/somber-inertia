@@ -88,7 +88,7 @@ class Program
         var dwarf = new Monster(UnitName.DarkDwarf);
         dwarf.HP.Current = 1;
 
-        // game.AddUnit(max, 0, 0);
+        game.AddUnit(max, 0, 0);
         game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
         game.AddUnit(dwarf, 3, 1);
         game.AddUnit(runeKnight, 4, 1);

@@ -95,13 +95,20 @@ stateDiagram-v2
 From the action menu: **Item** → `BattleItemMenu` (or MessageNotice if no items).  
 **X** on item menu → BattleActionMenu.
 
-### 4a. Use (stub)
+### 4a. Use
 
 ```mermaid
 stateDiagram-v2
     direction TB
-    BattleItemMenu --> BattleItemMenu : Use (not implemented)
+    BattleItemMenu --> UseWhichItem : Use
 ```
+
+Select a job-usable inventory item (consumables use `Job.Any`; weapons only if they have a spell). Shows item range + info box. Target apply (`UseItemOnWhom`) not wired yet.
+
+| At | Cancel / edge case |
+|----|---------------------|
+| UseWhichItem | X → BattleItemMenu |
+| No usable items | MessageNotice → BattleItemMenu |
 
 ### 4b. Drop
 

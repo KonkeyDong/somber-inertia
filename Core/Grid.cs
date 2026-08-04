@@ -3,6 +3,7 @@ using SomberInertia.Enums;
 using SomberInertia.Timers;
 using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Item;
 using SomberInertia.Core.Combat.Spells;
 
 using System;
@@ -27,6 +28,7 @@ public class Grid
     public HashSet<(int x, int y)> MagicAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> SpellEffectRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> GiveRangeSet { get; private set; } = new HashSet<(int x, int y)>();
+    public HashSet<(int x, int y)> ItemUseRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public readonly RangeTint RangeTint = new RangeTint(GameConstants.Animations.RangeTintFrameDelay);
 
     private static readonly Combat.Range GiveDistanceRange = new Combat.Range(1, 1);
@@ -86,6 +88,7 @@ public class Grid
         MagicAttackRangeSet.Clear();
         SpellEffectRangeSet.Clear();
         GiveRangeSet.Clear();
+        ItemUseRangeSet.Clear();
     }
 
     public void CalculateUnitMovementRange(Unit unit)
@@ -173,6 +176,16 @@ public class Grid
         }
 
         MagicAttackRangeSet = CalculateEffectDistanceRange(unit, magic.DistanceRange);
+    }
+
+    public void CalculateItemUseRange(Unit unit, ItemData item)
+    {
+        if (unit?.Block == null)
+        {
+            return;
+        }
+
+        ItemUseRangeSet = CalculateEffectDistanceRange(unit, item.DistanceRange);
     }
 
     // Similar to CalculateMagicAttackRange(), but sets the SpellEffectRangeSet.
@@ -271,6 +284,13 @@ public class Grid
         Logger.Debug("Grid::BuildListOfUnitsInSpellEffectRange() building list of units in spell effect range.");
 
         return BuildListOfUnitsInRange(unit, SpellEffectRangeSet);
+    }
+
+    public List<Unit> BuildListOfUnitsInItemUseRange(Unit unit)
+    {
+        Logger.Debug("Grid::BuildListOfUnitsInItemUseRange() building list of units in item use range.");
+
+        return BuildListOfUnitsInRange(unit, ItemUseRangeSet);
     }
 
     public List<Unit> BuildListOfUnitsInGiveRange(Unit unit)

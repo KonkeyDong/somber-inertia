@@ -133,13 +133,13 @@ public class EquipItem : IGameState
             return false;
         }
 
-        var slot = _currentUnit.Items[index];
-        if (slot.IsEmpty)
+        var itemSlot = _currentUnit.Items[index];
+        if (itemSlot.IsEmpty)
         {
             return false;
         }
 
-        var data = ItemDatabase.Get(slot.Name);
+        var data = ItemDatabase.Get(itemSlot.Name);
         if (!data.Type.IsWeapon())
         {
             return false;

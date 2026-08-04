@@ -7,13 +7,16 @@ using SomberInertia.Graphics.UI;
 
 namespace SomberInertia.State;
 
-public class TradeWhichItemFromAdjacentNeighbor : IGameState
+/// <summary>
+/// Item menu → Use: pick an inventory item this unit's job can use.
+/// Shows radial icons (unusable slots blanked), info box, and item use range.
+/// </summary>
+public class UseWhichItem : IGameState
 {
     private readonly Game _game;
     private Unit _currentUnit;
-    private Unit _recipient = null!;
 
-    public TradeWhichItemFromAdjacentNeighbor(Game game)
+    public UseWhichItem(Game game)
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
@@ -22,26 +25,19 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
     public void Enter()
     {
         _currentUnit = _game.GetCurrentUnit();
-        _recipient = _game.Give.Recipient!;
+        _game.ItemUI.Reset();
+        _game.ItemUI.ResetLayoutCenter();
+        _game.ItemUI.SelectFirstItem(_currentUnit, ItemUI.UsableFilter);
 
-        if (_recipient == null)
+        if (!_game.ItemUI.HasValidSelection(_currentUnit, ItemUI.UsableFilter))
         {
-            Logger.Error("TradeWhichItemFromAdjacentNeighbor: Give.Recipient is null. Returning to GiveItemToWhom.");
-            GameStateManager.ChangeStateType(GameStateType.GiveItemToWhom);
+            GameStateManager.ShowMessageNotice(
+                GameConstants.MessageNotice.NoItem,
+                GameStateType.BattleItemMenu);
             return;
         }
 
-        _game.Grid.CalculateGiveRange(_currentUnit);
-
-        _game.ItemUI.Reset();
-        _game.ItemUI.SetLayoutCenter(GameConstants.Give.Positions.TradeInventoryCenter);
-        _game.ItemUI.SelectFirstItem(_recipient, ItemUI.GiveableFilter);
-
-        if (_recipient.Block != null)
-        {
-            _game.InitializeHighlight();
-            _game.SetHighlightTarget(_recipient);
-        }
+        UpdateRangeForSelection();
     }
 
     public void Exit()
@@ -50,7 +46,17 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
 
     private void SetSelectedItem(Direction direction)
     {
-        _game.ItemUI.SetSelected(direction, _recipient, ItemUI.GiveableFilter);
+        _game.ItemUI.SetSelected(direction, _currentUnit, ItemUI.UsableFilter);
+        if (_game.ItemUI.HasValidSelection(_currentUnit, ItemUI.UsableFilter))
+        {
+            UpdateRangeForSelection();
+        }
+    }
+
+    private void UpdateRangeForSelection()
+    {
+        var data = _game.ItemUI.GetSelectedItemData();
+        _game.Grid.CalculateItemUseRange(_currentUnit, data);
     }
 
     public void HandleInput()
@@ -88,25 +94,26 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
 
     private void ConfirmSelection()
     {
-        if (!_game.ItemUI.HasValidSelection(_recipient, ItemUI.GiveableFilter))
+        if (!_game.ItemUI.HasValidSelection(_currentUnit, ItemUI.UsableFilter))
         {
-            Logger.Warning("TradeWhichItemFromAdjacentNeighbor: no valid item selected.");
+            Logger.Warning("UseWhichItem: no valid usable item selected.");
             return;
         }
 
-        _game.Give.RecipientSlotIndex = _game.ItemUI.GetSelectedIndex();
-
-        _game.Prompt.Action = PromptAction.TradeItem;
-        _game.Prompt.ReturnStateOnYes = GameStateType.EndTurn;
-        _game.Prompt.ReturnStateOnNo = GameStateType.TradeWhichItemFromAdjacentNeighbor;
-        GameStateManager.ChangeStateType(GameStateType.PromptYesNo);
+        // Next: UseItemOnWhom (target select + apply). Keep selection for that hop.
+        _game.Prompt.ItemSlotIndex = _game.ItemUI.GetSelectedIndex();
+        Logger.Info(
+            $"UseWhichItem: selected slot [{_game.Prompt.ItemSlotIndex}] " +
+            $"{_game.ItemUI.GetSelectedItemName()} (target select not implemented yet)."
+        );
     }
 
     private void CancelSelection()
     {
         _game.ItemUI.Reset();
         _game.ItemUI.ResetLayoutCenter();
-        GameStateManager.ChangeStateType(GameStateType.GiveItemToWhom);
+        _game.Grid.ItemUseRangeSet.Clear();
+        GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
     }
 
     public void Update()
@@ -114,27 +121,28 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
         _game.Grid.RangeTint.Tick();
         _game.FrameFlipper.Tick();
         ItemIcons.Tick();
-        _game.UpdateHighlightPosition();
     }
 
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawGiveRange(scale, _game.Grid);
+        _game.Renderer.DrawItemUseRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
-        _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
 
-        foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_recipient))
+        foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(
+            _currentUnit,
+            ItemUI.UsableFilter,
+            blankDisallowed: true))
         {
             _game.Renderer.DrawItemIcon(scale, iconData.ItemName, iconData.Position, iconData.IsSelected);
         }
 
-        if (_game.ItemUI.HasValidSelection(_recipient, ItemUI.GiveableFilter))
+        if (_game.ItemUI.HasValidSelection(_currentUnit, ItemUI.UsableFilter))
         {
             _game.Renderer.DrawItemInfoBox(
                 scale,
                 _game.ItemUI.GetSelectedItemData(),
-                _game.ItemUI.IsSelectedItemEquipped(_recipient),
+                _game.ItemUI.IsSelectedItemEquipped(_currentUnit),
                 _game.ItemUI.GetInformationBoxCoordinates()
             );
         }

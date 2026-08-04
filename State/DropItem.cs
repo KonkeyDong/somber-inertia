@@ -3,6 +3,7 @@ using SomberInertia.Enums;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
 using SomberInertia.Graphics;
+using SomberInertia.Graphics.UI;
 using Raylib_cs;
 
 namespace SomberInertia.State;
@@ -30,7 +31,7 @@ public class DropItem : IGameState
 
     private void SetSelectedItem(Direction direction)
     {
-        _game.ItemUI.SetSelected(direction, _currentUnit);
+        _game.ItemUI.SetSelected(direction, _currentUnit, ItemUI.GiveableFilter);
         // _game.Grid.CalculateMagicAttackRange(_currentUnit, _game.MagicUI.GetSelectedMagic());
     }
 
@@ -95,7 +96,7 @@ public class DropItem : IGameState
         _game.Renderer.DrawMovementRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
 
-        foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(scale, _currentUnit))
+        foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_currentUnit))
         {
             _game.Renderer.DrawItemIcon(scale, iconData.ItemName, iconData.Position, iconData.IsSelected);
         }

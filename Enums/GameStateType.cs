@@ -38,6 +38,7 @@ public enum GameStateType
     DropItem,
     PromptYesNo,
     EquipItem,
+    UseWhichItem,
     GiveWhichItem,
     GiveItemToWhom,
     TradeWhichItemFromAdjacentNeighbor,
