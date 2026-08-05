@@ -97,7 +97,7 @@ public class SelectMagicTargets : IGameState
 
     public void Update()
     {
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
         _game.Grid.RangeTint.Tick();
         _game.UpdateHighlightPosition();
     }
@@ -106,7 +106,7 @@ public class SelectMagicTargets : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         if (_game.IsHighlightSettled())
         {

@@ -12,7 +12,7 @@ public class EnterBattleScreen : IGameState
 {
     private readonly Game _game;
     private readonly Sprite _foregroundSprite;
-    private readonly DelayIterator _delayIterator;
+    private readonly Delay _delay;
 
     private float _progress = 0f;
     private const float Duration = 60; // total frames for the transition
@@ -25,7 +25,7 @@ public class EnterBattleScreen : IGameState
     public EnterBattleScreen(Game game)
     {
         _game = game;
-        _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
+        _delay = new Delay(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = BattleForegrounds.Get(ForegroundNames.RoughTerrain);
     }
@@ -59,7 +59,7 @@ public class EnterBattleScreen : IGameState
 
     public void Update()
     {
-        _delayIterator.Tick();
+        _delay.Tick();
 
         if (_progress < 1f)
         {
@@ -86,7 +86,7 @@ public class EnterBattleScreen : IGameState
         Raylib.ClearBackground(Color.Black);
 
         var eased = _game.Renderer.EaseInOut(_progress);
-        var frameIndex = _delayIterator.CurrentIndex;
+        var frameIndex = _delay.CurrentIndex;
 
         // Phase 1: Fade out world map (0.0 -> 0.5)
         if (_progress < 0.5f)
@@ -94,7 +94,7 @@ public class EnterBattleScreen : IGameState
             var mapAlpha = (byte)(255 * (1f - eased * 2));
 
             _game.Renderer.DrawBackground(scale, _game.Grid, mapAlpha);
-            _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn, mapAlpha);
+            _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn, mapAlpha);
         }
         // Phase 2: Fade in battle screen + slide sprites (0.5 -> 1.0)
         else

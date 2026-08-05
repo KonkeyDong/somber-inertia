@@ -1,6 +1,6 @@
 namespace SomberInertia.Timers;
 
-public interface ITimers
+public interface ITimer
 {
     void Tick();
     void Reset();

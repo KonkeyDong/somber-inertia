@@ -83,7 +83,7 @@ public class AnimateUnitDeaths : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var unit in _deadUnits)
         {

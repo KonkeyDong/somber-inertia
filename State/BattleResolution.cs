@@ -14,7 +14,7 @@ public class BattleResolution : IGameState
     private readonly Sprite _foregroundSprite;
     private int _battleSequenceFrame;
     private readonly int _battleSequenceFrameLimit;
-    private readonly DelayIterator _delayIterator;
+    private readonly Delay _delay;
 
     public BattleResolution(Game game)
     {
@@ -22,7 +22,7 @@ public class BattleResolution : IGameState
 
         _battleSequenceFrame = 0;
         _battleSequenceFrameLimit = _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count;
-        _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
+        _delay = new Delay(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = BattleForegrounds.Get(ForegroundNames.RoughTerrain);
     }
@@ -44,7 +44,7 @@ public class BattleResolution : IGameState
 
     public void Update()
     {
-        _delayIterator.Tick();
+        _delay.Tick();
         _battleSequenceFrame++;
 
         // since both the attacker and defender should have the same list of sprites, it shouldn't matter
@@ -71,7 +71,7 @@ public class BattleResolution : IGameState
 
         if (_battleSequenceFrame >= _battleSequenceFrameLimit)
         {
-            var frameIndex = _delayIterator.CurrentIndex;
+            var frameIndex = _delay.CurrentIndex;
 
             if (!_game.AttackContext.GetMonster().IsDead())
             {

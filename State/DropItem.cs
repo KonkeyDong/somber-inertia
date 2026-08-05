@@ -86,7 +86,7 @@ public class DropItem : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
         ItemIcons.Tick();
     }
 
@@ -94,7 +94,7 @@ public class DropItem : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawMovementRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_currentUnit))
         {

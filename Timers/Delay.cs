@@ -1,6 +1,9 @@
 namespace SomberInertia.Timers;
 
-public class DelayIterator : ITimers
+/// <summary>
+/// Advances <see cref="CurrentIndex"/> by one every N frames.
+/// </summary>
+public class Delay : ITimer
 {
     private readonly int _delayFrames;
     private int _currentTick;
@@ -8,7 +11,7 @@ public class DelayIterator : ITimers
 
     public int CurrentIndex => _currentIndex;
 
-    public DelayIterator(int delayFrames)
+    public Delay(int delayFrames)
     {
         _delayFrames = delayFrames;
         Reset();

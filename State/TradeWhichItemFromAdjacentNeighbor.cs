@@ -112,7 +112,7 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
         ItemIcons.Tick();
         _game.UpdateHighlightPosition();
     }
@@ -121,7 +121,7 @@ public class TradeWhichItemFromAdjacentNeighbor : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawGiveRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
         _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_recipient))

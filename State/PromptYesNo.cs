@@ -160,7 +160,7 @@ public class PromptYesNo : IGameState
 
     public void Update()
     {
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
         CommandIcons.Tick();
     }
 
@@ -211,7 +211,7 @@ public class PromptYesNo : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         if (IsGiveOrTradePrompt())
         {

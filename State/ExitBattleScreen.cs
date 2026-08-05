@@ -10,7 +10,7 @@ namespace SomberInertia.State;
 public class ExitBattleScreen : IGameState
 {
     private readonly Game _game;
-    private readonly DelayIterator _delayIterator;
+    private readonly Delay _delay;
     private readonly Sprite _foregroundSprite;
 
     private float _progress = 0f;
@@ -19,7 +19,7 @@ public class ExitBattleScreen : IGameState
     public ExitBattleScreen(Game game)
     {
         _game = game;
-        _delayIterator = new DelayIterator(GameConstants.Animations.IdleDelay);
+        _delay = new Delay(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = BattleForegrounds.Get(ForegroundNames.RoughTerrain);
     }
@@ -41,8 +41,8 @@ public class ExitBattleScreen : IGameState
 
     public void Update()
     {
-        _delayIterator.Tick();
-        _game.FrameFlipper.Tick();
+        _delay.Tick();
+        _game.FlipFlop.Tick();
 
         if (_progress < 1f)
         {
@@ -77,7 +77,7 @@ public class ExitBattleScreen : IGameState
             _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
             _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
 
-            var frameIndex = _delayIterator.CurrentIndex;
+            var frameIndex = _delay.CurrentIndex;
 
             if (!_game.AttackContext.GetMonster().IsDead())
             {
@@ -99,7 +99,7 @@ public class ExitBattleScreen : IGameState
             var mapAlpha = (byte)(255 * ((eased - 0.5f) * 2));
 
             _game.Renderer.DrawBackground(scale, _game.Grid, mapAlpha);
-            _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn, mapAlpha);
+            _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn, mapAlpha);
         }
     }
 }

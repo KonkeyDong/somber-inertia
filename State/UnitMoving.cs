@@ -61,7 +61,7 @@ public class UnitMoving : IGameState
     {
         _game.Grid.RangeTint.Tick();
         _countdownTimer.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
 
         if (_currentUnit.IsAnimating)
         {
@@ -79,6 +79,6 @@ public class UnitMoving : IGameState
             _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
         }
 
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
     }
 }
