@@ -17,7 +17,7 @@ public class Game
     public List<Unit> Units { get; set; } = new();
     public List<Unit> FriendlyUnitsInRange { get; set; } = new();
     public List<Unit> UnfriendlyUnitsInRange { get; set; } = new();
-    public FrameFlipper FrameFlipper { get; set; } = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay);
+    public FlipFlop FlipFlop { get; set; } = new FlipFlop(GameConstants.Animations.FlipFlopDelay);
     public MagicUI MagicUI { get; set; } = new();
     public ItemUI ItemUI { get; set; } = new();
     public AttackContext AttackContext { get; set; } = null!;

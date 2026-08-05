@@ -70,7 +70,7 @@ public class CalculateUnitMovementRange : IGameState
     public void Update()
     {
         _countdownTimer.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
 
         if ((_isPoisoned || _isSleeping) && !_countdownTimer.IsActive)
         {
@@ -109,7 +109,7 @@ public class CalculateUnitMovementRange : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawMovementRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         if (_isPoisoned)
         {

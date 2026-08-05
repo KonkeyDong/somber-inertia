@@ -22,7 +22,7 @@ public class EndTurn : IGameState
         Logger.Info($"{current.Name}'s turn ends.");
 
         _game.Grid.ResetAllRangeSets();
-        _game.FrameFlipper.Reset();
+        _game.FlipFlop.Reset();
         _game.ResetListOfUnitsInRange();
         _game.MagicUI.Reset();
         _game.ItemUI.Reset();

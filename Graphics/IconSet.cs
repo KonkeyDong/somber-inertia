@@ -20,7 +20,7 @@ public interface IIconSet<TKey> where TKey : Enum
 
 public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
 {
-    private readonly FrameFlipper _frameFlipper;
+    private readonly FlipFlop _flipFlop;
     private readonly string _rootPath;
     private readonly Dictionary<TKey, List<Sprite>> _animations = new();
     private TKey _selectedKey = default!;
@@ -29,7 +29,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
     public IconSet(string rootPath, int animationDelay, Func<TKey, string>? getBaseName = null)
     {
         _rootPath = rootPath;
-        _frameFlipper = new FrameFlipper(animationDelay);
+        _flipFlop = new FlipFlop(animationDelay);
 
         // If no custom function is provided, use default behavior
         _getBaseName = getBaseName ?? (key => key.ToString().ToLowerInvariant());
@@ -68,7 +68,7 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
         Reset();
     }
 
-    public void Tick() => _frameFlipper.Tick();
+    public void Tick() => _flipFlop.Tick();
 
     public Sprite GetSprite(TKey key)
     {
@@ -86,9 +86,9 @@ public class IconSet<TKey> : IIconSet<TKey> where TKey : Enum
             return null!;
         }
 
-        var frame = (isSelected && _frameFlipper.IsOn) ? 1 : 0;
+        var frame = (isSelected && _flipFlop.IsOn) ? 1 : 0;
         return _animations[key][frame];
     }
 
-    public void Reset() => _frameFlipper.Reset();
+    public void Reset() => _flipFlop.Reset();
 }

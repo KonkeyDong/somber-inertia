@@ -29,7 +29,9 @@ public class Grid
     public HashSet<(int x, int y)> SpellEffectRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> GiveRangeSet { get; private set; } = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> ItemUseRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public readonly RangeTint RangeTint = new RangeTint(GameConstants.Animations.RangeTintFrameDelay);
+    public readonly Oscillator<Color> RangeTint = new Oscillator<Color>(
+        GameConstants.Animations.RangeTintLevels,
+        GameConstants.Animations.RangeTintFrameDelay);
 
     private static readonly Combat.Range GiveDistanceRange = new Combat.Range(1, 1);
 

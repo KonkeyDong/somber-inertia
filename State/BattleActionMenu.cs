@@ -136,7 +136,7 @@ public class BattleActionMenu : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
         CommandIcons.Tick();
     }
 
@@ -144,7 +144,7 @@ public class BattleActionMenu : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawMovementRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         // Refresh center each draw so Ctrl+/- scale stays correct.
         _centerPosition = RadialMenuLayout.GetCenterPosition();

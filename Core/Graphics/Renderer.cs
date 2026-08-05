@@ -199,7 +199,7 @@ public class Renderer
                 position,
                 GameConstants.Textures.BaseRotation,
                 scale,
-                grid.RangeTint.GetCurrentColor()
+                grid.RangeTint.Current
             );
 
             if (debugFlag)

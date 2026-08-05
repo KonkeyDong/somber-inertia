@@ -1,6 +1,7 @@
 using Raylib_cs;
 using SomberInertia.Core;
 using SomberInertia.Enums;
+using SomberInertia.Timers;
 
 namespace SomberInertia.State;
 
@@ -11,7 +12,7 @@ namespace SomberInertia.State;
 public class MessageNotice : IGameState
 {
     private readonly Game _game;
-    private int _countdownTimer = GameConstants.Animations.SwitchStateCountdownTimer;
+    private readonly CountdownTimer _countdownTimer = new(GameConstants.Animations.SwitchStateCountdownTimer);
     private GameStateType _returnState;
     private string _message = "";
 
@@ -22,7 +23,7 @@ public class MessageNotice : IGameState
 
     public void Enter()
     {
-        _countdownTimer = GameConstants.Animations.SwitchStateCountdownTimer;
+        _countdownTimer.Reset();
         _message = _game.MessageNotice.Message;
         _returnState = _game.MessageNotice.ReturnState;
 
@@ -60,11 +61,11 @@ public class MessageNotice : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
 
-        _countdownTimer--;
+        _countdownTimer.Tick();
 
-        if (_countdownTimer <= 0)
+        if (!_countdownTimer.IsActive)
         {
             Logger.Info("MessageNotice: countdown exhausted.");
             ConfirmSelection();
@@ -81,7 +82,7 @@ public class MessageNotice : IGameState
         _game.Renderer.DrawGiveRange(scale, _game.Grid);
         _game.Renderer.DrawItemUseRange(scale, _game.Grid);
 
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         var position = GameConstants.WorldMap.Positions.NoTargetMessageBox;
         _game.Renderer.DrawBattleMenuMessage(scale, _message, position);

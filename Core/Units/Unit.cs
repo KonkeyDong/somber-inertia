@@ -107,7 +107,7 @@ public class Unit
     private Vector2 _startWorldPosition;
     private float _movementTimer;
 
-    private readonly FrameFlipper _movementFlipper = new FrameFlipper(GameConstants.Animations.FrameFlipperDelay / 7);
+    private readonly FlipFlop _movementFlipFlop = new FlipFlop(GameConstants.Animations.FlipFlopDelay / 7);
     public const float MovementDuration = GameConstants.Animations.MovementDuration;
 
     private bool _isAnimating;
@@ -765,7 +765,7 @@ public class Unit
 
         WorldPosition = Vector2.Lerp(_startWorldPosition, TargetWorldPosition, progress);
 
-        _movementFlipper.Tick();
+        _movementFlipFlop.Tick();
 
         if (progress >= 1.0f)
         {
@@ -793,7 +793,7 @@ public class Unit
         return _walkAnimations[direction][0];
     }
 
-    public Sprite GetFacingDirectionTexture(bool globalFrameFlipperFlag)
+    public Sprite GetFacingDirectionTexture(bool globalFlipFlopIsOn)
     {
         if (!_walkAnimations.Any())
         {
@@ -806,11 +806,11 @@ public class Unit
         int frameIndex;
         if (_isAnimating)
         {
-            frameIndex = _movementFlipper.IsOn ? 1 : 0;
+            frameIndex = _movementFlipFlop.IsOn ? 1 : 0;
         }
         else
         {
-            frameIndex = globalFrameFlipperFlag ? 1 : 0;
+            frameIndex = globalFlipFlopIsOn ? 1 : 0;
         }
 
         return animations[frameIndex];

@@ -13,13 +13,13 @@ public class SelectMagicLevel : IGameState
 {
     private readonly Game _game;
     private readonly Unit _currentUnit;
-    private readonly FrameFlipper _blinker;
+    private readonly FlipFlop _blinker;
 
     public SelectMagicLevel(Game game)
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-        _blinker = new FrameFlipper(GameConstants.Animations.BlinkDelay);
+        _blinker = new FlipFlop(GameConstants.Animations.BlinkDelay);
     }
 
     public void Enter()
@@ -72,7 +72,7 @@ public class SelectMagicLevel : IGameState
     public void Update()
     {
         _game.Grid.RangeTint.Tick();
-        _game.FrameFlipper.Tick();
+        _game.FlipFlop.Tick();
         _blinker.Tick();
         MagicIcons.Tick();
     }
@@ -81,7 +81,7 @@ public class SelectMagicLevel : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
         _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
-        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FrameFlipper.IsOn);
+        _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var iconData in _game.MagicUI.GetMagicIconsToDraw(scale, _currentUnit))
         {

@@ -89,12 +89,20 @@ public static class GameConstants
         public const int RangeTintFrameDelay = 6;
         public const int CountdownTimerDelay = 60;
         public const float MovementDuration = 0.20f; // 0.25 = quarter second (15 frames)
-        public const int FrameFlipperDelay = 30;
+        public const int FlipFlopDelay = 30;
         public const int BlinkDelay = 7;
         public const int IdleDelay = 10;
         public const int AttackDelay = 10; // frames
         public const int JitterOffset = 3; // pixels
         public const int SwitchStateCountdownTimer = 180;
+
+        public static readonly Color[] RangeTintLevels =
+        {
+            new Color(255, 255, 255, 255), // 0: full bright
+            new Color(200, 220, 255, 200), // 1: light blue
+            new Color(140, 180, 255, 180), // 2: medium blue
+            new Color(80,  120, 255, 160)  // 3: strong blue
+        };
 
         public static class Dissolve
         {

@@ -1,17 +1,17 @@
 namespace SomberInertia.Timers;
 
-public class CountdownTimer : ITimers
+public class CountdownTimer : ITimer
 {
-    private int _maxNumberOfFrames;
+    private int _durationFrames;
     private int _frameCounter;
     private bool _isActive;
 
     public bool IsActive => _isActive;
 
-    public CountdownTimer(int frameCounter)
+    public CountdownTimer(int durationFrames)
     {
-        _maxNumberOfFrames = frameCounter;
-        _frameCounter = frameCounter;
+        _durationFrames = durationFrames;
+        _frameCounter = durationFrames;
         _isActive = true;
     }
 
@@ -37,9 +37,10 @@ public class CountdownTimer : ITimers
     }
 
     public void Start() => _isActive = true;
+
     public void Reset()
     {
-        _frameCounter = _maxNumberOfFrames;
+        _frameCounter = _durationFrames;
         _isActive = true;
     }
 }
