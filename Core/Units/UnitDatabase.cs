@@ -23,6 +23,8 @@ public static class UnitDatabase
             BaseAttack = 10,
             BaseDefense = 5,
             BaseSpeed = 5,
+            Friendly = true,
+            Level = 1,
             DefaultJob = Job.Swordsman
         });
 
@@ -36,11 +38,14 @@ public static class UnitDatabase
             BaseAttack = 3,
             BaseDefense = 4,
             BaseSpeed = 6,
+            Friendly = true,
+            Level = 1,
             DefaultJob = Job.Mage
         });
 
         // ─────────────────────────────────────────
         // Monsters used in current test setup
+        // (no job; pre-set level; cannot equip / promote / gain exp)
         // ─────────────────────────────────────────
         Register(new UnitData
         {
@@ -52,7 +57,9 @@ public static class UnitDatabase
             BaseAttack = 6,
             BaseDefense = 5,
             BaseSpeed = 4,
-            DefaultJob = Job.Any
+            Friendly = false,
+            Level = 1,
+            DefaultJob = Job.Monster
         });
 
         Register(new UnitData
@@ -65,7 +72,9 @@ public static class UnitDatabase
             BaseAttack = 8,
             BaseDefense = 6,
             BaseSpeed = 5,
-            DefaultJob = Job.Any
+            Friendly = false,
+            Level = 3,
+            DefaultJob = Job.Monster
         });
 
         Register(new UnitData
@@ -78,7 +87,9 @@ public static class UnitDatabase
             BaseAttack = 7,
             BaseDefense = 8,
             BaseSpeed = 3,
-            DefaultJob = Job.Any
+            Friendly = false,
+            Level = 2,
+            DefaultJob = Job.Monster
         });
     }
 
@@ -101,6 +112,8 @@ public static class UnitDatabase
             BaseAttack = 5,
             BaseDefense = 5,
             BaseSpeed = 5,
+            Friendly = false,
+            Level = 1,
             DefaultJob = Job.Any
         };
     }

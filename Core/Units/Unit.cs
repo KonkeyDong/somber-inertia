@@ -11,7 +11,7 @@ using Raylib_cs;
 
 namespace SomberInertia.Core.Units;
 
-public abstract class Unit
+public class Unit
 {
     public class Stat
     {
@@ -36,11 +36,45 @@ public abstract class Unit
     }
 
     public Texture2D Texture { get; protected set; }
-    protected abstract string AssetRoot { get; }
+
+    /// <summary>
+    /// Overworld sprite root: force → Characters/…/Promoted|Unpromoted; monsters → Monsters/….
+    /// </summary>
+    private string AssetRoot =>
+        Friendly
+            ? Path.Combine(
+                GameConstants.Paths.Characters,
+                Name.GetBaseName(),
+                GameConstants.Paths.PromotionFolder(Promoted))
+            : Path.Combine(
+                GameConstants.Paths.Monsters,
+                Name.GetBaseName());
 
     public UnitName Name { get; protected set; }
     public MovementType MovementType { get; protected set; }
-    public virtual bool Promoted { get; set; } = false;
+
+    /// <summary>Force promotion state. Always false for monsters (cannot promote).</summary>
+    private bool _promoted;
+    public bool Promoted
+    {
+        get => Friendly && _promoted;
+        set
+        {
+            if (!Friendly)
+            {
+                _promoted = false;
+                return;
+            }
+
+            _promoted = value;
+        }
+    }
+
+    /// <summary>Force job. Monsters have no job (default / zero flags).</summary>
+    public Job Job { get; set; }
+
+    public int Level { get; set; }
+    public int Exp { get; private set; }
 
     public Dictionary<MagicFamily, List<MagicName>> KnownSpells { get; } = new();
     public MagicFamily?[] MagicFamilyBuckets = new MagicFamily?[GameConstants.MaxBucketSize];
@@ -102,12 +136,20 @@ public abstract class Unit
         Defense = data.BaseDefense;
         Speed = data.BaseSpeed;
 
+        Friendly = data.Friendly;
+        Level = data.Level;
+        Exp = 0;
+        Job = data.Friendly ? data.DefaultJob : default;
+        Promoted = false;
+
         StatusEffects = new();
         InitializeItemSlots();
         EquipUnarmed();
         LoadWalkAnimations();
 
-        Logger.Info($"Unit created → {Name.GetDisplayName()} ({MovementType}), Movement: {Movement}");
+        Logger.Info(
+            $"Unit created → {Name.GetDisplayName()} ({MovementType}), " +
+            $"Friendly: {Friendly}, Lvl {Level}, Job: {Job}, Movement: {Movement}");
     }
 
     private void InitializeItemSlots()
@@ -121,6 +163,22 @@ public abstract class Unit
     public void EquipUnarmed()
     {
         EquippedWeaponIndex = -1;
+    }
+
+    /// <summary>Monsters cannot equip weapons; force members must match job flags.</summary>
+    public bool CanEquipWeapon(ItemData data)
+    {
+        if (!Friendly)
+        {
+            return false;
+        }
+
+        if (!data.Type.IsWeapon())
+        {
+            return false;
+        }
+
+        return Job.IsAllowedBy(data.AllowedJobs);
     }
 
     public bool EquipWeaponAtIndex(int index)
@@ -139,9 +197,11 @@ public abstract class Unit
         }
 
         var data = ItemDatabase.Get(slot.Name);
-        if (!data.Type.IsWeapon())
+        if (!CanEquipWeapon(data))
         {
-            Logger.Warning($"EquipWeaponAtIndex(): [{slot.Name}] is not a weapon.");
+            Logger.Warning(
+                $"EquipWeaponAtIndex(): [{Name.GetDisplayName()}] cannot equip [{slot.Name}] " +
+                $"(Friendly={Friendly}, Job={Job}).");
             return false;
         }
 
@@ -382,7 +442,7 @@ public abstract class Unit
                 if (autoEquipWeapon && EquippedWeaponIndex < 0)
                 {
                     var data = ItemDatabase.Get(itemName);
-                    if (data.Type.IsWeapon())
+                    if (CanEquipWeapon(data))
                     {
                         EquippedWeaponIndex = i;
                     }
@@ -416,11 +476,8 @@ public abstract class Unit
         return false;
     }
 
-    /// <summary>Force members use their job; others are treated as <see cref="Job.Any"/>.</summary>
-    public Job GetJob()
-    {
-        return this is ForceMember forceMember ? forceMember.Job : Job.Any;
-    }
+    /// <summary>Force job; monsters have no job flags (default).</summary>
+    public Job GetJob() => Job;
 
     /// <summary>
     /// True if the item can be selected under Use: job is allowed and the item has a

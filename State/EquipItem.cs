@@ -13,7 +13,6 @@ public class EquipItem : IGameState
 {
     private readonly Game _game;
     private readonly Unit _currentUnit;
-    private readonly Job _job;
 
     private Vector2 _centerPosition;
     private int _selectedIndex; // 0..2 inventory, 3 = Unarmed
@@ -31,10 +30,6 @@ public class EquipItem : IGameState
     {
         _game = game;
         _currentUnit = _game.GetCurrentUnit();
-
-        _job = _currentUnit is ForceMember forceMember
-            ? forceMember.Job
-            : Job.Any;
     }
 
     public void Enter()
@@ -148,7 +143,7 @@ public class EquipItem : IGameState
         return CanJobEquip(data);
     }
 
-    private bool CanJobEquip(ItemData data) => _job.IsAllowedBy(data.AllowedJobs);
+    private bool CanJobEquip(ItemData data) => _currentUnit.CanEquipWeapon(data);
 
     private void UpdateSelectedIcon()
     {
