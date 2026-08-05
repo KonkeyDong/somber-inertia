@@ -52,7 +52,7 @@ class Program
         ItemDatabase.Initialize();
         var game = new Game(new Grid(11, 10));
 
-        var max = new ForceMember(UnitName.Max);
+        var max = new Unit(UnitName.Max);
         max.Attack = 15;
         max.HP.Current = 1;
         max.MP.Max = 99;
@@ -73,19 +73,19 @@ class Program
 
         Logger.Info(max.GetEquippedWeaponName().ToString());
 
-        var anri = new ForceMember(UnitName.Anri);
+        var anri = new Unit(UnitName.Anri);
         anri.Attack = 15;
         // Unarmed equip is default (index -1); do not put Unarmed in inventory.
         anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: true);
         anri.AddItem(ItemName.MedicalHerb);
 
-        var goblin1 = new Monster(UnitName.Goblin);
+        var goblin1 = new Unit(UnitName.Goblin);
         goblin1.Defense = 5;
 
-        var runeKnight = new Monster(UnitName.RuneKnight);
+        var runeKnight = new Unit(UnitName.RuneKnight);
         runeKnight.HP.Current = 1;
 
-        var dwarf = new Monster(UnitName.DarkDwarf);
+        var dwarf = new Unit(UnitName.DarkDwarf);
         dwarf.HP.Current = 1;
 
         game.AddUnit(max, 0, 0);

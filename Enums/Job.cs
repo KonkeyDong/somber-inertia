@@ -31,4 +31,6 @@ public enum Job
     SkyKnight = 1 << 23,
     SkyLord = 1 << 24,
     SkyBaron = 1 << 25,
+
+    Monster = 1 << 26,
 }
