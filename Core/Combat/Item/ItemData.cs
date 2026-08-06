@@ -3,19 +3,20 @@ using System.Text;
 
 namespace SomberInertia.Core.Combat.Item;
 
-public struct ItemData
+/// <summary>Immutable item definition from <see cref="ItemDatabase"/>.</summary>
+public readonly struct ItemData
 {
-    public ItemName Name;
-    public ItemType Type;
-    public int Price;
-    public int Attack; // 0 for non-weapons
-    public Range DistanceRange;
-    public Job AllowedJobs;
-    public bool Cursed;
+    public ItemName Name { get; init; }
+    public ItemType Type { get; init; }
+    public int Price { get; init; }
+    public int Attack { get; init; } // 0 for non-weapons
+    public Range DistanceRange { get; init; }
+    public Job AllowedJobs { get; init; }
+    public bool Cursed { get; init; }
 
-    public ItemEffectType EffectType;
-    public int EffectValue; // e.g. heal amount
-    public MagicName SpellName; // MagicName.NoSpell if none
+    public ItemEffectType EffectType { get; init; }
+    public int EffectValue { get; init; } // e.g. heal amount
+    public MagicName SpellName { get; init; } // MagicName.NoSpell if none
 
     public int SellPrice => (int)(Price * 0.75f);
 
