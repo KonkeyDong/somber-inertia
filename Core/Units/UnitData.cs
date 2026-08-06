@@ -2,24 +2,25 @@ using SomberInertia.Enums;
 
 namespace SomberInertia.Core.Units;
 
-public struct UnitData
+/// <summary>Immutable unit definition from <see cref="UnitDatabase"/>.</summary>
+public readonly struct UnitData
 {
-    public UnitName Name;
-    public MovementType MovementType;
-    public int Movement;
-    public int BaseHP;
-    public int BaseMP;
-    public int BaseAttack;
-    public int BaseDefense;
-    public int BaseSpeed;
+    public UnitName Name { get; init; }
+    public MovementType MovementType { get; init; }
+    public int Movement { get; init; }
+    public int BaseHP { get; init; }
+    public int BaseMP { get; init; }
+    public int BaseAttack { get; init; }
+    public int BaseDefense { get; init; }
+    public int BaseSpeed { get; init; }
 
-    public bool Friendly;
+    public bool Friendly { get; init; }
 
-    // ForceMembers gain levels while monsters don't gain experience or level up.
-    public int Level;
+    // Force members gain levels; monsters use a pre-set level and do not gain exp.
+    public int Level { get; init; }
 
-    // Monsters will just have a generic "Monster" job.
-    public Job DefaultJob;
+    // Monsters use default (no job); force members use a concrete job.
+    public Job DefaultJob { get; init; }
 
     public override string ToString()
     {

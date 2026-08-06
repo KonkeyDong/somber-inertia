@@ -2,10 +2,11 @@ using SomberInertia.Enums;
 
 namespace SomberInertia.Core.Combat.Item;
 
-public struct ItemSlot
+/// <summary>Inventory cell: item id + condition. Replace as a whole; do not mutate in place.</summary>
+public readonly struct ItemSlot
 {
-    public ItemName Name; // basically an ID
-    public ItemCondition Condition;
+    public ItemName Name { get; init; } // basically an ID
+    public ItemCondition Condition { get; init; }
 
     public static ItemSlot Empty => new ItemSlot
     {

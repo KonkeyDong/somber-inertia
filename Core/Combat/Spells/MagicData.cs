@@ -3,17 +3,18 @@ using SomberInertia.Enums;
 
 namespace SomberInertia.Core.Combat.Spells;
 
-public struct MagicData
+/// <summary>Immutable spell definition from <see cref="MagicDatabase"/>.</summary>
+public readonly struct MagicData
 {
-    public MagicName Name;
-    public int Level;
-    public int MPCost;
-    public MagicType MagicType;
-    public Range DistanceRange;
-    public Range TargetRange;
-    public bool Offensive;
-    public MagicEffectType EffectType;
-    public int EffectValue; // damage or heal amount
+    public MagicName Name { get; init; }
+    public int Level { get; init; }
+    public int MPCost { get; init; }
+    public MagicType MagicType { get; init; }
+    public Range DistanceRange { get; init; }
+    public Range TargetRange { get; init; }
+    public bool Offensive { get; init; }
+    public MagicEffectType EffectType { get; init; }
+    public int EffectValue { get; init; } // damage or heal amount
 
     public MagicFamily Family => Name.ToFamily();
 
