@@ -24,7 +24,9 @@ public class UnitMoving : IGameState
     public void Enter()
     {
         Logger.Debug("UnitMoving::Enter() called.");
+        _currentUnit = _game.GetCurrentUnit();
         _game.Grid.RangeTint.Reset();
+        _game.Grid.CalculateUnitMovementRange(_currentUnit);
         _game.InitializeHighlight();
         _currentUnit.ResetStartingWorldPosition();
     }
@@ -72,7 +74,7 @@ public class UnitMoving : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMovementRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
 
         if (_countdownTimer.IsActive)
         {

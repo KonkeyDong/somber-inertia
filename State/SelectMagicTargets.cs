@@ -86,13 +86,13 @@ public class SelectMagicTargets : IGameState
         var selectedUnit = _listOfUnits[_currentIndex];
         var spellData = _game.MagicUI.GetSelectedMagicData();
 
-        // Prefer MagicData overload if you have it; otherwise pass TargetRange
+        // Fills RangeSet with AoE around the selected target (cast range refilled on magic select).
         _game.Grid.CalculateSpellEffectRange(selectedUnit, spellData);
 
-        var unitsInRange = _game.Grid.BuildListOfUnitsInSpellEffectRange(selectedUnit);
+        var unitsInRange = _game.Grid.BuildListOfUnitsInRange(selectedUnit);
         _magicContext = new MagicContext(_currentUnit, unitsInRange, _game.Grid);
 
-        _areaOfEffect = _game.Grid.GetBlocksFromRangeSet(_game.Grid.SpellEffectRangeSet);
+        _areaOfEffect = _game.Grid.GetBlocksFromRangeSet();
     }
 
     public void Update()
@@ -105,7 +105,7 @@ public class SelectMagicTargets : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         if (_game.IsHighlightSettled())

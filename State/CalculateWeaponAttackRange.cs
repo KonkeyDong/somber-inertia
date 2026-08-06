@@ -21,7 +21,7 @@ public class CalculateWeaponAttackRange : IGameState
         Logger.Debug("CalculateWeaponAttackRange::Enter(): called.");
 
         _game.Grid.CalculateWeaponAttackRange(_currentUnit);
-        var unitsInRange = _game.Grid.BuildListOfUnitsInAttackRange(_currentUnit);
+        var unitsInRange = _game.Grid.BuildListOfUnitsInRange(_currentUnit);
         _game.SeparateListOfUnitsInRange(_currentUnit, unitsInRange);
 
         if (_game.UnfriendlyUnitsInRange.Count > 0)

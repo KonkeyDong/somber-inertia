@@ -86,6 +86,25 @@ public class Unit
     public Direction FacingDirection { get; set; } = Direction.Down;
     private Dictionary<Direction, List<Sprite>> _walkAnimations = new();
 
+    /// <summary>Map tile where this unit's turn movement range was rooted (set at turn start).</summary>
+    public readonly struct MovementOriginCoord
+    {
+        public int X { get; init; }
+        public int Y { get; init; }
+
+        public static MovementOriginCoord Invalid => new() { X = -1, Y = -1 };
+
+        public bool IsValid => X >= 0 && Y >= 0;
+    }
+
+    public MovementOriginCoord MovementOrigin { get; private set; } = MovementOriginCoord.Invalid;
+
+    public void SetMovementOrigin(int x, int y) =>
+        MovementOrigin = new MovementOriginCoord { X = x, Y = y };
+
+    public void ClearMovementOrigin() =>
+        MovementOrigin = MovementOriginCoord.Invalid;
+
     protected Block? _block;
     public Block? Block
     {

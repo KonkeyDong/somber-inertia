@@ -18,7 +18,7 @@ public class PrepareMagicTargets : IGameState
 
     public void Enter()
     {
-        var unitsInRange = _game.Grid.BuildListOfUnitsInMagicRange(_currentUnit);
+        var unitsInRange = _game.Grid.BuildListOfUnitsInRange(_currentUnit);
         _game.SeparateListOfUnitsInRange(_currentUnit, unitsInRange);
 
         if (_game.MagicUI.IsSelectedMagicOffensive())

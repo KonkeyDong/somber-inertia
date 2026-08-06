@@ -112,7 +112,7 @@ public class UseWhichItem : IGameState
     {
         _game.ItemUI.Reset();
         _game.ItemUI.ResetLayoutCenter();
-        _game.Grid.ItemUseRangeSet.Clear();
+        _game.Grid.ClearRangeSet();
         GameStateManager.ChangeStateType(GameStateType.BattleItemMenu);
     }
 
@@ -126,7 +126,7 @@ public class UseWhichItem : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawItemUseRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(

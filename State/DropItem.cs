@@ -21,6 +21,8 @@ public class DropItem : IGameState
 
     public void Enter()
     {
+        _currentUnit = _game.GetCurrentUnit();
+        _game.Grid.CalculateUnitMovementRange(_currentUnit);
         SetSelectedItem(Direction.Up);
     }
 
@@ -93,7 +95,7 @@ public class DropItem : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMovementRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_currentUnit))

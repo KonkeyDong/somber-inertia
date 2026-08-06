@@ -88,7 +88,7 @@ public class SelectMagic : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var iconData in _game.MagicUI.GetMagicIconsToDraw(scale, _currentUnit))
