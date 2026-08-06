@@ -23,12 +23,10 @@ public class Grid
     public int BlockSize { get; set; } = (int)(GameConstants.TileSize * GameConstants.Window.Scale);
 
     private static readonly Dictionary<MovementType, Dictionary<TerrainType, int>> _movementCostsMap;
-    public HashSet<(int x, int y)> MovementRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public HashSet<(int x, int y)> WeaponAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public HashSet<(int x, int y)> MagicAttackRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public HashSet<(int x, int y)> SpellEffectRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public HashSet<(int x, int y)> GiveRangeSet { get; private set; } = new HashSet<(int x, int y)>();
-    public HashSet<(int x, int y)> ItemUseRangeSet { get; private set; } = new HashSet<(int x, int y)>();
+
+    /// <summary>Active overlay / query set (movement, attack, magic, give, item, spell AoE).</summary>
+    public HashSet<(int x, int y)> RangeSet { get; } = new HashSet<(int x, int y)>();
+
     public readonly Oscillator<Color> RangeTint = new Oscillator<Color>(
         GameConstants.Animations.RangeTintLevels,
         GameConstants.Animations.RangeTintFrameDelay);
@@ -83,35 +81,41 @@ public class Grid
         Logger.Info("Grid initialization complete.");
     }
 
-    public void ResetAllRangeSets()
-    {
-        MovementRangeSet.Clear();
-        WeaponAttackRangeSet.Clear();
-        MagicAttackRangeSet.Clear();
-        SpellEffectRangeSet.Clear();
-        GiveRangeSet.Clear();
-        ItemUseRangeSet.Clear();
-    }
+    public void ClearRangeSet() => RangeSet.Clear();
 
     public void CalculateUnitMovementRange(Unit unit)
     {
         if (unit == null)
         {
             Logger.Error("CalculateUnitMovementRange() unit is null.");
+            return;
         }
 
         if (unit.Block == null)
         {
             Logger.Error($"Unit {unit.Name} does not contain a block.");
+            return;
         }
 
-        MovementRangeSet.Clear();
+        // Battle start (no EndTurn yet): root range on current tile once.
+        if (!unit.MovementOrigin.IsValid)
+        {
+            unit.SetMovementOrigin(unit.Block.X, unit.Block.Y);
+        }
+
+        var origin = unit.MovementOrigin;
+        if (origin.X < 0 || origin.X >= Width || origin.Y < 0 || origin.Y >= Height)
+        {
+            Logger.Error($"CalculateUnitMovementRange(): origin ({origin.X},{origin.Y}) out of bounds.");
+            return;
+        }
+
+        RangeSet.Clear();
         var costToReach = new Dictionary<(int x, int y), int>();
-
         var queue = new Queue<Block>();
-        var start = unit.Block;
+        var start = Blocks[origin.X, origin.Y];
 
-        MovementRangeSet.Add((start.X, start.Y));
+        RangeSet.Add((start.X, start.Y));
         costToReach[(start.X, start.Y)] = 0;
         queue.Enqueue(start);
 
@@ -128,7 +132,7 @@ public class Grid
                 }
 
                 var coord = (neighbor.X, neighbor.Y);
-                if (MovementRangeSet.Contains(coord))
+                if (RangeSet.Contains(coord))
                 {
                     continue;
                 }
@@ -142,7 +146,7 @@ public class Grid
 
                 if (totalCost <= unit.Movement)
                 {
-                    MovementRangeSet.Add(coord);
+                    RangeSet.Add(coord);
                     costToReach[coord] = totalCost;
                     queue.Enqueue(neighbor);
                 }
@@ -157,7 +161,7 @@ public class Grid
             return;
         }
 
-        WeaponAttackRangeSet = CalculateEffectDistanceRange(unit, unit.GetEquippedWeaponData().DistanceRange);
+        FillEffectDistanceRange(unit, unit.GetEquippedWeaponData().DistanceRange);
     }
 
     public void CalculateGiveRange(Unit unit)
@@ -167,7 +171,7 @@ public class Grid
             return;
         }
 
-        GiveRangeSet = CalculateEffectDistanceRange(unit, GiveDistanceRange);
+        FillEffectDistanceRange(unit, GiveDistanceRange);
     }
 
     public void CalculateMagicAttackRange(Unit unit, MagicData magic)
@@ -177,7 +181,7 @@ public class Grid
             return;
         }
 
-        MagicAttackRangeSet = CalculateEffectDistanceRange(unit, magic.DistanceRange);
+        FillEffectDistanceRange(unit, magic.DistanceRange);
     }
 
     public void CalculateItemUseRange(Unit unit, ItemData item)
@@ -187,12 +191,13 @@ public class Grid
             return;
         }
 
-        ItemUseRangeSet = CalculateEffectDistanceRange(unit, item.DistanceRange);
+        FillEffectDistanceRange(unit, item.DistanceRange);
     }
 
-    // Similar to CalculateMagicAttackRange(), but sets the SpellEffectRangeSet.
-    // Used for when you cast an AOE spell on a unit and you need to get all units
-    // at that unit's location, not the caster's location.
+    /// <summary>
+    /// AoE around a target unit (spell target range). Reuses <see cref="RangeSet"/> —
+    /// cast range is refilled when returning to magic select states.
+    /// </summary>
     public void CalculateSpellEffectRange(Unit unit, MagicData magic)
     {
         if (unit?.Block == null)
@@ -200,23 +205,23 @@ public class Grid
             return;
         }
 
-        SpellEffectRangeSet = CalculateEffectDistanceRange(unit, magic.TargetRange);
+        FillEffectDistanceRange(unit, magic.TargetRange);
     }
 
-    // Effect meaning magical or weapon attack.
-    private HashSet<(int, int)> CalculateEffectDistanceRange(Unit unit, SomberInertia.Core.Combat.Range range)
+    /// <summary>Clear and fill <see cref="RangeSet"/> with manhattan min..max tiles from unit.</summary>
+    private void FillEffectDistanceRange(Unit unit, Combat.Range range)
     {
+        RangeSet.Clear();
+
         if (unit?.Block == null)
         {
-            Logger.Error("Unit is not on a block.");
-            return new HashSet<(int x, int y)>();
+            Logger.Error("FillEffectDistanceRange: unit is not on a block.");
+            return;
         }
 
         var queue = new Queue<Block>();
         var visited = new HashSet<(int x, int y)>();
-        var effectRangeSet = new HashSet<(int x, int y)>();
         var start = unit.Block;
-
         var minRange = range.Min;
         var maxRange = range.Max;
 
@@ -228,10 +233,9 @@ public class Grid
             var current = queue.Dequeue();
             var distance = Math.Abs(current.X - start.X) + Math.Abs(current.Y - start.Y);
 
-            // Add tile if it's within min and max range (inclusive)
             if (distance >= minRange && distance <= maxRange)
             {
-                effectRangeSet.Add((current.X, current.Y));
+                RangeSet.Add((current.X, current.Y));
             }
 
             if (distance >= maxRange)
@@ -250,15 +254,13 @@ public class Grid
                 }
             }
         }
-
-        return effectRangeSet;
     }
 
-    public List<Block> GetBlocksFromRangeSet(HashSet<(int x, int y)> rangeSet)
+    public List<Block> GetBlocksFromRangeSet()
     {
         var blocks = new List<Block>();
 
-        foreach (var (x, y) in rangeSet)
+        foreach (var (x, y) in RangeSet)
         {
             blocks.Add(Blocks[x, y]);
         }
@@ -266,47 +268,13 @@ public class Grid
         return blocks;
     }
 
-    // Note: attack range could be spell range, or item range.
-    public List<Unit> BuildListOfUnitsInAttackRange(Unit unit)
+    public List<Unit> BuildListOfUnitsInRange(Unit unit)
     {
-        Logger.Debug("Grid::BuildListOfUnitsInAttackRange() building list of units in attack.");
+        Logger.Debug("Grid::BuildListOfUnitsInRange() building list of units in RangeSet.");
 
-        return BuildListOfUnitsInRange(unit, WeaponAttackRangeSet);
-    }
-
-    public List<Unit> BuildListOfUnitsInMagicRange(Unit unit)
-    {
-        Logger.Debug("Grid::BuildListOfUnitsInMagicRange() building list of units in magic range.");
-
-        return BuildListOfUnitsInRange(unit, MagicAttackRangeSet);
-    }
-
-    public List<Unit> BuildListOfUnitsInSpellEffectRange(Unit unit)
-    {
-        Logger.Debug("Grid::BuildListOfUnitsInSpellEffectRange() building list of units in spell effect range.");
-
-        return BuildListOfUnitsInRange(unit, SpellEffectRangeSet);
-    }
-
-    public List<Unit> BuildListOfUnitsInItemUseRange(Unit unit)
-    {
-        Logger.Debug("Grid::BuildListOfUnitsInItemUseRange() building list of units in item use range.");
-
-        return BuildListOfUnitsInRange(unit, ItemUseRangeSet);
-    }
-
-    public List<Unit> BuildListOfUnitsInGiveRange(Unit unit)
-    {
-        Logger.Debug("Grid::BuildListOfUnitsInGiveRange() building list of units in give range.");
-
-        return BuildListOfUnitsInRange(unit, GiveRangeSet);
-    }
-
-    private List<Unit> BuildListOfUnitsInRange(Unit unit, HashSet<(int x, int y)> rangeSet)
-    {
         var unitsInRange = new List<Unit>();
 
-        foreach (var (x, y) in rangeSet)
+        foreach (var (x, y) in RangeSet)
         {
             var occupant = Blocks[x, y].PeekOccupant();
             if (occupant == null)
@@ -402,9 +370,9 @@ public class Grid
             return;
         }
 
-        if (!MovementRangeSet.Contains((newX, newY)))
+        if (!RangeSet.Contains((newX, newY)))
         {
-            Logger.Debug($"Movement blocked: block coordinate [{newX}, {newY}] not in movement range.");
+            Logger.Debug($"Movement blocked: block coordinate [{newX}, {newY}] not in range set.");
             return;
         }
 

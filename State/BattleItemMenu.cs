@@ -34,6 +34,7 @@ public class BattleItemMenu : IGameState
     public void Enter()
     {
         _currentUnit = _game.GetCurrentUnit();
+        _game.Grid.CalculateUnitMovementRange(_currentUnit);
         _selectedCommand = CommandIconType.Use;
         CommandIcons.SetSelectedIcon(_selectedCommand);
         _centerPosition = RadialMenuLayout.GetCenterPosition();
@@ -138,7 +139,7 @@ public class BattleItemMenu : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawMovementRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         _centerPosition = RadialMenuLayout.GetCenterPosition();

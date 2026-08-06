@@ -21,7 +21,7 @@ public class EndTurn : IGameState
         current.ResetFacingDirection();
         Logger.Info($"{current.Name}'s turn ends.");
 
-        _game.Grid.ResetAllRangeSets();
+        _game.Grid.ClearRangeSet();
         _game.FlipFlop.Reset();
         _game.ResetListOfUnitsInRange();
         _game.MagicUI.Reset();
@@ -30,6 +30,8 @@ public class EndTurn : IGameState
         _game.Give.Reset();
         _game.MessageNotice.Reset();
         _game.AttackContext?.Reset();
+
+        current.ClearMovementOrigin();
 
         // If a unit begins their turn dying from poison, the AnimateUnitDeath
         // state will remove that unit from the Game.Units list and then switch
@@ -44,6 +46,13 @@ public class EndTurn : IGameState
         }
 
         _game.ResetFirstUnitDiedFromPoison();
+
+        // Next unit's turn: root movement range on their current tile.
+        var next = _game.GetCurrentUnit();
+        if (next.Block != null)
+        {
+            next.SetMovementOrigin(next.Block.X, next.Block.Y);
+        }
 
         GameStateManager.ChangeStateType(GameStateType.CalculateUnitMovementRange);
     }

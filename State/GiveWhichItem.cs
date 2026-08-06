@@ -22,15 +22,15 @@ public class GiveWhichItem : IGameState
     {
         _currentUnit = _game.GetCurrentUnit();
 
-        // Fill give range first — BuildListOfUnitsInGiveRange only reads GiveRangeSet.
+        // Fill give range first — BuildListOfUnitsInRange reads RangeSet.
         _game.Grid.CalculateGiveRange(_currentUnit);
 
-        var units = _game.Grid.BuildListOfUnitsInGiveRange(_currentUnit);
+        var units = _game.Grid.BuildListOfUnitsInRange(_currentUnit);
         _game.SeparateListOfUnitsInRange(_currentUnit, units);
 
         if (_game.FriendlyUnitsInRange.Count == 0)
         {
-            // GiveRangeSet is filled; MessageNotice draws + pulses it.
+            // RangeSet is filled; MessageNotice draws + pulses it.
             GameStateManager.ShowMessageNotice(
                 GameConstants.MessageNotice.NoTarget,
                 GameStateType.BattleItemMenu);
@@ -116,7 +116,7 @@ public class GiveWhichItem : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawGiveRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         foreach (var iconData in _game.ItemUI.GetItemIconsToDraw(_currentUnit))

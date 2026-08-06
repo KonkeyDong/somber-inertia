@@ -76,11 +76,8 @@ public class MessageNotice : IGameState
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
 
-        // Draw any range sets already filled by the previous state (empty = no-op).
-        _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
-        _game.Renderer.DrawMagicAttackRange(scale, _game.Grid);
-        _game.Renderer.DrawGiveRange(scale, _game.Grid);
-        _game.Renderer.DrawItemUseRange(scale, _game.Grid);
+        // Draw range left by the previous state (empty = no-op).
+        _game.Renderer.DrawRange(scale, _game.Grid);
 
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 

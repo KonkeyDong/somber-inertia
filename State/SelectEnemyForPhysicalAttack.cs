@@ -19,6 +19,9 @@ public class SelectEnemyForPhysicalAttack : IGameState
 
     public void Enter()
     {
+        _currentUnit = _game.GetCurrentUnit();
+        _game.Grid.CalculateWeaponAttackRange(_currentUnit);
+
         if (_game.UnfriendlyUnitsInRange.Count > 0)
         {
             _game.InitializeHighlight();
@@ -77,7 +80,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawWeaponAttackRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
 
         _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());

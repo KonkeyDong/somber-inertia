@@ -29,7 +29,7 @@ public class GiveItemToWhom : IGameState
         ItemIcons.ClearSelection();
         ItemIcons.Reset();
 
-        var unitsInRange = _game.Grid.BuildListOfUnitsInGiveRange(_currentUnit);
+        var unitsInRange = _game.Grid.BuildListOfUnitsInRange(_currentUnit);
         _friendliesInRange = unitsInRange
             .Where(u => u.Friendly == _currentUnit.Friendly && u != _currentUnit)
             .ToList();
@@ -121,7 +121,7 @@ public class GiveItemToWhom : IGameState
     public void Draw(float scale)
     {
         _game.Renderer.DrawBackground(scale, _game.Grid);
-        _game.Renderer.DrawGiveRange(scale, _game.Grid);
+        _game.Renderer.DrawRange(scale, _game.Grid);
         _game.Renderer.DrawUnits(scale, _game.Grid, _game.Units, _game.FlipFlop.IsOn);
         _game.Renderer.DrawHighlightRectangle(scale, _game.GetHighlightPosition());
 

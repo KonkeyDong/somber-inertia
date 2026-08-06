@@ -179,17 +179,12 @@ public class Renderer
         }
     }
 
-    public void DrawMovementRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MovementRangeSet);
-    public void DrawWeaponAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.WeaponAttackRangeSet);
-    public void DrawMagicAttackRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.MagicAttackRangeSet);
-    public void DrawGiveRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.GiveRangeSet);
-    public void DrawItemUseRange(float scale, Grid grid) => DrawRangeBlockColor(scale, grid, grid.ItemUseRangeSet);
-    private void DrawRangeBlockColor(float scale, Grid grid, HashSet<(int x, int y)> hashSet)
+    public void DrawRange(float scale, Grid grid)
     {
         var debugFlag = Logger.MinimumLevel == LogLevel.Debug;
 
         var position = new Vector2();
-        foreach ((var x, var y) in hashSet)
+        foreach ((var x, var y) in grid.RangeSet)
         {
             position.X = x * grid.BlockSize;
             position.Y = y * grid.BlockSize;
