@@ -1,4 +1,5 @@
 using SomberInertia.Enums;
+using SomberInertia.Core.Units;
 
 namespace SomberInertia.Core.Combat.Item;
 
@@ -44,9 +45,49 @@ public static class ItemDatabase
             return;
         }
 
-        if (data.SpellName != MagicName.NoSpell) // item can cast a spell
+        if (data.SpellName != MagicName.NoSpell)
         {
-            ExecuteSpell(data, context);
+            // Spell items: preferred path builds MagicContext in UseItemOnWhom and calls
+            // MagicDatabase.Cast + ApplySpellItemDurability. This remains a safety stub.
+            Logger.Warning(
+                "ItemDatabase.UseItem: spell item should be cast via UseItemOnWhom " +
+                "(MagicContext + Cast(fromItem: true)).");
+        }
+    }
+
+    public static void ApplySpellItemDurability(Unit caster, int itemSlotIndex)
+    {
+        if (caster == null)
+        {
+            Logger.Error("ApplySpellItemDurability: caster is null.");
+            return;
+        }
+
+        var slot = caster.GetItemAtIndex(itemSlotIndex);
+        if (slot.IsEmpty)
+        {
+            Logger.Warning("ApplySpellItemDurability: slot empty (already removed?).");
+            return;
+        }
+
+        if (slot.Damaged)
+        {
+            Logger.Info(
+                $"{caster.GetDisplayName()}'s [{slot.Name}] was already damaged and breaks.");
+            caster.RemoveItemAtIndex(itemSlotIndex);
+            return;
+        }
+
+        if (CombatSystem.Chance(GameConstants.Items.BreakChance))
+        {
+            caster.SetItemDamaged(itemSlotIndex, damaged: true);
+            Logger.Info(
+                $"{caster.GetDisplayName()}'s [{slot.Name}] is now damaged " +
+                $"(1/{GameConstants.Items.BreakChance}).");
+        }
+        else
+        {
+            Logger.Info($"{caster.GetDisplayName()}'s [{slot.Name}] remains intact after spell cast.");
         }
     }
 
@@ -95,11 +136,6 @@ public static class ItemDatabase
                 Logger.Warning($"No consumable effect for [{data.Name}] ({data.EffectType}).");
                 break;
         }
-    }
-
-    private static void ExecuteSpell(ItemData data, ItemContext context)
-    {
-        Logger.Warning("ItemDatabase::ExecuteSpell() has not been implemented.");
     }
 
     private static void Register(ItemData data)
