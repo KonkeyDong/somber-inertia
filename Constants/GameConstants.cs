@@ -129,6 +129,11 @@ public static class GameConstants
         public const int SleepDuration = 3; // 1 to 3 turns (turn 0 shows wake message and skips turn)
     }
 
+    public static class Items
+    {
+        public const int BreakChance = 8;
+    }
+
     public static class WorldMap
     {
         public static class Positions

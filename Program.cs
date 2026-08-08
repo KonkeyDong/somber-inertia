@@ -59,6 +59,9 @@ class Program
         max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
         max.AddItem(ItemName.ShortSword, autoEquipWeapon: true);
+        // Smoke: spell-item Use (Bolt2). Max is Swordsman — temporarily allow equip/use.
+        max.Job = Job.Hero;
+        max.AddItem(ItemName.SwordOfLight);
         max.LearnSpell(MagicName.Egress1);
         max.LearnSpell(MagicName.Blaze1);
         max.LearnSpell(MagicName.Blaze2);

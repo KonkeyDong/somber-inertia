@@ -262,6 +262,21 @@ public class Unit
         return actual;
     }
 
+    /// <summary>Mark inventory slot damaged (replace whole readonly slot).</summary>
+    public bool SetItemDamaged(int index, bool damaged = true)
+    {
+        if (index < 0 || index >= Items.Length || Items[index].IsEmpty)
+        {
+            Logger.Error($"SetItemDamaged(): invalid slot [{index}].");
+            return false;
+        }
+
+        var slot = Items[index];
+        Items[index] = new ItemSlot { Name = slot.Name, Damaged = damaged };
+        Logger.Info($"{GetDisplayName()}'s [{slot.Name}] Damaged set to {damaged}.");
+        return true;
+    }
+
     public bool RemoveItemAtIndex(int index)
     {
         if (index < 0 || index >= Items.Length)

@@ -70,15 +70,17 @@ public static class CombatSystem
         return variantAmount;
     }
 
-    private static bool Chance(int denominator)
+    /// <summary>True with probability 1/denominator (e.g. denominator 8 → 1/8).</summary>
+    public static bool Chance(int denominator)
     {
         if (denominator <= 1)
         {
             Logger.Error("CombatSystem::Chance(): denominator must be greater than 1.");
+            return false;
         }
 
         var result = Raylib.GetRandomValue(0, denominator - 1);
-        Logger.Info($"CombatSystem::Chance() roll: [{result}].");
+        Logger.Info($"CombatSystem::Chance() roll: [{result}] (need 0 of {denominator}).");
 
         return result == 0;
     }
