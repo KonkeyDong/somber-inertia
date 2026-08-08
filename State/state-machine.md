@@ -103,12 +103,26 @@ stateDiagram-v2
     BattleItemMenu --> UseWhichItem : Use
 ```
 
-Select a job-usable inventory item (consumables use `Job.Any`; weapons only if they have a spell). Shows item range + info box. Target apply (`UseItemOnWhom`) not wired yet.
+Select a job-usable inventory item (consumables use `Job.Any`; weapons only if they have a spell). Shows item range + info box.
+
+```mermaid
+stateDiagram-v2
+    direction TB
+    UseWhichItem --> UseItemOnWhom : confirm
+    UseItemOnWhom --> EnterBattleScreen : Heal / RemovePoison
+    EnterBattleScreen --> UseConsumableBattle : item mode
+    UseConsumableBattle --> ExitBattleScreen
+    ExitBattleScreen --> EndTurn : item mode
+```
+
+Battle presentation is **force-only** (no enemy). Self: idle + apply. Ally: slide caster out / target in / apply / restore caster. Consumables always remove after use. Heal uses 75–125% variance and is clamped to missing HP.
 
 | At | Cancel / edge case |
 |----|---------------------|
 | UseWhichItem | X → BattleItemMenu |
+| UseItemOnWhom | X → UseWhichItem |
 | No usable items | MessageNotice → BattleItemMenu |
+| No targets | MessageNotice → UseWhichItem |
 
 ### 4b. Drop
 

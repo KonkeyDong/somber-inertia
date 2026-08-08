@@ -32,6 +32,76 @@ public static class ItemDatabase
         return _items[ItemName.NoItem];
     }
 
+    public static void UseItem(ItemName name, ItemContext context)
+    {
+        var data = Get(name);
+
+        if (data.Type == ItemType.Consumable)
+        {
+            ExecuteConsumable(data, context);
+            // Consumables are always removed after use (100% "hit"; heal uses variance separately).
+            context.Caster.RemoveItemAtIndex(context.ItemSlotIndex);
+            return;
+        }
+
+        if (data.SpellName != MagicName.NoSpell) // item can cast a spell
+        {
+            ExecuteSpell(data, context);
+        }
+    }
+
+    private static void ExecuteConsumable(ItemData data, ItemContext context)
+    {
+        switch (data.EffectType)
+        {
+            case ItemEffectType.Heal:
+                foreach (var target in context.Targets)
+                {
+                    if (context.Caster.Friendly != target.Friendly)
+                    {
+                        continue;
+                    }
+
+                    var rolled = CombatSystem.ApplyAmountVariance(data.EffectValue);
+                    target.Heal(rolled);
+                }
+                break;
+
+            case ItemEffectType.RemovePoison:
+                foreach (var target in context.Targets)
+                {
+                    if (context.Caster.Friendly != target.Friendly)
+                    {
+                        continue;
+                    }
+
+                    if (target.HasStatus(StatusEffectType.Poison))
+                    {
+                        target.RemoveStatus(StatusEffectType.Poison);
+                        Logger.Info($"{target.GetDisplayName()} was cured of poison by an item.");
+                    }
+                    else
+                    {
+                        Logger.Info($"{target.GetDisplayName()} was not poisoned; antidote had no effect.");
+                    }
+                }
+                break;
+
+            case ItemEffectType.Escape:
+                Logger.Warning("ItemEffectType.Escape not implemented.");
+                break;
+
+            default:
+                Logger.Warning($"No consumable effect for [{data.Name}] ({data.EffectType}).");
+                break;
+        }
+    }
+
+    private static void ExecuteSpell(ItemData data, ItemContext context)
+    {
+        Logger.Warning("ItemDatabase::ExecuteSpell() has not been implemented.");
+    }
+
     private static void Register(ItemData data)
     {
         _items[data.Name] = data;

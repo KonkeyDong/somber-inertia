@@ -60,6 +60,7 @@ public class SelectEnemyForPhysicalAttack : IGameState
 
     private void ConfirmSelection()
     {
+        _game.BattleScreenMode = BattleScreenMode.Combat;
         _game.AttackContext = new AttackContext(_currentUnit, _game.UnfriendlyUnitsInRange[_currentIndex]);
         GameStateManager.ChangeStateType(GameStateType.EnterBattleScreen);
     }

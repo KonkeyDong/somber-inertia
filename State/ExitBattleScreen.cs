@@ -15,6 +15,7 @@ public class ExitBattleScreen : IGameState
 
     private float _progress = 0f;
     private const float Duration = 60; // frames for the full transition
+    private bool _itemMode;
 
     public ExitBattleScreen(Game game)
     {
@@ -27,16 +28,15 @@ public class ExitBattleScreen : IGameState
     public void Enter()
     {
         _progress = 0f;
+        _itemMode = _game.BattleScreenMode == BattleScreenMode.ItemConsumable;
     }
 
     public void Exit()
     {
-
     }
 
     public void HandleInput()
     {
-
     }
 
     public void Update()
@@ -51,7 +51,17 @@ public class ExitBattleScreen : IGameState
         }
         else
         {
-            GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
+            if (_itemMode)
+            {
+                _game.ItemContext?.Reset();
+                _game.ItemContext = null;
+                _game.BattleScreenMode = BattleScreenMode.Combat;
+                GameStateManager.ChangeStateType(GameStateType.EndTurn);
+            }
+            else
+            {
+                GameStateManager.ChangeStateType(GameStateType.AnimateUnitDeaths);
+            }
         }
     }
 
@@ -70,27 +80,50 @@ public class ExitBattleScreen : IGameState
         {
             var battleAlpha = (byte)(255 * (1f - eased * 2));
 
-            // Draw current battle screen with fading alpha
             var background = BattleBackgrounds.Get(BackgroundNames.GatesOfGuardiana);
             _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
 
-            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
-            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
-
             var frameIndex = _delay.CurrentIndex;
 
-            if (!_game.AttackContext.GetMonster().IsDead())
+            if (_itemMode)
             {
-                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), 
-                    _game.AttackContext.MonsterSpriteSet.BasePosition, battleAlpha);
+                var ctx = _game.ItemContext;
+                if (ctx != null)
+                {
+                    var casterPos = GameConstants.Battle.GetSpritePosition(ctx.Caster);
+                    _game.Renderer.DrawUnitInfoBox(scale, ctx.Caster, friendlyStatsPosition, battleAlpha);
+                    _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground, battleAlpha);
+                    _game.Renderer.Draw(
+                        scale,
+                        ctx.CasterSprites.GetIdleFrame(frameIndex),
+                        casterPos,
+                        battleAlpha);
+                }
             }
-            
-            _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground, battleAlpha);
-
-            if (!_game.AttackContext.GetForceMember().IsDead())
+            else
             {
-                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), 
-                    _game.AttackContext.ForceMemberSpriteSet.BasePosition, battleAlpha);
+                _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
+                _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
+
+                if (!_game.AttackContext.GetMonster().IsDead())
+                {
+                    _game.Renderer.Draw(
+                        scale,
+                        _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex),
+                        _game.AttackContext.MonsterSpriteSet.BasePosition,
+                        battleAlpha);
+                }
+
+                _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground, battleAlpha);
+
+                if (!_game.AttackContext.GetForceMember().IsDead())
+                {
+                    _game.Renderer.Draw(
+                        scale,
+                        _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex),
+                        _game.AttackContext.ForceMemberSpriteSet.BasePosition,
+                        battleAlpha);
+                }
             }
         }
         // Phase 2: Fade in world map (0.5 -> 1.0)

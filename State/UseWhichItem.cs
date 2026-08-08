@@ -100,12 +100,11 @@ public class UseWhichItem : IGameState
             return;
         }
 
-        // Next: UseItemOnWhom (target select + apply). Keep selection for that hop.
         _game.Prompt.ItemSlotIndex = _game.ItemUI.GetSelectedIndex();
         Logger.Info(
             $"UseWhichItem: selected slot [{_game.Prompt.ItemSlotIndex}] " +
-            $"{_game.ItemUI.GetSelectedItemName()} (target select not implemented yet)."
-        );
+            $"{_game.ItemUI.GetSelectedItemName()} → UseItemOnWhom.");
+        GameStateManager.ChangeStateType(GameStateType.UseItemOnWhom);
     }
 
     private void CancelSelection()

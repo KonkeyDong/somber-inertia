@@ -54,7 +54,7 @@ class Program
 
         var max = new Unit(UnitName.Max);
         max.Attack = 15;
-        max.HP.Current = 1;
+        max.HP.Current = 7;
         max.MP.Max = 99;
         max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
@@ -75,12 +75,15 @@ class Program
 
         var anri = new Unit(UnitName.Anri);
         anri.Attack = 15;
+        anri.HP.Current = 7;
+        anri.ApplyStatus(StatusEffectType.Poison);
         // Unarmed equip is default (index -1); do not put Unarmed in inventory.
         anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: true);
         anri.AddItem(ItemName.MedicalHerb);
 
         var goblin1 = new Unit(UnitName.Goblin);
         goblin1.Defense = 5;
+        goblin1.HP.Current = 1;
 
         var runeKnight = new Unit(UnitName.RuneKnight);
         runeKnight.HP.Current = 1;
