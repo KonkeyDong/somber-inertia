@@ -1,5 +1,5 @@
 using SomberInertia.Core;
-using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Item;
 using SomberInertia.Graphics;
 using SomberInertia.Timers;
 using SomberInertia.Enums;
@@ -17,10 +17,11 @@ public class EnterBattleScreen : IGameState
     private float _progress = 0f;
     private const float Duration = 60; // total frames for the transition
 
-    // Animation start positions for sprites
     private Vector2 _startUnfriendlyPosition;
     private Vector2 _startFriendlyPosition;
     private Vector2 _startForegroundPosition;
+    private Vector2 _friendlyBase;
+    private bool _itemMode;
 
     public EnterBattleScreen(Game game)
     {
@@ -32,29 +33,44 @@ public class EnterBattleScreen : IGameState
 
     public void Enter()
     {
-        var scale = GameStateManager.CurrentScale;
+        _itemMode = _game.BattleScreenMode == BattleScreenMode.ItemConsumable;
+        _progress = 0f;
 
-        // Final (target) positions
-        var targetUnfriendly = _game.AttackContext.MonsterSpriteSet.BasePosition;
-        var targetFriendly   = _game.AttackContext.ForceMemberSpriteSet.BasePosition;
         var targetForeground = GameConstants.Battle.Positions.Foreground;
 
-        // Start positions (off-screen)
-        _startUnfriendlyPosition = new Vector2(targetUnfriendly.X - 140, targetUnfriendly.Y);
-        _startFriendlyPosition   = new Vector2(targetFriendly.X + 140, targetFriendly.Y);
-        _startForegroundPosition = new Vector2(targetForeground.X + 100, targetForeground.Y);
+        if (_itemMode)
+        {
+            if (_game.ItemContext == null)
+            {
+                Logger.Error("EnterBattleScreen (item): ItemContext null.");
+                GameStateManager.ChangeStateType(GameStateType.EndTurn);
+                return;
+            }
 
-        _progress = 0f;
+            _friendlyBase = GameConstants.Battle.GetSpritePosition(_game.ItemContext.Caster);
+            _game.ItemContext.CasterSprites.BasePosition = _friendlyBase;
+            _startFriendlyPosition = new Vector2(_friendlyBase.X + 140, _friendlyBase.Y);
+            _startForegroundPosition = new Vector2(targetForeground.X + 100, targetForeground.Y);
+            _startUnfriendlyPosition = Vector2.Zero;
+        }
+        else
+        {
+            var targetUnfriendly = _game.AttackContext.MonsterSpriteSet.BasePosition;
+            var targetFriendly = _game.AttackContext.ForceMemberSpriteSet.BasePosition;
+            _friendlyBase = targetFriendly;
+
+            _startUnfriendlyPosition = new Vector2(targetUnfriendly.X - 140, targetUnfriendly.Y);
+            _startFriendlyPosition = new Vector2(targetFriendly.X + 140, targetFriendly.Y);
+            _startForegroundPosition = new Vector2(targetForeground.X + 100, targetForeground.Y);
+        }
     }
 
     public void Exit()
     {
-
     }
 
     public void HandleInput()
     {
-
     }
 
     public void Update()
@@ -68,8 +84,12 @@ public class EnterBattleScreen : IGameState
         }
         else
         {
-            // Debug (F1): manual frame scrubber. AttackContext must be built while debug is on
-            // so BuildBattleScene uses one copy per pose.
+            if (_itemMode)
+            {
+                GameStateManager.ChangeStateType(GameStateType.UseConsumableBattle);
+                return;
+            }
+
             if (Logger.InDebugMode())
             {
                 GameStateManager.ChangeStateType(GameStateType.BattleResolutionDebug);
@@ -102,23 +122,35 @@ public class EnterBattleScreen : IGameState
             var battleAlpha = (byte)(255 * ((eased - 0.5f) * 2));
 
             var backgroundPosition = GameConstants.Battle.Positions.Background;
-            var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats;
             var friendlyStatsPosition = GameConstants.Battle.Positions.FriendlyStats;
-
             var foregroundPosition = Vector2.Lerp(_startForegroundPosition, GameConstants.Battle.Positions.Foreground, eased);
-            var unfriendlyPosition = Vector2.Lerp(_startUnfriendlyPosition, _game.AttackContext.MonsterSpriteSet.BasePosition, eased);
-            var friendlyPosition   = Vector2.Lerp(_startFriendlyPosition,   _game.AttackContext.ForceMemberSpriteSet.BasePosition, eased);
+            var friendlyPosition = Vector2.Lerp(_startFriendlyPosition, _friendlyBase, eased);
 
-            // Draw battle background
             var background = BattleBackgrounds.Get(BackgroundNames.GatesOfGuardiana);
             _game.Renderer.Draw(scale, background, backgroundPosition, battleAlpha);
-            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
-            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
 
-            // Draw sprites with slide + fade
-            _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, battleAlpha);
-            _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, battleAlpha);
-            _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, battleAlpha);
+            if (_itemMode)
+            {
+                var ctx = _game.ItemContext!;
+                _game.Renderer.DrawUnitInfoBox(scale, ctx.Caster, friendlyStatsPosition, battleAlpha);
+                _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, battleAlpha);
+                _game.Renderer.Draw(scale, ctx.CasterSprites.GetIdleFrame(frameIndex), friendlyPosition, battleAlpha);
+            }
+            else
+            {
+                var unfriendlyStatsPosition = GameConstants.Battle.Positions.UnfriendlyStats;
+                var unfriendlyPosition = Vector2.Lerp(
+                    _startUnfriendlyPosition,
+                    _game.AttackContext.MonsterSpriteSet.BasePosition,
+                    eased);
+
+                _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), unfriendlyStatsPosition, battleAlpha);
+                _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), friendlyStatsPosition, battleAlpha);
+
+                _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetIdleFrame(frameIndex), unfriendlyPosition, battleAlpha);
+                _game.Renderer.Draw(scale, _foregroundSprite, foregroundPosition, battleAlpha);
+                _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetIdleFrame(frameIndex), friendlyPosition, battleAlpha);
+            }
         }
     }
 }

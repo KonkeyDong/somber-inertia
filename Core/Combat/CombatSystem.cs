@@ -55,16 +55,19 @@ public static class CombatSystem
 
     private static bool Miss(int denominator) => Chance(denominator);
 
+    /// <summary>Scale a base amount by 75%–125% (shared by attacks and item heals).</summary>
+    public static int ApplyAmountVariance(int baseAmount) => CalculateVariance(baseAmount);
+
     private static int CalculateVariance(int baseAmount)
     {
         Logger.Info($"  Base amount: [{baseAmount}].");
 
         var variance = Raylib.GetRandomValue(75, 125);
-        var variantDamage = (baseAmount * variance) / 100;
+        var variantAmount = (baseAmount * variance) / 100;
 
-        Logger.Info($"  Variant amount: [{variantDamage}].");
+        Logger.Info($"  Variant amount: [{variantAmount}].");
 
-        return variantDamage;
+        return variantAmount;
     }
 
     private static bool Chance(int denominator)

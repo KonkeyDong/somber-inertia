@@ -243,6 +243,25 @@ public class Unit
         Logger.Info($"\tUnit's current health: {HP.Current} / {HP.Max}.");
     }
 
+    /// <summary>Restore HP up to Max. Amount should already include variance; excess over missing HP is ignored.</summary>
+    public int Heal(int amount)
+    {
+        if (amount < 0)
+        {
+            amount = 0;
+        }
+
+        var missing = HP.Max - HP.Current;
+        var actual = Math.Min(amount, missing);
+        HP.Current += actual;
+
+        Logger.Info(
+            $"Unit [{Name.GetDisplayName()}] healed for {actual} " +
+            $"(requested {amount}, missing was {missing}). HP now {HP.Current}/{HP.Max}.");
+
+        return actual;
+    }
+
     public bool RemoveItemAtIndex(int index)
     {
         if (index < 0 || index >= Items.Length)

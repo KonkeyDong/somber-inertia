@@ -30,6 +30,10 @@ public class EndTurn : IGameState
         _game.Give.Reset();
         _game.MessageNotice.Reset();
         _game.AttackContext?.Reset();
+        _game.ItemContext?.Reset();
+        _game.ItemContext = null;
+        _game.BattleScreenMode = BattleScreenMode.Combat;
+        _game.Prompt.Reset();
 
         current.ClearMovementOrigin();
 

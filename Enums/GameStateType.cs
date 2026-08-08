@@ -39,6 +39,8 @@ public enum GameStateType
     PromptYesNo,
     EquipItem,
     UseWhichItem,
+    UseItemOnWhom,
+    UseConsumableBattle,
     GiveWhichItem,
     GiveItemToWhom,
     TradeWhichItemFromAdjacentNeighbor,

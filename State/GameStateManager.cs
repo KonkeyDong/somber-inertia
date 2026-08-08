@@ -63,6 +63,8 @@ public static class GameStateManager
             GameStateType.PromptYesNo => new PromptYesNo(Game),
             GameStateType.EquipItem => new EquipItem(Game),
             GameStateType.UseWhichItem => new UseWhichItem(Game),
+            GameStateType.UseItemOnWhom => new UseItemOnWhom(Game),
+            GameStateType.UseConsumableBattle => new UseConsumableBattle(Game),
             GameStateType.GiveWhichItem => new GiveWhichItem(Game),
             GameStateType.GiveItemToWhom => new GiveItemToWhom(Game),
             GameStateType.TradeWhichItemFromAdjacentNeighbor => new TradeWhichItemFromAdjacentNeighbor(Game),

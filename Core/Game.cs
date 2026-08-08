@@ -5,7 +5,9 @@ using SomberInertia.Timers;
 using SomberInertia.State;
 using SomberInertia.Core.Units;
 using SomberInertia.Core.Combat;
+using SomberInertia.Core.Combat.Item;
 using SomberInertia.Core.Graphics;
+using SomberInertia.Enums;
 using SomberInertia.Graphics.UI;
 
 namespace SomberInertia.Core;
@@ -21,6 +23,8 @@ public class Game
     public MagicUI MagicUI { get; set; } = new();
     public ItemUI ItemUI { get; set; } = new();
     public AttackContext AttackContext { get; set; } = null!;
+    public ItemContext? ItemContext { get; set; }
+    public BattleScreenMode BattleScreenMode { get; set; } = BattleScreenMode.Combat;
 
     public PromptContext Prompt { get; set; } = new PromptContext();
     public GiveContext Give { get; set; } = new GiveContext();
