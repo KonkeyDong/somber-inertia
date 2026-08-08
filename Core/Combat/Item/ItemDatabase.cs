@@ -10,20 +10,7 @@ public static class ItemDatabase
     {
         _items.Clear();
 
-        Register(new ItemData
-        {
-            Name = ItemName.NoItem,
-            Type = ItemType.Consumable,
-            Price = 0,
-            Attack = 0,
-            DistanceRange = new Range(0, 0),
-            AllowedJobs = Job.Any,
-            Cursed = false,
-            EffectType = ItemEffectType.None,
-            EffectValue = 0,
-            SpellName = MagicName.NoSpell
-        });
-
+        RegisterNoItem();
         RegisterUnarmed();
         RegisterSwords();
         RegisterAxes();
@@ -48,6 +35,23 @@ public static class ItemDatabase
     private static void Register(ItemData data)
     {
         _items[data.Name] = data;
+    }
+
+    private static void RegisterNoItem()
+    {
+        Register(new ItemData
+        {
+            Name = ItemName.NoItem,
+            Type = ItemType.Consumable,
+            Price = 0,
+            Attack = 0,
+            DistanceRange = new Range(0, 0),
+            AllowedJobs = Job.Any,
+            Cursed = false,
+            EffectType = ItemEffectType.None,
+            EffectValue = 0,
+            SpellName = MagicName.NoSpell
+        });
     }
 
     private static void RegisterUnarmed()
@@ -145,8 +149,8 @@ public static class ItemDatabase
     private static void RegisterConsumables()
     {
         // Consumables: AllowedJobs = Job.Any (any unit job may Use). Target friendlies in later states.
-        Register(MakeConsumable(ItemName.MedicalHerb, new Range(0, 1), 10, ItemEffectType.Heal, 8));
-        Register(MakeConsumable(ItemName.HealingSeed, new Range(0, 1), 200, ItemEffectType.Heal, 16));
+        Register(MakeConsumable(ItemName.MedicalHerb, new Range(0, 1), 10, ItemEffectType.Heal, 10));
+        Register(MakeConsumable(ItemName.HealingSeed, new Range(0, 1), 200, ItemEffectType.Heal, 20));
         Register(MakeConsumable(ItemName.Antidote, new Range(0, 1), 20, ItemEffectType.RemovePoison, 0));
         Register(MakeConsumable(ItemName.AngelWing, new Range(0, 0), 40, ItemEffectType.Escape, 0));
     }

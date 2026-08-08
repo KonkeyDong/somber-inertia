@@ -1,4 +1,6 @@
 using SomberInertia.Enums;
+using System.Text;
+
 
 namespace SomberInertia.Core.Combat.Item;
 
@@ -15,4 +17,14 @@ public readonly struct ItemSlot
     };
 
     public bool IsEmpty => Name == ItemName.NoItem;
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        
+        sb.AppendLine("Item name: " + Name.GetDisplayName());
+        sb.AppendLine("Item condition: " + Condition.ToString());
+
+        return sb.ToString();
+    }
 }
