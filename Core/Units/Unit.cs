@@ -369,7 +369,7 @@ public class Unit
         sb.AppendLine($"   {GetDisplayName()}:");
         sb.AppendLine($"   HP            = [{HP}]");
         sb.AppendLine($"   MP            = [{MP}]");
-        sb.AppendLine($"   Eq. Weapon    = [{weaponData.Name}] ({weaponSlot.Condition})");
+        sb.AppendLine($"   Eq. Weapon    = [{weaponData.Name}] (Damaged: {weaponSlot.Damaged})");
         sb.AppendLine($"   Offense       = [{GetTotalOffense()}]");
         sb.AppendLine($"   Defense       = [{Defense}]");
         sb.AppendLine($"   Speed         = [{Speed}]");
@@ -440,7 +440,7 @@ public class Unit
         return MagicDatabase.Get(GetHighestMagicLevelInBucket(magicFamily));
     }
 
-    public bool AddItem(ItemName itemName, ItemCondition condition = ItemCondition.Normal, bool autoEquipWeapon = false)
+    public bool AddItem(ItemName itemName, bool damaged = false, bool autoEquipWeapon = false)
     {
         if (itemName == ItemName.Unarmed)
         {
@@ -455,7 +455,7 @@ public class Unit
                 Items[i] = new ItemSlot
                 {
                     Name = itemName,
-                    Condition = condition
+                    Damaged = damaged
                 };
 
                 if (autoEquipWeapon && EquippedWeaponIndex < 0)
@@ -602,7 +602,7 @@ public class Unit
             return false;
         }
 
-        if (!recipient.AddItem(itemSlot.Name, itemSlot.Condition, autoEquipWeapon: false))
+        if (!recipient.AddItem(itemSlot.Name, itemSlot.Damaged, autoEquipWeapon: false))
         {
             Logger.Error("GiveItemTo(): failed to add item to recipient.");
             return false;
@@ -696,7 +696,7 @@ public class Unit
             return new ItemSlot
             {
                 Name = ItemName.Unarmed,
-                Condition = ItemCondition.Normal
+                Damaged = false
             };
         }
 
