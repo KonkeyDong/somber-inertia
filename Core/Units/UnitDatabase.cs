@@ -43,6 +43,21 @@ public static class UnitDatabase
             DefaultJob = Job.Mage
         });
 
+        Register(new UnitData
+        {
+            Name = UnitName.Tao,
+                        MovementType = MovementType.Warrior,
+            Movement = 5,
+            BaseHP = 10,
+            BaseMP = 12,
+            BaseAttack = 3,
+            BaseDefense = 4,
+            BaseSpeed = 6,
+            Friendly = true,
+            Level = 1,
+            DefaultJob = Job.Mage
+        });
+
         // ─────────────────────────────────────────
         // Monsters used in current test setup
         // (no job; pre-set level; cannot equip / promote / gain exp)
