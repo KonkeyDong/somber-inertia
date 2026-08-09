@@ -72,7 +72,7 @@ class Program
         max.LearnSpell(MagicName.Heal4);
         max.LearnSpell(MagicName.Bolt3);
         max.AddItem(ItemName.MedicalHerb);
-        max.AddItem(ItemName.Antidote);
+        max.AddItem(ItemName.ShowerOfCure); // party-wide full heal smoke
 
         Logger.Info(max.GetEquippedWeaponName().ToString());
 

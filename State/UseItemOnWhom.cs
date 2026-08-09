@@ -56,6 +56,13 @@ public class UseItemOnWhom : IGameState
         if (IsSupportedConsumable(_itemData))
         {
             _mode = UseMode.Consumable;
+
+            if (_itemData.EffectType == ItemEffectType.HealAllFull)
+            {
+                EnterHealAllFull();
+                return;
+            }
+
             EnterConsumable();
             return;
         }
@@ -85,7 +92,34 @@ public class UseItemOnWhom : IGameState
 
     private static bool IsSupportedConsumable(ItemData data) =>
         data.Type == ItemType.Consumable &&
-        (data.EffectType == ItemEffectType.Heal || data.EffectType == ItemEffectType.RemovePoison);
+        (data.EffectType == ItemEffectType.Heal
+         || data.EffectType == ItemEffectType.RemovePoison
+         || data.EffectType == ItemEffectType.HealAllFull);
+
+    /// <summary>
+    /// Party-wide full heal: all living friendlies (incl. caster). No target pick — go to battle.
+    /// </summary>
+    private void EnterHealAllFull()
+    {
+        _targets = _game.Units
+            .Where(unit => unit.Friendly == _currentUnit.Friendly && !unit.IsDead())
+            .OrderBy(unit => ReferenceEquals(unit, _currentUnit) ? 0 : 1)
+            .ToList();
+
+        if (_targets.Count == 0)
+        {
+            GameStateManager.ShowMessageNotice(
+                GameConstants.MessageNotice.NoTarget,
+                GameStateType.UseWhichItem);
+            return;
+        }
+
+        Logger.Info(
+            $"UseItemOnWhom HealAllFull: {_targets.Count} friendly target(s) " +
+            $"(caster {_currentUnit.GetDisplayName()}).");
+
+        ConfirmConsumableWithTargets(_targets);
+    }
 
     private void EnterConsumable()
     {
@@ -236,8 +270,11 @@ public class UseItemOnWhom : IGameState
     private void ConfirmConsumable()
     {
         var target = _targets[_currentIndex];
-        var targets = new List<Unit> { target };
+        ConfirmConsumableWithTargets(new List<Unit> { target });
+    }
 
+    private void ConfirmConsumableWithTargets(List<Unit> targets)
+    {
         _game.ItemContext = new ItemContext(_currentUnit, targets, _game.Grid, _itemSlotIndex);
         _game.ItemContext.LoadBattleSprites();
         _game.BattleScreenMode = BattleScreenMode.ItemConsumable;

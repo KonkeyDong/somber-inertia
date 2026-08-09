@@ -39,9 +39,13 @@ public static class ItemDatabase
 
         if (data.Type == ItemType.Consumable)
         {
-            ExecuteConsumable(data, context);
-            // Consumables are always removed after use (100% "hit"; heal uses variance separately).
-            context.Caster.RemoveItemAtIndex(context.ItemSlotIndex);
+            foreach (var target in context.Targets)
+            {
+                ApplyConsumableToTarget(data, context.Caster, target);
+            }
+
+            // Consumables are always removed after use.
+            ConsumeItem(context.Caster, context.ItemSlotIndex);
             return;
         }
 
@@ -52,6 +56,70 @@ public static class ItemDatabase
             Logger.Warning(
                 "ItemDatabase.UseItem: spell item should be cast via UseItemOnWhom " +
                 "(MagicContext + Cast(fromItem: true)).");
+        }
+    }
+
+    /// <summary>Remove a consumable from inventory after use (battle may apply effects earlier per unit).</summary>
+    public static void ConsumeItem(Unit caster, int itemSlotIndex)
+    {
+        if (caster == null)
+        {
+            Logger.Error("ConsumeItem: caster is null.");
+            return;
+        }
+
+        caster.RemoveItemAtIndex(itemSlotIndex);
+    }
+
+    /// <summary>
+    /// Apply one consumable hit to a single target (heal / antidote / full heal).
+    /// Used by battle presentation so effects land while that unit is on screen.
+    /// </summary>
+    public static void ApplyConsumableToTarget(ItemData data, Unit caster, Unit target)
+    {
+        if (caster == null || target == null)
+        {
+            return;
+        }
+
+        if (caster.Friendly != target.Friendly)
+        {
+            return;
+        }
+
+        switch (data.EffectType)
+        {
+            case ItemEffectType.Heal:
+            {
+                var rolled = CombatSystem.ApplyAmountVariance(data.EffectValue);
+                target.Heal(rolled);
+                break;
+            }
+
+            case ItemEffectType.HealAllFull:
+                // Full restore: large EffectValue; Unit.Heal clamps to missing HP (no variance).
+                target.Heal(data.EffectValue);
+                break;
+
+            case ItemEffectType.RemovePoison:
+                if (target.HasStatus(StatusEffectType.Poison))
+                {
+                    target.RemoveStatus(StatusEffectType.Poison);
+                    Logger.Info($"{target.GetDisplayName()} was cured of poison by an item.");
+                }
+                else
+                {
+                    Logger.Info($"{target.GetDisplayName()} was not poisoned; antidote had no effect.");
+                }
+                break;
+
+            case ItemEffectType.Escape:
+                Logger.Warning("ItemEffectType.Escape not implemented.");
+                break;
+
+            default:
+                Logger.Warning($"No consumable effect for [{data.Name}] ({data.EffectType}).");
+                break;
         }
     }
 
@@ -91,52 +159,6 @@ public static class ItemDatabase
         }
     }
 
-    private static void ExecuteConsumable(ItemData data, ItemContext context)
-    {
-        switch (data.EffectType)
-        {
-            case ItemEffectType.Heal:
-                foreach (var target in context.Targets)
-                {
-                    if (context.Caster.Friendly != target.Friendly)
-                    {
-                        continue;
-                    }
-
-                    var rolled = CombatSystem.ApplyAmountVariance(data.EffectValue);
-                    target.Heal(rolled);
-                }
-                break;
-
-            case ItemEffectType.RemovePoison:
-                foreach (var target in context.Targets)
-                {
-                    if (context.Caster.Friendly != target.Friendly)
-                    {
-                        continue;
-                    }
-
-                    if (target.HasStatus(StatusEffectType.Poison))
-                    {
-                        target.RemoveStatus(StatusEffectType.Poison);
-                        Logger.Info($"{target.GetDisplayName()} was cured of poison by an item.");
-                    }
-                    else
-                    {
-                        Logger.Info($"{target.GetDisplayName()} was not poisoned; antidote had no effect.");
-                    }
-                }
-                break;
-
-            case ItemEffectType.Escape:
-                Logger.Warning("ItemEffectType.Escape not implemented.");
-                break;
-
-            default:
-                Logger.Warning($"No consumable effect for [{data.Name}] ({data.EffectType}).");
-                break;
-        }
-    }
 
     private static void Register(ItemData data)
     {
@@ -259,6 +281,7 @@ public static class ItemDatabase
         Register(MakeConsumable(ItemName.HealingSeed, new Range(0, 1), 200, ItemEffectType.Heal, 20));
         Register(MakeConsumable(ItemName.Antidote, new Range(0, 1), 20, ItemEffectType.RemovePoison, 0));
         Register(MakeConsumable(ItemName.AngelWing, new Range(0, 0), 40, ItemEffectType.Escape, 0));
+        Register(MakeConsumable(ItemName.ShowerOfCure, new Range(0, 0), 0, ItemEffectType.HealAllFull, 999));
     }
 
     private static ItemData MakeWeapon(
