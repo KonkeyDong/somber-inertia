@@ -117,6 +117,8 @@ stateDiagram-v2
 
 **Consumables (Heal / RemovePoison):** battle presentation is **force-only** (no enemy). Self: apply + hold. Ally: slide caster out / target in / apply / restore caster. Always remove after use. Heal uses 75–125% variance and is clamped to missing HP.
 
+**HealAllFull (Shower of Cure):** all living friendlies (incl. caster) in `ItemContext.Targets`; skip target pick; apply full heal once, then cycle battle sprites through each friendly and restore caster.
+
 **Spell items** (`SpellName` set; job must match `AllowedJobs` like equip): cast range = **spell** `DistanceRange` (not weapon range). Targets like magic (offensive → enemies). `MagicDatabase.Cast(..., fromItem: true)` (no MP) → durability (1/8 → Damaged; already Damaged → remove) → `AnimateUnitDeaths`.
 
 | At | Cancel / edge case |

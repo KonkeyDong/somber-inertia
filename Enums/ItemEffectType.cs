@@ -5,5 +5,6 @@ public enum ItemEffectType
     None,
     Heal,
     RemovePoison,
-    Escape
+    Escape,
+    HealAllFull
 }

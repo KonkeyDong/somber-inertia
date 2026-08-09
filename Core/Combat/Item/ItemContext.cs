@@ -12,16 +12,18 @@ public class ItemContext
     public Grid Grid { get; }
     public int ItemSlotIndex { get; }
 
+    /// <summary>Presentation order: typically caster first, then other friendlies.</summary>
+    public List<(Unit Unit, BattleUnitSpriteSet Sprites)> PresentationUnits { get; private set; } = new();
+
     public BattleUnitSpriteSet CasterSprites { get; private set; } = new();
-    public BattleUnitSpriteSet TargetSprites { get; private set; } = new();
 
     public Unit Target => Targets.Count > 0 ? Targets[0] : Caster;
 
     public bool IsSelfTarget => Targets.Count == 1 && ReferenceEquals(Targets[0], Caster);
 
-    public Vector2 CasterSpritePosition => GameConstants.Battle.GetSpritePosition(Caster);
+    public bool IsPartyWide => Targets.Count > 1;
 
-    public Vector2 TargetSpritePosition => GameConstants.Battle.GetSpritePosition(Target);
+    public Vector2 CasterSpritePosition => GameConstants.Battle.GetSpritePosition(Caster);
 
     public ItemContext(Unit caster, List<Unit> targets, Grid grid, int itemSlotIndex)
     {
@@ -31,38 +33,54 @@ public class ItemContext
         ItemSlotIndex = itemSlotIndex;
     }
 
-    /// <summary>Load force-side battle idle sprites for caster and target (may be the same unit).</summary>
+    /// <summary>
+    /// Load force-side battle idle sprites for every target (and ensure caster is present).
+    /// </summary>
     public void LoadBattleSprites()
     {
-        CasterSprites = BattleUnitSpriteManager.Get(Caster);
-        CasterSprites.BasePosition = CasterSpritePosition;
+        PresentationUnits = new List<(Unit, BattleUnitSpriteSet)>();
 
-        if (IsSelfTarget)
+        foreach (var unit in Targets)
         {
-            TargetSprites = CasterSprites;
+            var set = BattleUnitSpriteManager.Get(unit);
+            set.BasePosition = GameConstants.Battle.GetSpritePosition(unit);
+            PresentationUnits.Add((unit, set));
+        }
+
+        // EnterBattleScreen / exit draw the caster set explicitly.
+        var casterEntry = PresentationUnits.FirstOrDefault(p => ReferenceEquals(p.Unit, Caster));
+        if (casterEntry.Unit != null)
+        {
+            CasterSprites = casterEntry.Sprites;
         }
         else
         {
-            TargetSprites = BattleUnitSpriteManager.Get(Target);
-            TargetSprites.BasePosition = TargetSpritePosition;
+            CasterSprites = BattleUnitSpriteManager.Get(Caster);
+            CasterSprites.BasePosition = CasterSpritePosition;
         }
 
         Logger.Debug(
-            $"ItemContext sprites loaded. Self={IsSelfTarget}. " +
-            $"Caster pos={CasterSpritePosition}, Target pos={TargetSpritePosition}");
+            $"ItemContext sprites loaded. Targets={Targets.Count}, PartyWide={IsPartyWide}, " +
+            $"Caster pos={CasterSpritePosition}");
     }
 
     public void Reset()
     {
-        CasterSprites.Reset();
-        if (!IsSelfTarget)
+        var reset = new HashSet<BattleUnitSpriteSet>();
+        foreach (var (_, sprites) in PresentationUnits)
         {
-            TargetSprites.Reset();
+            if (reset.Add(sprites))
+            {
+                sprites.Reset();
+            }
         }
-        else
+
+        if (reset.Add(CasterSprites))
         {
-            // Shared reference already reset above.
+            CasterSprites.Reset();
         }
+
+        PresentationUnits.Clear();
     }
 
     public override string ToString()
