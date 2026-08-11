@@ -79,9 +79,10 @@ class Program
         var anri = new Unit(UnitName.Anri);
         anri.Attack = 15;
         anri.HP.Current = 7;
-        anri.ApplyStatus(StatusEffectType.Poison);
+        // anri.ApplyStatus(StatusEffectType.Poison);
         // Unarmed equip is default (index -1); do not put Unarmed in inventory.
-        anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: true);
+        anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: false);
+        anri.AddItem(ItemName.PowerStaff, autoEquipWeapon: true);
         anri.AddItem(ItemName.MedicalHerb);
 
         var tao = new Unit(UnitName.Tao);
@@ -100,8 +101,8 @@ class Program
         dwarf.HP.Current = 1;
 
         // game.AddUnit(max, 0, 0);
-        // game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
-        game.AddUnit(tao, 1, 1);
+        game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
+        // game.AddUnit(tao, 1, 1);
         game.AddUnit(dwarf, 3, 1);
         // game.AddUnit(runeKnight, 4, 1);
         // game.AddUnit(goblin1, 3, 2);
