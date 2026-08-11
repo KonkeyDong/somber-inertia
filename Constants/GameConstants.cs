@@ -199,6 +199,7 @@ public static class GameConstants
             // Anri
             { $"{UnitName.Anri.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
             { $"{UnitName.Anri.GetBaseName()}_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
+            { $"{UnitName.Anri.GetBaseName()}_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
 
             // Tao
             { $"{UnitName.Tao.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
