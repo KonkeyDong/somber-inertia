@@ -203,6 +203,7 @@ public static class GameConstants
             // Tao
             { $"{UnitName.Tao.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
             { $"{UnitName.Tao.GetBaseName()}_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
+            { $"{UnitName.Tao.GetBaseName()}_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
 
             // Monsters
             { $"{UnitName.Goblin.GetBaseName()}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
