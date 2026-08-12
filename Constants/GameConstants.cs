@@ -180,6 +180,9 @@ public static class GameConstants
 
     public static class Battle
     {
+        private static readonly string promoted = Paths.Promoted;
+        private static readonly string unpromoted = Paths.Unpromoted;
+
         public static class Positions
         {
             public static readonly Vector2 Background = new Vector2(0, 64);
@@ -193,24 +196,25 @@ public static class GameConstants
         {
             // Force Members
             // Max
-            { $"{UnitName.Max.GetBaseName()}_unpromoted_{ItemName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
-            { $"{UnitName.Max.GetBaseName()}_unpromoted_{ItemName.Unarmed.GetBaseName()}", new Vector2(145, 90) },
-            { $"{UnitName.Max.GetBaseName()}_promoted_{ItemName.LongSword.GetBaseName()}", new Vector2(105, 80) },
+            { $"{UnitName.Max.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(145, 90) },
+            { $"{UnitName.Max.GetBaseName()}_{unpromoted}_{ItemName.ShortSword.GetBaseName()}", new Vector2(165, 100) },
+            { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(128, 80) },
+            { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.DoomBlade.GetBaseName()}", new Vector2(105, 80) },
 
             // Anri
-            { $"{UnitName.Anri.GetBaseName()}_unpromoted_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
-            { $"{UnitName.Anri.GetBaseName()}_unpromoted_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
-            { $"{UnitName.Anri.GetBaseName()}_unpromoted_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
+            { $"{UnitName.Anri.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
+            { $"{UnitName.Anri.GetBaseName()}_{unpromoted}_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
+            { $"{UnitName.Anri.GetBaseName()}_{unpromoted}_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
 
             // Tao
-            { $"{UnitName.Tao.GetBaseName()}_unpromoted_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
-            { $"{UnitName.Tao.GetBaseName()}_unpromoted_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
-            { $"{UnitName.Tao.GetBaseName()}_unpromoted_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
+            { $"{UnitName.Tao.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
+            { $"{UnitName.Tao.GetBaseName()}_{unpromoted}_{ItemName.WoodenStaff.GetBaseName()}", new Vector2(144, 72) },
+            { $"{UnitName.Tao.GetBaseName()}_{unpromoted}_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
 
             // Monsters
-            { $"{UnitName.Goblin.GetBaseName()}_unpromoted_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
-            { $"{UnitName.DarkDwarf.GetBaseName()}_unpromoted_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
-            { $"{UnitName.RuneKnight.GetBaseName()}_unpromoted_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
+            { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
+            { $"{UnitName.DarkDwarf.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
+            { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
 
         public static Vector2 GetSpritePosition(Unit unit)
@@ -229,7 +233,7 @@ public static class GameConstants
         public static string BuildKey(Unit unit)
         {
             var weaponName = unit.GetEquippedWeaponName();
-            var promoted = unit.Promoted ? "promoted" : "unpromoted";
+            var promoted = unit.Promoted ? Paths.Promoted : Paths.Unpromoted;
             Logger.Debug(unit.Name.GetBaseName());
             Logger.Debug(weaponName.ToString());
 

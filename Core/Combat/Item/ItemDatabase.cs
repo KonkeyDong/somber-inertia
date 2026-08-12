@@ -206,7 +206,7 @@ public static class ItemDatabase
 
         Register(MakeWeapon(ItemName.ShortSword, 5, type, range, Job.Swordsman | Job.Warrior | Job.Birdman, 100));
         Register(MakeWeapon(ItemName.MiddleSword, 8, type, range, Job.Swordsman | Job.Warrior | Job.Birdman, 250));
-        Register(MakeWeapon(ItemName.LongSword, 12, type, range, Job.Warrior | Job.Swordsman, 750));
+        Register(MakeWeapon(ItemName.LongSword, 12, type, range, Job.Swordsman | Job.Warrior, 750));
         Register(MakeWeapon(ItemName.SteelSword, 18, type, range, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 2500));
         Register(MakeWeapon(ItemName.BroadSword, 20, type, range, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 4800));
         Register(MakeWeapon(ItemName.DoomBlade, 25, type, range, Job.Hero | Job.Ninja | Job.SkyWarrior | Job.Samurai, 0));
