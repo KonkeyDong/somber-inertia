@@ -412,6 +412,14 @@ public class Unit
         return sb.ToString();
     }
 
+    public void Promote()
+    {
+        Logger.Warning("Promotion still needs to change job class! Expect crashes until implemented.");
+        Promoted = true;
+
+        LoadWalkAnimations();
+    }
+
     public void LearnSpell(MagicName spellName)
     {
         var data = MagicDatabase.Get(spellName);

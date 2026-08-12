@@ -53,13 +53,14 @@ class Program
         var game = new Game(new Grid(11, 10));
 
         var max = new Unit(UnitName.Max);
-        max.Promoted = true;
+        max.Job = Job.Hero;
+        max.Promote();
         max.Attack = 15;
         max.HP.Current = 7;
         max.MP.Max = 99;
         max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
-        max.AddItem(ItemName.LongSword, autoEquipWeapon: true);
+        max.AddItem(ItemName.DoomBlade, autoEquipWeapon: true);
         // Smoke: spell-item Use (Bolt2). Max is Swordsman — temporarily allow equip/use.
         max.Job = Job.Hero;
         max.AddItem(ItemName.SwordOfLight);
