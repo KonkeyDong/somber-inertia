@@ -53,12 +53,13 @@ class Program
         var game = new Game(new Grid(11, 10));
 
         var max = new Unit(UnitName.Max);
+        max.Promoted = true;
         max.Attack = 15;
         max.HP.Current = 7;
         max.MP.Max = 99;
         max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
-        max.AddItem(ItemName.ShortSword, autoEquipWeapon: true);
+        max.AddItem(ItemName.LongSword, autoEquipWeapon: true);
         // Smoke: spell-item Use (Bolt2). Max is Swordsman — temporarily allow equip/use.
         max.Job = Job.Hero;
         max.AddItem(ItemName.SwordOfLight);
@@ -100,8 +101,8 @@ class Program
         var dwarf = new Unit(UnitName.DarkDwarf);
         dwarf.HP.Current = 1;
 
-        // game.AddUnit(max, 0, 0);
-        game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
+        game.AddUnit(max, 0, 0);
+        // game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
         // game.AddUnit(tao, 1, 1);
         game.AddUnit(dwarf, 3, 1);
         // game.AddUnit(runeKnight, 4, 1);
