@@ -60,7 +60,7 @@ class Program
         max.MP.Max = 99;
         max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
-        max.AddItem(ItemName.BroadSword, autoEquipWeapon: true);
+        max.AddItem(ItemName.SwordOfDarkness, autoEquipWeapon: true);
         // Smoke: spell-item Use (Bolt2). Max is Swordsman — temporarily allow equip/use.
         max.Job = Job.Hero;
         max.AddItem(ItemName.SwordOfLight);
@@ -106,8 +106,8 @@ class Program
         // game.AddUnit(anri, 1, 0); // adjacent to Max for give/trade smoke tests
         // game.AddUnit(tao, 1, 1);
         game.AddUnit(dwarf, 3, 1);
-        // game.AddUnit(runeKnight, 4, 1);
-        // game.AddUnit(goblin1, 3, 2);
+        game.AddUnit(runeKnight, 4, 1);
+        game.AddUnit(goblin1, 3, 2);
 
         // max.ApplyStatus(StatusEffectType.Poison);
 
