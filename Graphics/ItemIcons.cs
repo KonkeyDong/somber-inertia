@@ -24,6 +24,5 @@ public static class ItemIcons
 
     public static void Reset() => _icons.Reset();
 
-    /// Clears name-based selection so no icon blinks via the legacy key path.
     public static void ClearSelection() => _icons.SetSelected(ItemName.NoItem);
 }
