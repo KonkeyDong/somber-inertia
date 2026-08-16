@@ -202,7 +202,9 @@ public static class GameConstants
             { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.SteelSword.GetBaseName()}", new Vector2(105, 80) },
             { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.BroadSword.GetBaseName()}", new Vector2(105, 80) },
             { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.DoomBlade.GetBaseName()}", new Vector2(105, 80) },
+            { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.SwordOfLight.GetBaseName()}", new Vector2(103, 78) },
             { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.SwordOfDarkness.GetBaseName()}", new Vector2(101, 78) },
+            { $"{UnitName.Max.GetBaseName()}_{promoted}_{ItemName.ChaosBreaker.GetBaseName()}", new Vector2(101, 78) },
 
             // Anri
             { $"{UnitName.Anri.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(150, 85) },
