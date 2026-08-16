@@ -58,7 +58,7 @@ public static class GameConstants
         public const string Foregrounds = "Assets/Foregrounds";
 
         public const string Sprites = "Assets/Sprites";
-        public const string Characters = "Assets/Sprites/Characters";
+        public const string ForceMembers = "Assets/Sprites/ForceMembers";
         public const string Monsters = "Assets/Sprites/Monsters";
         public const string Shared = "Assets/Sprites/Shared";
 

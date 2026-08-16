@@ -193,7 +193,7 @@ public class BattleUnitSpriteManager
             var weapon = unit.GetEquippedWeaponData();
 
             return Path.Combine(
-                GameConstants.Paths.Characters,
+                GameConstants.Paths.ForceMembers,
                 unit.Name.GetBaseName(),
                 GameConstants.Paths.PromotionFolder(unit.Promoted),
                 GameConstants.Paths.Battle,
