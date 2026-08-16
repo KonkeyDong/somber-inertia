@@ -43,7 +43,7 @@ public class Unit
     private string AssetRoot =>
         Friendly
             ? Path.Combine(
-                GameConstants.Paths.Characters,
+                GameConstants.Paths.ForceMembers,
                 Name.GetBaseName(),
                 GameConstants.Paths.PromotionFolder(Promoted))
             : Path.Combine(
