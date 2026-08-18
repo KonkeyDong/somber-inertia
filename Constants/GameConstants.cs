@@ -41,6 +41,8 @@ public static class GameConstants
         public const string IdlePng = "Idle.png";
         public const string AttackJson = "Attack.json";
         public const string AttackPng = "Attack.png";
+        public const string EyesOpenPng = "EyesOpen.png";
+        public const string EyesClosed = "EyesClosed.png";
         public const string GrassTile = "grass_tile.png";
         public const string ForestTile = "forest_tile.png";
         public const string PngExtension = ".png";
@@ -76,6 +78,7 @@ public static class GameConstants
         public const string Battle = "Battle";
         public const string Promoted = "Promoted";
         public const string Unpromoted = "Unpromoted";
+        public const string Portrait = "Portrait";
 
         /// <summary>Folder segment under a force member: Promoted or Unpromoted.</summary>
         public static string PromotionFolder(bool promoted) =>
