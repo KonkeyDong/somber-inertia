@@ -220,8 +220,9 @@ public static class GameConstants
             { $"{UnitName.Tao.GetBaseName()}_{unpromoted}_{ItemName.PowerStaff.GetBaseName()}", new Vector2(134, 65) },
 
             // Monsters
-            { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
+            { $"{UnitName.ArmedSkeleton.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(30, 65)},
             { $"{UnitName.DarkDwarf.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
+            { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
 
