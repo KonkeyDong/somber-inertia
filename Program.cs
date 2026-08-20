@@ -97,7 +97,7 @@ class Program
         tao.AddItem(ItemName.WoodenStaff, autoEquipWeapon: false);
         tao.AddItem(ItemName.PowerStaff, autoEquipWeapon: false);
 
-        var goblin1 = new Unit(UnitName.ArmedSkeleton);
+        var goblin1 = new Unit(UnitName.Artillery);
         goblin1.Defense = 5;
         goblin1.HP.Current = 1;
 
@@ -107,7 +107,7 @@ class Program
         var dwarf = new Unit(UnitName.DarkDwarf);
         dwarf.HP.Current = 1;
 
-        game.AddUnit(max, 0, 0);
+        game.AddUnit(max, 3, 1);
         // game.AddUnit(anri, 1, 0);
         // game.AddUnit(tao, 1, 1);
         // game.AddUnit(dwarf, 3, 1);

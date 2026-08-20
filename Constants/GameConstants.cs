@@ -45,6 +45,7 @@ public static class GameConstants
         public const string EyesClosed = "EyesClosed.png";
         public const string GrassTile = "grass_tile.png";
         public const string ForestTile = "forest_tile.png";
+        public const string Effect = "effect";
         public const string PngExtension = ".png";
         public const string JsonExtension = ".json";
     }
@@ -63,12 +64,12 @@ public static class GameConstants
         public const string ForceMembers = "Assets/Sprites/ForceMembers";
         public const string Monsters = "Assets/Sprites/Monsters";
         public const string Shared = "Assets/Sprites/Shared";
+        public const string Effects = "Effects";
 
         public const string CommandIcons = "Assets/Sprites/Shared/CommandIcons";
         public const string ItemIcons = "Assets/Sprites/Shared/ItemIcons";
         public const string MagicIcons = "Assets/Sprites/Shared/MagicIcons";
 
-        public const string BattleFieldDeath = "Assets/Sprites/Shared/BattleFieldDeath";
 
         public const string GrassTile = "Assets/grass_tile.png";
         public const string ForestTile = "Assets/forest_tile.png";
@@ -221,6 +222,7 @@ public static class GameConstants
 
             // Monsters
             { $"{UnitName.ArmedSkeleton.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(30, 65)},
+            { $"{UnitName.Artillery.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 70)},
             { $"{UnitName.DarkDwarf.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
             { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
