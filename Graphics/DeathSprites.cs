@@ -1,3 +1,5 @@
+using SomberInertia.Enums;
+
 namespace SomberInertia.Graphics;
 
 public static class DeathSprites
@@ -12,8 +14,9 @@ public static class DeathSprites
             return;
         }
 
-        var pngPath = GameConstants.Paths.BattleFieldDeath + GameConstants.Files.PngExtension;
-        var jsonPath = GameConstants.Paths.BattleFieldDeath + GameConstants.Files.JsonExtension;
+        var basePath = Path.Combine(GameConstants.Paths.Shared, GameConstants.Paths.Effects, Effects.BattleFieldDeath.GetBaseName(), GameConstants.Files.Effect);
+        var pngPath = basePath + GameConstants.Files.PngExtension;
+        var jsonPath = basePath + GameConstants.Files.JsonExtension;
 
         foreach (var frame in SpriteManager.ExtractFrameData(jsonPath))
         {
