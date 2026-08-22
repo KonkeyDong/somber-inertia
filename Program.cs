@@ -40,18 +40,33 @@ class Program
 
     static void RunGame()
     {
-        var scale = GameConstants.Window.Scale;
-        var width = (int)(GameConstants.Window.Width * scale);
-        var height = (int)(GameConstants.Window.Height * scale);
-
-        Raylib.InitWindow(width, height, "Somber Inertia");
+        Raylib.InitWindow(
+            (int)(GameConstants.Window.Width * GameConstants.Window.Scale), 
+            (int)(GameConstants.Window.Height * GameConstants.Window.Scale), 
+            "Somber Inertia"
+        );
         Raylib.SetTargetFPS(60);
 
-        UnitDatabase.Initialize();
-        MagicDatabase.Initialize();
-        ItemDatabase.Initialize();
-        var game = new Game(new Grid(11, 10));
+        InitializeDatabases();
+        LoadGraphicData();
 
+        var game = new Game(new Grid(11, 10));
+        AddTestUnits(game);
+        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
+
+        while (!Raylib.WindowShouldClose())
+        {
+            GameStateManager.HandleInput();
+            GameStateManager.Update();
+            GameStateManager.Draw();
+        }
+
+        SpriteManager.UnloadAll();
+        Raylib.CloseWindow();
+    }
+
+    private static void AddTestUnits(Game game)
+    {
         var max = new Unit(UnitName.Max);
         max.Job = Job.Hero;
         max.Promote();
@@ -113,10 +128,17 @@ class Program
         // game.AddUnit(dwarf, 3, 1);
         // game.AddUnit(runeKnight, 4, 1);
         game.AddUnit(goblin1, 3, 2);
+    }
 
-        // max.ApplyStatus(StatusEffectType.Poison);
+    private static  void InitializeDatabases()
+    {
+        UnitDatabase.Initialize();
+        MagicDatabase.Initialize();
+        ItemDatabase.Initialize();
+    }
 
-        GameStateManager.InitializeGameState(GameStateType.CalculateUnitMovementRange, game);
+    private static void LoadGraphicData()
+    {
         CommandIcons.Load();
         MagicIcons.Load();
         ItemIcons.Load();
@@ -124,14 +146,5 @@ class Program
         BattleBackgrounds.Load();
         BattleForegrounds.Load();
 
-        while (!Raylib.WindowShouldClose())
-        {
-            GameStateManager.HandleInput();
-            GameStateManager.Update();
-            GameStateManager.Draw();
-        }
-
-        SpriteManager.UnloadAll();
-        Raylib.CloseWindow();
     }
 }
