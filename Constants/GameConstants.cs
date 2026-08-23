@@ -1,6 +1,7 @@
 using SomberInertia.Core.Units;
 using SomberInertia.Enums;
 
+using System.IO;
 using System.Numerics;
 using Raylib_cs;
 
@@ -51,39 +52,60 @@ public static class GameConstants
     }
 
     /// <summary>
-    /// Asset roots and path segments. Full roots for fixed folders; segments for dynamic Path.Combine.
+    /// Asset roots and path segments. Folder names live in <see cref="Folders"/>;
+    /// full roots are composed with <see cref="Path.Combine"/>.
     /// </summary>
     public static class Paths
     {
-        public const string Root = "Assets";
+        /// <summary>Directory name segments only (no slashes).</summary>
+        public static class Folders
+        {
+            public const string Assets = "Assets";
+            public const string Backgrounds = "Backgrounds";
+            public const string Foregrounds = "Foregrounds";
+            public const string Sprites = "Sprites";
+            public const string ForceMembers = "ForceMembers";
+            public const string Monsters = "Monsters";
+            public const string Shared = "Shared";
+            public const string CommandIcons = "CommandIcons";
+            public const string ItemIcons = "ItemIcons";
+            public const string MagicIcons = "MagicIcons";
+            public const string Effects = "Effects";
+            public const string Overworld = "Overworld";
+            public const string Battle = "Battle";
+            public const string Promoted = "Promoted";
+            public const string Unpromoted = "Unpromoted";
+            public const string Portrait = "Portrait";
+        }
 
-        public const string Backgrounds = "Assets/Backgrounds";
-        public const string Foregrounds = "Assets/Foregrounds";
+        // Segment aliases (dynamic Path.Combine args at call sites)
+        public const string Overworld = Folders.Overworld;
+        public const string Battle = Folders.Battle;
+        public const string Promoted = Folders.Promoted;
+        public const string Unpromoted = Folders.Unpromoted;
+        public const string Portrait = Folders.Portrait;
+        public const string Effects = Folders.Effects;
 
-        public const string Sprites = "Assets/Sprites";
-        public const string ForceMembers = "Assets/Sprites/ForceMembers";
-        public const string Monsters = "Assets/Sprites/Monsters";
-        public const string Shared = "Assets/Sprites/Shared";
-        public const string Effects = "Effects";
+        // Composed roots
+        public static readonly string Backgrounds = Path.Combine(Folders.Assets, Folders.Backgrounds);
+        public static readonly string Foregrounds = Path.Combine(Folders.Assets, Folders.Foregrounds);
 
-        public const string CommandIcons = "Assets/Sprites/Shared/CommandIcons";
-        public const string ItemIcons = "Assets/Sprites/Shared/ItemIcons";
-        public const string MagicIcons = "Assets/Sprites/Shared/MagicIcons";
+        // Sprite Folder Paths
+        public static readonly string Sprites = Path.Combine(Folders.Assets, Folders.Sprites);
+        public static readonly string ForceMembers = Path.Combine(Sprites, Folders.ForceMembers);
+        public static readonly string Monsters = Path.Combine(Sprites, Folders.Monsters);
+        public static readonly string Shared = Path.Combine(Sprites, Folders.Shared);
 
+        // Command, Magic, and Item Icon paths
+        public static readonly string CommandIcons = Path.Combine(Shared, Folders.CommandIcons);
+        public static readonly string ItemIcons = Path.Combine(Shared, Folders.ItemIcons);
+        public static readonly string MagicIcons = Path.Combine(Shared, Folders.MagicIcons);
 
-        public const string GrassTile = "Assets/grass_tile.png";
-        public const string ForestTile = "Assets/forest_tile.png";
-
-        // Folder name segments (dynamic paths)
-        public const string Overworld = "Overworld";
-        public const string Battle = "Battle";
-        public const string Promoted = "Promoted";
-        public const string Unpromoted = "Unpromoted";
-        public const string Portrait = "Portrait";
+        public static readonly string GrassTile = Path.Combine(Folders.Assets, Files.GrassTile);
+        public static readonly string ForestTile = Path.Combine(Folders.Assets, Files.ForestTile);
 
         /// <summary>Folder segment under a force member: Promoted or Unpromoted.</summary>
-        public static string PromotionFolder(bool promoted) =>
-            promoted ? Promoted : Unpromoted;
+        public static string PromotionFolder(bool promoted) => promoted ? Promoted : Unpromoted;
     }
 
     public static class Animations
