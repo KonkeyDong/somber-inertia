@@ -81,9 +81,12 @@ public class BattleUnitSpriteSet
         if (BattleSequence == null || BattleSequence.Count == 0)
         {
             Logger.Error("No battle sequence frames detected.");
+            return null!;
         }
 
-        return BattleSequence[frameIndex % BattleSequence.Count];
+        // One-shot attack/dissolve timelines must not wrap (wrapping replays hit-jitter after dissolve).
+        var index = Math.Clamp(frameIndex, 0, BattleSequence.Count - 1);
+        return BattleSequence[index];
     }
 
     public void BuildBattleSequence(Sprite sprite, int numberOfCopies, bool invert = false)
@@ -107,6 +110,21 @@ public class BattleUnitSpriteSet
         }
 
         Logger.Debug("BattleSequnce count: " + BattleSequence.Count);
+    }
+
+    /// <summary>Repeat the last sequence frame until <paramref name="length"/> (keeps dissolve clear / idle held).</summary>
+    public void PadBattleSequenceToLength(int length)
+    {
+        if (BattleSequence.Count == 0 || BattleSequence.Count >= length)
+        {
+            return;
+        }
+
+        var last = BattleSequence[^1];
+        while (BattleSequence.Count < length)
+        {
+            BattleSequence.Add(last);
+        }
     }
 
     private void UnloadDynamicTexture()

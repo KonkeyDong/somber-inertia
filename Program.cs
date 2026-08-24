@@ -71,7 +71,7 @@ class Program
         max.Job = Job.Hero;
         max.Promote();
         max.Attack = 15;
-        max.HP.Current = 7;
+        max.HP.Current = 1;
         max.MP.Max = 99;
         max.MP.Current = 99;
         // max.EquipWeapon(WeaponManager.Create(ItemName.ShortSword));
@@ -97,8 +97,8 @@ class Program
         var anri = new Unit(UnitName.Anri);
         anri.Attack = 15;
         anri.HP.Current = 7;
-        anri.Promote();
-        anri.Job = Job.Wizard;
+        // anri.Promote();
+        // anri.Job = Job.Wizard;
         // anri.ApplyStatus(StatusEffectType.Poison);
         // Unarmed equip is default (index -1); do not put Unarmed in inventory.
         anri.AddItem(ItemName.WoodenStaff, autoEquipWeapon: false);
@@ -145,6 +145,6 @@ class Program
         DeathSprites.Load();
         BattleBackgrounds.Load();
         BattleForegrounds.Load();
-
+        ArtilleryExplosion.Load();
     }
 }
