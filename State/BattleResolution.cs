@@ -13,15 +13,17 @@ public class BattleResolution : IGameState
     private Game _game;
     private readonly Sprite _foregroundSprite;
     private int _battleSequenceFrame;
-    private readonly int _battleSequenceFrameLimit;
+    private int _battleSequenceFrameLimit;
     private readonly Delay _delay;
+
+    private SequenceTimerSlot[] _delayEffects = Array.Empty<SequenceTimerSlot>();
+    private List<Sprite> _artilleryExplosions = new();
 
     public BattleResolution(Game game)
     {
         _game = game;
 
         _battleSequenceFrame = 0;
-        _battleSequenceFrameLimit = _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count;
         _delay = new Delay(GameConstants.Animations.IdleDelay);
 
         _foregroundSprite = BattleForegrounds.Get(ForegroundNames.RoughTerrain);
@@ -29,27 +31,54 @@ public class BattleResolution : IGameState
 
     public void Enter()
     {
+        _delayEffects = Array.Empty<SequenceTimerSlot>();
+        _artilleryExplosions = new List<Sprite>();
 
+        // Use the longer side so dissolve frames on either sprite set are not truncated.
+        _battleSequenceFrameLimit = Math.Max(
+            _game.AttackContext.ForceMemberSpriteSet.BattleSequence.Count,
+            _game.AttackContext.MonsterSpriteSet.BattleSequence.Count);
+
+        Logger.Info("Attack Context Effect: " + _game.AttackContext.Effect.ToString());
+        Logger.Debug($"DamageApplyFrame={_game.AttackContext.DamageApplyFrame}, sequenceLimit={_battleSequenceFrameLimit}");
+
+        if (_game.AttackContext.Effect == Effects.ArtilleryExplosion)
+        {
+            _artilleryExplosions = ArtilleryExplosion.Frames;
+            _delayEffects = ArtilleryBattleEffects.CreateSlots(
+                _game.AttackContext.ForceMemberSpriteSet);
+
+            var effectsDuration = ArtilleryBattleEffects.MaxDuration(_delayEffects);
+            _battleSequenceFrameLimit = Math.Max(_battleSequenceFrameLimit, effectsDuration);
+        }
     }
 
     public void Exit()
     {
-
+        _delayEffects = Array.Empty<SequenceTimerSlot>();
     }
 
     public void HandleInput()
     {
-
     }
 
     public void Update()
     {
         _delay.Tick();
+
+        if (_delayEffects.Length > 0)
+        {
+            for (var i = 0; i < _delayEffects.Length; i++)
+            {
+                _delayEffects[i].SequenceTimer.Tick();
+            }
+        }
+
         _battleSequenceFrame++;
 
-        // since both the attacker and defender should have the same list of sprites, it shouldn't matter
-        // which sprite set we look at to retrieve the last index of the set. YOLO!
-        if (_battleSequenceFrame == (_game.AttackContext.MonsterSpriteSet.GetIndexOfLastAttackFrame() * 10) && _game.AttackContext.Hit)
+        // Apply damage on the attacker-paced frame stored when the sequence was built.
+        if (_game.AttackContext.Hit
+            && _battleSequenceFrame == _game.AttackContext.DamageApplyFrame)
         {
             _game.AttackContext.Defender.TakeDamage(_game.AttackContext.Damage);
         }
@@ -67,7 +96,7 @@ public class BattleResolution : IGameState
         _game.Renderer.Draw(scale, background, GameConstants.Battle.Positions.Background);
         _game.Renderer.Draw(scale, _foregroundSprite, GameConstants.Battle.Positions.Foreground);
         _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetMonster(), GameConstants.Battle.Positions.UnfriendlyStats);
-            _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), GameConstants.Battle.Positions.FriendlyStats);
+        _game.Renderer.DrawUnitInfoBox(scale, _game.AttackContext.GetForceMember(), GameConstants.Battle.Positions.FriendlyStats);
 
         if (_battleSequenceFrame >= _battleSequenceFrameLimit)
         {
@@ -86,7 +115,10 @@ public class BattleResolution : IGameState
         else
         {
             _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), _game.AttackContext.MonsterSpriteSet.BasePosition);
+
+            ArtilleryBattleEffects.DrawRange(scale, _game.Renderer, _delayEffects, _artilleryExplosions, 0, 3);
             _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), _game.AttackContext.ForceMemberSpriteSet.BasePosition);
+            ArtilleryBattleEffects.DrawRange(scale, _game.Renderer, _delayEffects, _artilleryExplosions, 3, 7);
         }
     }
 }
