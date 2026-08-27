@@ -265,6 +265,7 @@ public class AttackContext
         Effect = Attacker.Name switch
         {
             UnitName.Artillery => Effects.ArtilleryExplosion,
+            UnitName.Bowrider => Effects.ArtilleryExplosion,
             _ => Effects.NormalAttack
         };
     }

@@ -247,6 +247,8 @@ public static class GameConstants
             { $"{UnitName.Artillery.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 70)},
             { $"{UnitName.Balbazak.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 60)},
             { $"{UnitName.Belial.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 70)},
+            { $"{UnitName.BlueDragon.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 80)},
+            { $"{UnitName.Bowrider.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
             { $"{UnitName.DarkDwarf.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
             { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
