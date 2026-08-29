@@ -162,7 +162,7 @@ public class BattleResolutionDebug : IGameState
             _game.Renderer.Draw(scale, monsterFrame, monsterSet.BasePosition);
         }
 
-        ArtilleryBattleEffects.DrawRange(scale, _game.Renderer, _delayEffects, _artilleryExplosions, 0, 3);
+        _game.Renderer.DrawArtilleryExplosionsInFrontOfSprite(scale, _delayEffects, _artilleryExplosions);
 
         if (forceSet.BattleSequence.Count > 0)
         {
@@ -170,7 +170,7 @@ public class BattleResolutionDebug : IGameState
             _game.Renderer.Draw(scale, forceFrame, forceSet.BasePosition);
         }
 
-        ArtilleryBattleEffects.DrawRange(scale, _game.Renderer, _delayEffects, _artilleryExplosions, 3, 7);
+        _game.Renderer.DrawArtilleryExplosionsBehindSprite(scale, _delayEffects, _artilleryExplosions);
 
         _game.Renderer.DrawUnitInfoBox(
             scale,

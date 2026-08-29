@@ -23,26 +23,24 @@ public readonly struct SequenceTimerSlot
 /// </summary>
 public static class ArtilleryBattleEffects
 {
-    // Rough anchors as fractions of the current force idle frame (top-left = BasePosition).
-    // Values > 1 sit slightly past the right/bottom edge of the frame.
     private static readonly Vector2[] ExplosionAnchors =
     {
         // Under force sprite
-        new Vector2(0.90f, 0.60f),
-        new Vector2(0.83f, 0.65f),
-        new Vector2(0.61f, 0.71f),
+        new Vector2(190, 135),
+        new Vector2(160, 130),
+        new Vector2(140, 140),
         // Over force sprite
-        new Vector2(0.36f, 0.92f),
-        new Vector2(0.68f, 1.07f),
-        new Vector2(0.85f, 1.07f),
-        new Vector2(0.95f, 0.95f),
+        new Vector2(130, 145),
+        new Vector2(150, 150),
+        new Vector2(170, 155),
+        new Vector2(190, 155),
     };
 
     private static readonly int[] StartDelayFrames = { 3, 7, 11, 15, 19, 23, 27 };
 
     public static SequenceTimerSlot[] CreateSlots(BattleUnitSpriteSet forceSet)
     {
-        var tickDelayAmount = 3;
+        var tickDelayAmount = GameConstants.Animations.ArtilleryTickDelay;
         var numFrames = ArtilleryExplosion.Frames.Count;
         if (numFrames <= 0)
         {
@@ -62,10 +60,7 @@ public static class ArtilleryBattleEffects
         var slots = new SequenceTimerSlot[ExplosionAnchors.Length];
         for (var i = 0; i < ExplosionAnchors.Length; i++)
         {
-            var anchor = ExplosionAnchors[i];
-            var position = new Vector2(
-                basePos.X + frameW * anchor.X,
-                basePos.Y + frameH * anchor.Y);
+            var position = ExplosionAnchors[i];
 
             slots[i] = new SequenceTimerSlot(
                 new SequenceTimer(numFrames, tickDelayAmount, StartDelayFrames[i]),
@@ -123,36 +118,6 @@ public static class ArtilleryBattleEffects
         for (var i = 0; i < slots.Length; i++)
         {
             slots[i].SequenceTimer.Seek(battleFrame);
-        }
-    }
-
-    public static void DrawRange(
-        float scale,
-        Renderer renderer,
-        SequenceTimerSlot[] slots,
-        List<Sprite> frames,
-        int startIndex,
-        int endIndex)
-    {
-        if (slots == null || frames == null || frames.Count == 0)
-        {
-            return;
-        }
-
-        endIndex = Math.Min(endIndex, slots.Length);
-
-        for (var i = startIndex; i < endIndex; i++)
-        {
-            var slot = slots[i];
-            var timer = slot.SequenceTimer;
-
-            if (!timer.IsPlaying)
-            {
-                continue;
-            }
-
-            var frameIndex = Math.Clamp(timer.CurrentIndex, 0, frames.Count - 1);
-            renderer.Draw(scale, frames[frameIndex], slot.Position);
         }
     }
 }

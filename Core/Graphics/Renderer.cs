@@ -327,6 +327,45 @@ public class Renderer
         line2 = words[words.Length - 1];
     }
 
+    public void DrawArtilleryExplosionsInFrontOfSprite(float scale, SequenceTimerSlot[] slots, List<Sprite> frames)
+    {
+        DrawArtilleryExplosionsSlice(scale, slots, frames, 0, 3);
+    }
+
+    public void DrawArtilleryExplosionsBehindSprite(float scale, SequenceTimerSlot[] slots, List<Sprite> frames)
+    {
+        DrawArtilleryExplosionsSlice(scale, slots, frames, 3, 7);
+    }
+
+    private void DrawArtilleryExplosionsSlice(
+        float scale,
+        SequenceTimerSlot[] slots,
+        List<Sprite> frames,
+        int startIndex,
+        int endIndex)
+    {
+        if (slots == null || frames == null || frames.Count == 0)
+        {
+            return;
+        }
+
+        endIndex = Math.Min(endIndex, slots.Length);
+
+        for (var i = startIndex; i < endIndex; i++)
+        {
+            var slot = slots[i];
+            var timer = slot.SequenceTimer;
+
+            if (!timer.IsPlaying)
+            {
+                continue;
+            }
+
+            var frameIndex = Math.Clamp(timer.CurrentIndex, 0, frames.Count - 1);
+            Draw(scale, frames[frameIndex], slot.Position);
+        }
+    }
+
     private static Vector2 Measure(string text, int fontSize)
     {
         return Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, 1);
