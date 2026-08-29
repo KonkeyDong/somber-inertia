@@ -120,6 +120,7 @@ public static class GameConstants
         public const int IdleDelay = 10;
         public const int AttackDelay = 10; // frames
         public const int JitterOffset = 3; // pixels
+        public const int ArtilleryTickDelay = 3; // frames
         public const int SwitchStateCountdownTimer = 180;
 
         public static readonly Color[] RangeTintLevels =
@@ -249,6 +250,7 @@ public static class GameConstants
             { $"{UnitName.Belial.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 70)},
             { $"{UnitName.BlueDragon.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 80)},
             { $"{UnitName.Bowrider.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
+            { $"{UnitName.Cerberus.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 90)},
             { $"{UnitName.DarkDwarf.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
             { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}

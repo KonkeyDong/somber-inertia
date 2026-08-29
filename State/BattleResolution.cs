@@ -116,9 +116,9 @@ public class BattleResolution : IGameState
         {
             _game.Renderer.Draw(scale, _game.AttackContext.MonsterSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), _game.AttackContext.MonsterSpriteSet.BasePosition);
 
-            ArtilleryBattleEffects.DrawRange(scale, _game.Renderer, _delayEffects, _artilleryExplosions, 0, 3);
+            _game.Renderer.DrawArtilleryExplosionsInFrontOfSprite(scale, _delayEffects, _artilleryExplosions);
             _game.Renderer.Draw(scale, _game.AttackContext.ForceMemberSpriteSet.GetBattleSequenceFrame(_battleSequenceFrame), _game.AttackContext.ForceMemberSpriteSet.BasePosition);
-            ArtilleryBattleEffects.DrawRange(scale, _game.Renderer, _delayEffects, _artilleryExplosions, 3, 7);
+            _game.Renderer.DrawArtilleryExplosionsBehindSprite(scale, _delayEffects, _artilleryExplosions);
         }
     }
 }
