@@ -49,7 +49,7 @@ public enum UnitName
     DarkDragon,
     DarkDwarf,
     DarkElf,
-    Darkmage,
+    DarkMage,
     DarkPriest,
     Darksol,
     DemonMaster,

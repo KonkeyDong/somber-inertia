@@ -53,7 +53,7 @@ public static class UnitNameExtensions
             UnitName.DarkDragon    => "Dark Dragon",
             UnitName.DarkDwarf     => "Dark Dwarf",
             UnitName.DarkElf       => "Dark Elf",
-            UnitName.Darkmage      => "Dark Mage",
+            UnitName.DarkMage      => "Dark Mage",
             UnitName.DarkPriest    => "Dark Priest",
             UnitName.Darksol       => "Darksol",
             UnitName.DemonMaster   => "Demon Master",
