@@ -262,6 +262,9 @@ public static class GameConstants
             { $"{UnitName.Durahan.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 60)},
             { $"{UnitName.EvilPuppet.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(45, 70)},
             { $"{UnitName.Gargoyle.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(20, 70)},
+            { $"{UnitName.GeneralElliot.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(30, 65)},
+            { $"{UnitName.Ghoul.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 70)},
+            { $"{UnitName.GiantBat.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(30, 65)},
             { $"{UnitName.Goblin.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
