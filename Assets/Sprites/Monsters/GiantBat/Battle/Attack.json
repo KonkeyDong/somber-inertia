@@ -1,0 +1,29 @@
+{ "frames": [
+   {
+    "filename": "Sprite-0056 0.",
+    "frame": { "x": 0, "y": 0, "w": 114, "h": 66 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 114, "h": 66 },
+    "sourceSize": { "w": 114, "h": 66 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0056 1.",
+    "frame": { "x": 114, "y": 0, "w": 114, "h": 66 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 114, "h": 66 },
+    "sourceSize": { "w": 114, "h": 66 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.17.2-arm64",
+  "image": "Attack.png",
+  "format": "RGBA8888",
+  "size": { "w": 228, "h": 66 },
+  "scale": "1"
+ }
+}
