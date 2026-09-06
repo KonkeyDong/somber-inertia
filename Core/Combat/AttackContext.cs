@@ -266,6 +266,7 @@ public class AttackContext
         {
             UnitName.Artillery => Effects.ArtilleryExplosion,
             UnitName.Bowrider => Effects.ArtilleryExplosion,
+            UnitName.Horseman => Effects.ArtilleryExplosion,
             _ => Effects.NormalAttack
         };
     }

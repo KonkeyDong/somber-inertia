@@ -116,7 +116,7 @@ class Program
         goblin1.Defense = 5;
         goblin1.HP.Current = 1;
 
-        var runeKnight = new Unit(UnitName.RuneKnight);
+        var runeKnight = new Unit(UnitName.Horseman);
         runeKnight.HP.Current = 1;
 
         var dwarf = new Unit(UnitName.DarkDwarf);
