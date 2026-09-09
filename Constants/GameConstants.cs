@@ -271,6 +271,7 @@ public static class GameConstants
             { $"{UnitName.HighPriest.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 65)},
             { $"{UnitName.Horseman.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(40, 50)},
             { $"{UnitName.IceWorm.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(10, 65)},
+            { $"{UnitName.Jet.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(30, 80)},
             { $"{UnitName.RuneKnight.GetBaseName()}_{unpromoted}_{ItemName.Unarmed.GetBaseName()}", new Vector2(50, 75)}
         };
 
