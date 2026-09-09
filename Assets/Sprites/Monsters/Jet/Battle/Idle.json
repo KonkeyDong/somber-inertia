@@ -1,0 +1,29 @@
+{ "frames": [
+   {
+    "filename": "Sprite-0074 0.",
+    "frame": { "x": 0, "y": 0, "w": 85, "h": 61 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 85, "h": 61 },
+    "sourceSize": { "w": 85, "h": 61 },
+    "duration": 100
+   },
+   {
+    "filename": "Sprite-0074 1.",
+    "frame": { "x": 85, "y": 0, "w": 85, "h": 61 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 85, "h": 61 },
+    "sourceSize": { "w": 85, "h": 61 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.17.2-arm64",
+  "image": "Idle.png",
+  "format": "RGBA8888",
+  "size": { "w": 170, "h": 61 },
+  "scale": "1"
+ }
+}
