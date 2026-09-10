@@ -112,7 +112,7 @@ class Program
         tao.AddItem(ItemName.WoodenStaff, autoEquipWeapon: false);
         tao.AddItem(ItemName.PowerStaff, autoEquipWeapon: false);
 
-        var goblin1 = new Unit(UnitName.Jet);
+        var goblin1 = new Unit(UnitName.Kane);
         goblin1.Defense = 5;
         goblin1.HP.Current = 1;
 
